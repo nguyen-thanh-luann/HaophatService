@@ -1,0 +1,61 @@
+.quill {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  .ql-editor {
+    min-height: 500px;
+    outline: none;
+
+    img {
+      max-width: 100% !important;
+      max-height: 50vh !important;
+      object-fit: cover;
+      margin: 12px auto !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    p,
+    span,
+    li,
+    div {
+      @apply select-text break-words;
+    }
+  }
+
+  .ql-toolbar {
+    background-color: white;
+    z-index: 40;
+  }
+}
+
+// set the toolbar at top of page create post
+.post_editor_account_page {
+  .quill {
+    .ql-toolbar {
+      position: sticky !important;
+      top: $header_group_height;
+      background-color: white;
+      z-index: 40;
+      @include responsive(md-screen) {
+        top: $header_mobile_height;
+      }
+    }
+  }
+}
+
+// set the toolbar at top of modal update
+.post_update_modal_editor {
+  .quill {
+    .ql-toolbar {
+      position: sticky !important;
+      top: 0px;
+      background-color: white;
+      z-index: 40;
+    }
+  }
+}

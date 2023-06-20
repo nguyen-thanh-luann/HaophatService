@@ -1,0 +1,41 @@
+.product_detail_desc {
+  &-content {
+    &p,
+    span,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    li,
+    button {
+      font-family: 'Nunito', sans-serif !important;
+    }
+
+    &p,
+    li,
+    span {
+      @apply text-md font-medium leading-8;
+    }
+
+    h1 {
+      @apply text-xl font-bold leading-10;
+    }
+
+    h2 {
+      @apply text-lg font-bold leading-10;
+    }
+
+    h3 {
+      @apply text-lg font-semibold leading-10;
+    }
+
+    h4 {
+      @apply text-md font-semibold leading-10;
+    }
+
+    h5 {
+      @apply text-md font-semibold leading-9;
+    }
+  }
+}
