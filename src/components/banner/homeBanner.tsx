@@ -15,7 +15,6 @@ interface HomeBannerProps {
 }
 
 export const HomeBanner = ({ className }: HomeBannerProps) => {
-
   const { data: bannerList, isValidating: bannerListLoading } = useBanner({
     key: `${SWR_KEY.get_main_banner}`,
     params: {
@@ -23,8 +22,7 @@ export const HomeBanner = ({ className }: HomeBannerProps) => {
     },
   })
 
-
-  if (!bannerListLoading && !bannerList ) return null
+  if (!bannerListLoading && !bannerList) return null
 
   return (
     <div className={twMerge(classNames('', className))}>
@@ -61,9 +59,7 @@ export const HomeBanner = ({ className }: HomeBannerProps) => {
             ))}
           </div>
         </Swiper>
-      ) : (
-        <div className="animate-pulse bg-gray-200 aspect-[2/1] md:aspect-[4/1]"></div>
-      )}
+      ) : null}
     </div>
   )
 }

@@ -1,12 +1,10 @@
 import { DownIcon } from '@/assets'
 import { SWR_KEY } from '@/constants'
-import { isArrayHasValue, isDrugStore } from '@/helper'
-import { useCategoryList, useCategoryMinorList, usePrimaryPostCategory, useUser } from '@/hooks'
-import { PostCategory } from '@/types'
+import { isArrayHasValue } from '@/helper'
+import { useCategoryList, useCategoryMinorList } from '@/hooks'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { twMerge } from 'tailwind-merge'
 import { Spinner } from '../spinner'
@@ -19,7 +17,6 @@ interface HeaderCategoryNavProps {
 export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
   const router = useRouter()
   const ref = useRef<HTMLDivElement>(null)
-  const { userInfo } = useUser({})
   const [currentCategoryId, setCurrentCategoryId] = useState<number | undefined>()
   const [isCategoryMinor, setIsCategoryMinor] = useState<boolean>(false)
 
@@ -33,11 +30,6 @@ export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
     params: {},
   })
 
-  const { data: postCategoryList, isValidating: postCategoryLoading } = usePrimaryPostCategory({
-    key: `${SWR_KEY.get_parent_post_category_list}`,
-    params: {},
-  })
-
   const handleCategoryClick = (id: number, type: 'category' | 'minor_category') => {
     if (type === 'category') {
       router.push(`/search/?category_${id}=${id}`)
@@ -47,22 +39,9 @@ export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
     setCurrentCategoryId(undefined)
   }
 
-  const hanldePostCategoryClick = (postCategory: PostCategory) => {
-    if (postCategory.role === 'npp' && !isDrugStore(userInfo?.account)) {
-      toast.error('Thông tin chỉ dành cho người phụ trách chuyên môn về dược')
-    } else {
-      router.push({
-        pathname: '/post-list',
-        query: {
-          parent_category: postCategory?.id,
-        },
-      })
-    }
-  }
-
   return (
     <div ref={ref} className={twMerge(classNames(`bg-primary`, className))}>
-      <div className="container px-12">
+      <div className="container overflow-scroll scrollbar-hide px-12">
         <div className="relative" onMouseLeave={() => setCurrentCategoryId(undefined)}>
           <div className="flex-between">
             <div className="flex-1 h-header_nav_height">
@@ -111,40 +90,6 @@ export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
                   ))}
                 </ScrollContainer>
               ) : null}
-            </div>
-
-            <div className="flex items-center ml-12 max-w-[300px] overflow-scroll scrollbar-hide">
-              {postCategoryLoading ? (
-                <div>
-                  <Spinner />
-                </div>
-              ) : (
-                <div>
-                  {isArrayHasValue(postCategoryList) ? (
-                    <div className="flex items-center">
-                      <div className={`border-l border-white h-[18px] mx-12`}></div>
-
-                      <ScrollContainer className="flex items-center">
-                        {postCategoryList?.map((postCategory, index) => {
-                          return postCategory?.role !== 'npp' ? (
-                            <div className="flex items-center" key={index}>
-                              <div
-                                className="cursor-pointer"
-                                key={postCategory.id}
-                                onClick={() => {
-                                  hanldePostCategoryClick(postCategory)
-                                }}
-                              >
-                                <p className="title !text-white">{postCategory?.name}</p>
-                              </div>
-                            </div>
-                          ) : null
-                        })}
-                      </ScrollContainer>
-                    </div>
-                  ) : null}
-                </div>
-              )}
             </div>
           </div>
 

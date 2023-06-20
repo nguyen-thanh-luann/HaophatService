@@ -6,7 +6,6 @@ import { AccountDrawer } from '../account'
 import { CartDrawer } from '../cart'
 import { HeaderSearchProduct } from '../headerSearchProduct'
 import { Image } from '../image'
-import { SalePoint } from '../salePoint'
 
 interface HeaderProps {
   className?: string
@@ -27,7 +26,7 @@ export const Header = ({className}: HeaderProps) => {
         </div>
 
         <div className="flex items-center justify-between gap-12">
-          <SalePoint className='max-w-[120px]'/>
+          {/* <SalePoint className='max-w-[120px]'/> */}
 
           <AccountDrawer className='max-w-[120px]'/>
 

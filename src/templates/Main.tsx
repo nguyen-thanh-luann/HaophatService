@@ -3,10 +3,9 @@ import { ReactNode } from 'react'
 import {
   Backdrop,
   BottomNavigation,
-  ContactOptions,
   Footer,
   HeaderGroup,
-  HeaderMobile,
+  HeaderMobile
 } from '@/components'
 import type { MetaProps } from '@/layouts'
 import { Meta } from '@/layouts'
@@ -43,7 +42,7 @@ export const Main = ({ children, ...attributes }: IMainProps) => {
 
         <Footer />
       </div>
-      <ContactOptions />
+      {/* <ContactOptions /> */}
 
       <BottomNavigation />
     </div>
