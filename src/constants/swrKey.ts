@@ -81,4 +81,5 @@ export const SWR_KEY = {
   get_customers: 'get_customers',
 
   search_warranty: 'search_Warranty',
+  get_store_warranty_receipt_detail: 'get_store_warranty_receipt_detail',
 } as const

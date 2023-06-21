@@ -37,7 +37,11 @@ export const AccountNavMobile = ({ className }: AccountNavMobileProps) => {
             className={classNames(
               `flex-between p-10 rounded-[10px] cursor-pointer group hover:text-primary mb-12 last:mb-0 isActive:opacity-50`,
               isActive ? 'text-primary' : '',
-              item?.access_rules?.includes(userInfo?.account?.account_type || '') ? '' : 'hidden'
+              item?.account_type_permissions?.includes(
+                userInfo?.account?.warranty_account_type || ''
+              )
+                ? ''
+                : 'hidden'
             )}
           >
             <div className="flex items-center">

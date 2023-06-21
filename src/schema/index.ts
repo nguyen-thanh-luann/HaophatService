@@ -285,3 +285,14 @@ export const checkWarrantySchema = Yup.object().shape({
     .matches(PHONE_SCHEMA, 'Vui lòng nhập số điện thoại hợp lệ')
     .required('Vui lòng nhập số điện thoại'),
 })
+
+export const createWarrantyForStoreChema = Yup.object().shape({
+  picking_id: Yup.object()
+    .shape({
+      label: Yup.string().required(),
+      value: Yup.number().required(),
+    })
+    .required('Vui lòng chọn hóa đơn'),
+  invoice_ref: Yup.string().required('Vui lòng nhập mã tham chiếu'),
+  date: Yup.string().required('Vui lòng chọn ngày bắt đầu'),
+})

@@ -62,6 +62,8 @@ export type QueryListFunction<T, V> = QueryListFetchMoreFunction<T, V> & {
 
 export type QueryListFetchMoreFunction<T, V> = {
   fetcher?: (params?: V) => AxiosPromise<HTTPResponse<ListRes<T>>>
+  onError?: Function
+  onSuccess?: (_: T[]) => void
 }
 
 export type QueryListPaginateFunction<T, V> = QueryListFetchMoreFunction<T, V> & {
@@ -154,6 +156,21 @@ export type HTTPResV2<T> = {
   offset: number
   total: number
   data: T
+}
+
+export interface UseQueryRes<T, V> {
+  isValidating: boolean
+  hasMore: boolean
+  isFetchingMore: boolean
+  offset: number
+  data: T[] | undefined
+  error: any
+  isFirstLoading: boolean
+  params: (V & QueryList) | undefined
+  mutate: KeyedMutator<any>
+  fetchMore: (_: QueryListFunction<T, V>) => Promise<void>
+  filter: (_: QueryListFunction<T, V>) => Promise<void>
+  refresh?: () => void
 }
 
 export type FetcherListResV2<Params, Data> = (params: Params) => Promise<HTTPListResV2<Data[]>>

@@ -407,3 +407,9 @@ export const durationToName = (value: 'months' | 'days' | 'weeks' | 'years') => 
   if (value === 'weeks') return 'tuần'
   return 'năm'
 }
+
+export const changewarrantyDateToInputDatetype = (date: string) => {
+  if (!date) return
+  const draft = date.split('/')
+  return `${draft?.[2]}-${draft?.[1]}-${draft?.[0]}`
+}
