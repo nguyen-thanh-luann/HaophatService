@@ -26,7 +26,7 @@ export const accountNavData = [
     account_type_permissions: PublicAccountTypePermissions,
   },
   {
-    path: '/account/warranty',
+    path: '/account/warranty-list',
     icon: <UserCircleIcon className={accountIconStyle} />,
     title: 'Danh sách bảo hành',
     account_type_permissions: PublicAccountTypePermissions,
@@ -38,7 +38,7 @@ export const accountNavData = [
     account_type_permissions: StoreAccountTypePermissions,
   },
   {
-    path: '/account/warranty',
+    path: '/account/customer',
     icon: <UserCircleIcon className={accountIconStyle} />,
     title: 'Khách hàng',
     account_type_permissions: StoreAccountTypePermissions,

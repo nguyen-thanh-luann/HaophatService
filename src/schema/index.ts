@@ -296,3 +296,13 @@ export const createWarrantyForStoreChema = Yup.object().shape({
   invoice_ref: Yup.string().required('Vui lòng nhập mã tham chiếu'),
   date: Yup.string().required('Vui lòng chọn ngày bắt đầu'),
 })
+
+export const createCustomerWarrantyShema = Yup.object().shape({
+  customer_phone: Yup.string()
+    .matches(PHONE_SCHEMA, 'Vui lòng nhập số điện thoại hợp lệ')
+    .required('Vui lòng nhập số điện thoại'),
+  customer_name: Yup.string()
+    .min(2, 'Tên phải có tối thiểu 2 ký tự')
+    .max(30, 'Tên không vượt quá 30 ký tự')
+    .required('Vui lòng nhập tên'),
+})

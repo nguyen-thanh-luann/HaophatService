@@ -40,7 +40,7 @@ const StoreCreateWarrantyPage = () => {
   }
 
   return (
-    <Main title={'Tài khoản'} description={WEB_DESCRIPTION}>
+    <Main title={'Bảo hành'} description={WEB_DESCRIPTION}>
       <div className="container">
         <Breadcrumb
           breadcrumbList={[
