@@ -88,10 +88,13 @@ module.exports = {
         'product-item-background': '#FBF9F7',
 
         orange: '#FAA61A',
+        'orange-opacity-100': 'rgba(245, 155, 40, 0.1)',
 
         green: '#14CC62',
+        'green-opacity-100': 'rgba(20, 204, 98, 0.1)',
 
         violet: '#9B51E0',
+        'violet-opacity-100': 'rgba(155, 81, 224, 0.1)',
 
         yellow: '#FFBC4E',
 

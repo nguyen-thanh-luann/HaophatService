@@ -1,9 +1,9 @@
-import { companyIconSm, NoteIconOutline } from '@/assets'
+import { companyIconSm } from '@/assets'
 import { DOMAIN_URL, SWR_KEY } from '@/constants'
-import { formatMoneyVND, generateProductSlug, isObjectHasValue, purchasableProduct } from '@/helper'
+import { formatMoneyVND, generateProductSlug, isObjectHasValue } from '@/helper'
 import { useAddToCart, useProductPromotion, useUser, useWishlist } from '@/hooks'
 import { productAPI } from '@/services'
-import { Product, ProductDetail as IProductDetail } from '@/types'
+import { ProductDetail as IProductDetail, Product } from '@/types'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -39,8 +39,6 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
   const { addWhishlist, deleteWhishlist, isLoading: isToggleWishlist } = useWishlist({})
   const { addToCart, isAddingTocart } = useAddToCart()
 
-  const purchasable = purchasableProduct(data, userInfo)
-
   const { data: productPromotions, isValidating: isLoadProductPromotion } = useProductPromotion({
     key: `${SWR_KEY.get_product_promotion}_${data?.product_id}_${userInfo?.account?.partner_id}`,
     product_id: data?.product_id,
@@ -50,7 +48,7 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
   const [currentProduct, setCurrentProduct] = useState<IProductDetail>(data)
 
   const handleAddToCart = (product: Product) => {
-    if (!purchasable) return
+    if (isAddingTocart) return
 
     if (!userInfo?.account?.partner_id) {
       router.push(`${DOMAIN_URL}/login`)
@@ -184,29 +182,25 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
           <p className="text_md">{`${currentProduct?.sold_quantity || 0} Đã bán`}</p>
         </div>
 
-        {purchasable ? (
-          <p className="text_md mb-16">{`Tồn kho khả dụng: ${
-            currentProduct?.stock_quantity?.factor || 0
-          }`}</p>
-        ) : null}
+        <p className="text_md mb-16">{`Tồn kho khả dụng: ${
+          currentProduct?.stock_quantity?.factor || 0
+        }`}</p>
 
-        {purchasable ? (
-          <div className="flex h-fit gap-12 items-center mb-16">
-            <p className="text-red text-2xl font-semibold">
-              {formatMoneyVND(currentProduct?.price_unit || 0)}
-              <span className="text-text-color text-sm ml-4">{`/ ${currentProduct?.uom_id?.uom_name}`}</span>
-            </p>
+        <div className="flex h-fit gap-12 items-center mb-16">
+          <p className="text-red text-2xl font-semibold">
+            {formatMoneyVND(currentProduct?.price_unit || 0)}
+            <span className="text-text-color text-sm ml-4">{`/ ${currentProduct?.uom_id?.uom_name}`}</span>
+          </p>
 
-            <p
-              className={classNames(
-                'text-gray-400 text-md font-medium line-through',
-                currentProduct?.price_unit !== currentProduct?.origin_price_unit ? '' : 'hidden'
-              )}
-            >
-              {formatMoneyVND(currentProduct?.origin_price_unit || 0)}
-            </p>
-          </div>
-        ) : null}
+          <p
+            className={classNames(
+              'text-gray-400 text-md font-medium line-through',
+              currentProduct?.price_unit !== currentProduct?.origin_price_unit ? '' : 'hidden'
+            )}
+          >
+            {formatMoneyVND(currentProduct?.origin_price_unit || 0)}
+          </p>
+        </div>
 
         {/* category */}
         {isObjectHasValue(currentProduct?.category_id) ? (
@@ -286,24 +280,12 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
 
         <div className="flex gap-12 items-center">
           <Button
-            onClick={() => {
-              router.push('/quick_order')
-            }}
-            title="Đăng ký tư vấn"
-            icon={<NoteIconOutline className="text-primary" />}
-            className="rounded-[8px] p-10 bg-white border border-primary min-w-[167px] max-w-[30%] "
-            textClassName="text-primary text-md"
+            onClick={() => handleAddToCart(currentProduct)}
+            title={isAddingTocart ? '' : 'Chọn mua'}
+            icon={isAddingTocart ? <Spinner className="!text-white !fill-primary" /> : undefined}
+            className="rounded-[8px] p-10 bg-primary border border-primary min-w-[167px] max-w-[30%]"
+            textClassName="text-white text-md"
           />
-
-          {purchasable && (
-            <Button
-              onClick={() => handleAddToCart(currentProduct)}
-              title={isAddingTocart ? '' : 'Chọn mua'}
-              icon={isAddingTocart ? <Spinner className="!text-white !fill-primary" /> : undefined}
-              className="rounded-[8px] p-10 bg-primary border border-primary min-w-[167px] max-w-[30%]"
-              textClassName="text-white text-md"
-            />
-          )}
         </div>
       </div>
     </div>

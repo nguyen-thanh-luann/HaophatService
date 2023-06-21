@@ -1,9 +1,8 @@
-import React from 'react'
-import RImage, { ImageProps as RImageProps } from 'next/image'
-import { empty, imageBlur } from '@/assets'
-import classNames from 'classnames'
-import { isRemoteImageUrl } from '@/helper'
+import { companyIconSm, imageBlur } from '@/assets'
 import { API_URL } from '@/constants'
+import { isRemoteImageUrl } from '@/helper'
+import classNames from 'classnames'
+import RImage, { ImageProps as RImageProps } from 'next/image'
 
 export type CustomImageProps = Omit<RImageProps, 'alt'> & {
   alt?: string
@@ -15,7 +14,13 @@ export const CustomImage = ({ className, imageClassName, src, ...props }: Custom
   return (
     <div className={classNames('relative', className)}>
       <RImage
-        src={src && src !== '' ? (isRemoteImageUrl(src.toString()) ? src : `${API_URL}${src}`) : empty}
+        src={
+          src && src !== ''
+            ? isRemoteImageUrl(src.toString())
+              ? src
+              : `${API_URL}${src}`
+            : companyIconSm
+        }
         width={1000}
         height={1000}
         className={classNames(imageClassName)}

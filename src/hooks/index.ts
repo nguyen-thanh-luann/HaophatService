@@ -15,5 +15,4 @@ export * from './store'
 export * from './promotion'
 export * from './rating'
 export * from './upload'
-
-
+export * from './warranty'

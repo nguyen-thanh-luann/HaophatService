@@ -41,9 +41,9 @@ export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
 
   return (
     <div ref={ref} className={twMerge(classNames(`bg-primary`, className))}>
-      <div className="container overflow-scroll scrollbar-hide px-12">
+      <div className="container px-12">
         <div className="relative" onMouseLeave={() => setCurrentCategoryId(undefined)}>
-          <div className="flex-between">
+          <div className="flex-between overflow-scroll scrollbar-hide">
             <div className="flex-1 h-header_nav_height">
               {categoryListLoading || categoryMinorListLoading ? (
                 <div className="flex-1 flex-center h-header_nav_height">

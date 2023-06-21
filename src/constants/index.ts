@@ -122,3 +122,26 @@ export const VNPAY_STATUS_NAME = {
   '79': '	Giao dịch không thành công do: KH nhập sai mật khẩu thanh toán quá số lần quy định. Xin quý khách vui lòng thực hiện lại giao dịch',
   '99': '	Các lỗi khác (lỗi còn lại, không có trong danh sách mã lỗi đã liệt kê)',
 } as any
+
+export const CustomerWarrantyState = [
+  {
+    state: 'draft',
+    style: 'text-primary bg-error-200',
+    title: 'Đơn nháp',
+  },
+  {
+    state: 'waiting',
+    style: 'text-orange bg-orange-opacity-100',
+    title: 'Chờ xác nhận',
+  },
+  {
+    state: 'confirm',
+    style: 'text-green bg-green-opacity-100',
+    title: 'Đã xác nhận',
+  },
+  {
+    state: 'cancel',
+    style: 'text-violet bg-violet-opacity-100',
+    title: 'Hết hiệu lực',
+  },
+]

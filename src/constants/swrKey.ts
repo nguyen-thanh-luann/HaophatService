@@ -79,4 +79,6 @@ export const SWR_KEY = {
   shareOrderFile: (id: number) => 'share_order_file_' + id,
   getOrderStatus: 'get_order_satus',
   get_customers: 'get_customers',
+
+  search_warranty: 'search_Warranty',
 } as const

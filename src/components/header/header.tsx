@@ -1,4 +1,4 @@
-import { logoSm } from '@/assets'
+import { companyIconSm } from '@/assets'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
@@ -6,6 +6,7 @@ import { AccountDrawer } from '../account'
 import { CartDrawer } from '../cart'
 import { HeaderSearchProduct } from '../headerSearchProduct'
 import { Image } from '../image'
+import { LookupWarrantyReceipt } from '../lookupWarrantyReceipt'
 
 interface HeaderProps {
   className?: string
@@ -17,7 +18,7 @@ export const Header = ({className}: HeaderProps) => {
       <div className="container flex items-center py-24 px-12 gap-40">
         <div className="">
           <Link href="/">
-            <Image src={logoSm} className="w-[200px] h-[40px]" imageClassName='w-[200px] h-[40px]'/>
+            <Image src={companyIconSm} className="w-[80px] h-[65px]" imageClassName='w-[80px] h-[65px]'/>
           </Link>
         </div>
 
@@ -26,7 +27,7 @@ export const Header = ({className}: HeaderProps) => {
         </div>
 
         <div className="flex items-center justify-between gap-12">
-          {/* <SalePoint className='max-w-[120px]'/> */}
+          <LookupWarrantyReceipt className=''/>
 
           <AccountDrawer className='max-w-[120px]'/>
 

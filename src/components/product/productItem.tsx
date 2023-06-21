@@ -1,18 +1,15 @@
-import { ProductCartIcon, empty } from '@/assets'
+import { ProductCartIcon, companyIconSm } from '@/assets'
 import { API_URL } from '@/constants'
 import {
-  calcDiscountPercent,
   formatMoneyVND,
   generateProductSlug,
-  isObjectHasValue,
-  purchasableProduct,
+  isObjectHasValue
 } from '@/helper'
-import { useAddToCart, useModal, useUser } from '@/hooks'
+import { useAddToCart, useModal } from '@/hooks'
 import { addViewedProduct, setProduct } from '@/store'
 import { Product } from '@/types'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
-import ScrollContainer from 'react-indiana-drag-scroll'
 import { useDispatch } from 'react-redux'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -23,7 +20,6 @@ import { ModalProductDetail } from '../modal'
 import { Spinner } from '../spinner'
 import { Star } from '../star'
 import { Tooltip } from '../tooltip'
-import { ProductDiscountBadge } from './productDiscountBadge'
 import { ProductItemLoading } from './productItemLoading'
 
 interface ProductItemProps {
@@ -45,10 +41,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
   const productSlug = `/${generateProductSlug(data?.product_name, data?.product_id)}`
   const router = useRouter()
   const dispatch = useDispatch()
-  const { userInfo } = useUser({})
   const { addToCart, isAddingTocart } = useAddToCart()
-
-  const purchasable = purchasableProduct(data, userInfo)
 
   const {
     visible: showProductDetailModal,
@@ -57,7 +50,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
   } = useModal()
 
   const handleAddToCart = (product: Product) => {
-    if (isAddingTocart || !purchasable) return
+    if (isAddingTocart) return
 
     if (product.has_variant) {
       hanldeOpenModalDetail()
@@ -76,20 +69,10 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
     closeProductDetailModal()
   }
 
-  const hanldePropertyClick = (props: ProductPropertyClick) => {
-    if (props.type === 'category') {
-      router.push(`/search?category_${props.category_id}=${props.category_id}`)
-    } else {
-      router.push(`/search?attributes_${props.attribute_id}=${props.attribute_value_id}`)
-    }
-  }
-
   const onProductClick = () => {
     router.push(productSlug)
     dispatch(addViewedProduct(data))
   }
-
-  const discount = calcDiscountPercent(data)
 
   return (
     <>
@@ -112,7 +95,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
                 src={
                   data?.representation_image?.image_url
                     ? `${API_URL}${data?.representation_image?.image_url}`
-                    : empty
+                    : companyIconSm
                 }
                 imageClassName="object-cover w-full h-full hover:scale-110 duration-200 ease-in-out aspect-[1/1]"
                 className="aspect-[1/1]"
@@ -120,7 +103,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
             </div>
 
             {/* packing rule */}
-            <div
+            {/* <div
               className={classNames(
                 'absolute top-3',
                 discount > 0 ? 'right-25' : 'right-3',
@@ -130,106 +113,50 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
               <p className="text-xs font-medium line-clamp-2 flex-center h-full">
                 {data?.packaging_specifications || ''}
               </p>
-            </div>
+            </div> */}
 
-            {discount > 0 ? (
+            {/* {discount > 0 ? (
               <div className="absolute top-0 right-0 z-10">
                 <ProductDiscountBadge data={`${discount}`} />
               </div>
-            ) : null}
+            ) : null} */}
           </div>
 
           {/*product info*/}
           <div className="px-8 md:px-16 pb-8 md:pb-16 relative">
             <Tooltip text={data?.product_name || ''} viewTooltip={data?.product_name?.length > 20}>
-              <div onClick={onProductClick} className="relative group cursor-pointer">
+              <div onClick={onProductClick} className="relative group cursor-pointer w-full">
                 <p className="h-[43px] line-clamp-2 w-full text-text-color text-base md:text-md font-bold leading-9 mb-8 group-hover:text-primary duration-200 ease-in-out">
                   {data?.product_name}
                 </p>
               </div>
             </Tooltip>
 
-            {/* properties list */}
-            <ScrollContainer mouseScroll={true} className="flex h-[30px]">
-              {/* attribute */}
-              {data?.attribute_minor_ids?.map((attribute) => {
-                if (attribute?.filterable) {
-                  return attribute?.value_ids?.map((value) => (
-                    <p
-                      key={value?.value_id}
-                      onClick={() =>
-                        hanldePropertyClick({
-                          type: 'attribute',
-                          attribute_id: attribute?.attribute_id,
-                          attribute_value_id: value?.value_id,
-                        })
-                      }
-                      className="text-primary min-w-fit h-fit bg-primary-100 p-4 px-6 rounded-full cursor-pointer font-medium text-xs md:text-sm leading-7 mr-8 last:mr-0 line-clamp-1"
-                    >
-                      {value?.value_name}
-                    </p>
-                  ))
-                } else {
-                  return null
-                }
-              })}
-
-              {/* category */}
-              {isObjectHasValue(data?.category_id) ? (
-                <p
-                  key={data?.category_id?.category_id}
-                  onClick={() =>
-                    hanldePropertyClick({
-                      type: 'category',
-                      category_id: data?.category_id?.category_id,
-                    })
-                  }
-                  className="text-primary min-w-fit h-fit  bg-primary-100 p-4 px-6 rounded-full cursor-pointer font-medium text-xs md:text-sm leading-7 mr-8 line-clamp-1"
-                >
-                  {data?.category_id?.category_name}
-                </p>
-              ) : null}
-
-              {/* {data?.promotion_category && (
-                <p className="text-primary min-w-fit h-fit  bg-primary-100 p-4 px-6 rounded-full cursor-pointer font-medium text-xs md:text-sm leading-7 line-clamp-1">
-                  {data?.promotion_category}
-                </p>
-              )} */}
-            </ScrollContainer>
-
             <div className="relative">
               {/* price */}
-              <div>
-                {purchasable ? (
-                  <div className="mb-8 flex items-center">
-                    <div className="flex items-center flex-1 flex-wrap">
-                      <p className="text-orange text-base md:text-md font-bold leading-9 mr-10">
-                        {formatMoneyVND(data?.price_unit || 0)}
-                      </p>
-
-                      {data?.price_unit !== data?.origin_price_unit ? (
-                        <p className="text-gray-400 text-xs font-medium leading-7 line-through">
-                          {formatMoneyVND(data?.origin_price_unit || 0)}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div
-                      onClick={() => handleAddToCart(data)}
-                      className=" bg-primary h-[30px] w-[30px] min-w-[30px] rounded-full flex-center cursor-pointer"
-                    >
-                      {isAddingTocart ? (
-                        <Spinner className="!text-primary !fill-white" />
-                      ) : (
-                        <ProductCartIcon className="text-white w-16 h-16" />
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <p className="flex-1 text-orange text-base md:text-md font-bold leading-9">
-                    Tư vấn dược sĩ
+              <div className="mb-8 flex items-center">
+                <div className="flex items-center flex-1 flex-wrap">
+                  <p className="text-orange text-base md:text-md font-bold leading-9 mr-10">
+                    {formatMoneyVND(data?.price_unit || 0)}
                   </p>
-                )}
+
+                  {data?.price_unit !== data?.origin_price_unit ? (
+                    <p className="text-gray-400 text-xs font-medium leading-7 line-through">
+                      {formatMoneyVND(data?.origin_price_unit || 0)}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div
+                  onClick={() => handleAddToCart(data)}
+                  className=" bg-primary h-[30px] w-[30px] min-w-[30px] rounded-full flex-center cursor-pointer"
+                >
+                  {isAddingTocart ? (
+                    <Spinner className="!text-primary !fill-white" />
+                  ) : (
+                    <ProductCartIcon className="text-white w-16 h-16" />
+                  )}
+                </div>
               </div>
 
               {/*rate & sale count */}

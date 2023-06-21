@@ -5,6 +5,7 @@ import { QueryList } from './http'
 
 export type UserGenderType = 'male' | 'female' | 'other'
 export type UserMedicineAccountType = 'drugstore_account' | 'patient_account'
+export type UserWarrantyAccountType = 'customer_account' | 'store_account'
 export type UserBusinessType =
   | 'drugstore'
   | 'clinic'
@@ -32,6 +33,7 @@ export interface UserAccount {
   gender: UserGenderType
   avatar_url: URLRes
   account_type: AccountType
+  warranty_account_type: UserWarrantyAccountType
   medicine_account_type: UserMedicineAccountType
   business_type: UserBusinessType
   gpp_certification_image_url: URLRes

@@ -400,3 +400,10 @@ export function cartContainBogoSale(data: PromotionRes[] | undefined) {
 
   return false
 }
+
+export const durationToName = (value: 'months' | 'days' | 'weeks' | 'years') => {
+  if (value === 'months') return 'tháng'
+  if (value === 'days') return 'ngày'
+  if (value === 'weeks') return 'tuần'
+  return 'năm'
+}

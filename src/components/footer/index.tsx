@@ -1,9 +1,9 @@
 import {
   TelePhoneIcon,
+  companyIconSm,
   downloadAppStore,
   downloadGooglePlay,
   facebookIcon,
-  logoSm,
   zaloIcon,
 } from '@/assets'
 import { CONTACT_PHONE_NUMBER } from '@/constants'
@@ -17,7 +17,11 @@ export const Footer = () => {
       <div className="container px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-40">
         <div className="col-span-1 z-10">
           <div className="mb-24">
-            <Image src={logoSm} imageClassName="w-full max-w-[180px] object-cover" />
+            <Image
+              src={companyIconSm}
+              className="w-[80px] h-[60px]"
+              imageClassName="w-full max-w-[180px] object-cover"
+            />
           </div>
 
           <p className="text-md text-text-color font-normal mb-12"></p>
