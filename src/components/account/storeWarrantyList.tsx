@@ -1,4 +1,4 @@
-import { SWR_KEY, WarrantyStateTabs } from '@/constants'
+import { DEFAULT_LIMIT, SWR_KEY, WarrantyStateTabs } from '@/constants'
 import { isArrayHasValue } from '@/helper'
 import { useQuery, useUser } from '@/hooks'
 import { warrantyAPI } from '@/services'
@@ -32,7 +32,7 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
     key: `${SWR_KEY.store_warranty_receipt_list}_${currentTab}`,
     fetcher: warrantyAPI.getStoreListWarrantyReceipt,
     initialParams: {
-      limit: 7,
+      limit: DEFAULT_LIMIT,
       warranty_state: currentTab !== 'all' ? [currentTab] : [],
     },
     data_key: 'warranty_receipt',

@@ -1,39 +1,30 @@
-import useSWR from "swr";
-import { WarrantyParams, WarrantyReceipt } from "@/types";
-import {warrantyAPI} from "@/services";
+import { warrantyAPI } from '@/services'
+import { SearchWarrantyReceiptReq } from '@/types'
+import { useQuery } from '../common'
 
 interface Props {
-	params: WarrantyParams;
-	key: string;
+  params: SearchWarrantyReceiptReq
+  key: string
 }
 
-interface WarrantyReceiptSWR {
-	data: WarrantyReceipt[];
-	error?: any;
-	isValidating?: boolean;
-}
-
-const useCheckWarranty = ({ params, key }: Props): WarrantyReceiptSWR => {
-	const { data, error, isValidating } = useSWR(
+const useCheckWarranty = ({ params, key }: Props) => {
+  const { data, isValidating, fetchMore, hasMore, mutate } = useQuery<
+    any,
+    SearchWarrantyReceiptReq
+  >({
     key,
-    () =>
-      warrantyAPI
-        .searchWarrantyReceipt(params)
-        .then(
-          (res: any) =>
-            res?.result?.data?.warranty_receipt_customer || res?.data?.warranty_receipt_customer
-        ),
-    {
-      revalidateOnFocus: false,
-      dedupingInterval: 120000,
-    }
-  )
+    fetcher: warrantyAPI.searchWarrantyReceipt,
+    initialParams: params,
+    data_key: 'warranty_receipt_customer',
+  })
 
-	return {
-		data,
-		error,
-		isValidating,
-	};
-};
+  return {
+    data,
+    isValidating,
+    fetchMore,
+    hasMore,
+    mutate,
+  }
+}
 
-export { useCheckWarranty };
+export { useCheckWarranty }

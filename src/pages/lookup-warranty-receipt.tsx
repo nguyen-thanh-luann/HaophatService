@@ -13,6 +13,7 @@ import { Main } from '@/templates'
 import { WarrantyParams } from '@/types'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const LookupWarrantyPage = () => {
   const [searchParams, setSearchParams] = useState<WarrantyParams>({})
@@ -25,7 +26,12 @@ const LookupWarrantyPage = () => {
     console.log({ data })
   }
 
-  const { data: warrantyReceipts, isValidating } = useCheckWarranty({
+  const {
+    data: warrantyReceipts,
+    isValidating,
+    hasMore,
+    fetchMore,
+  } = useCheckWarranty({
     key: `${SWR_KEY?.search_warranty}_${searchParams?.lot_name || 0}_${
       searchParams?.customer_phone || 0
     }`,
@@ -65,16 +71,31 @@ const LookupWarrantyPage = () => {
             {isValidating ? (
               <ListWarrantyReceiptLoading />
             ) : isArrayHasValue(warrantyReceipts) ? (
-              <div className="w-full max-h-[400px] md:max-h-[600px] overflow-scroll scrollbar-hide">
-                {warrantyReceipts?.map((item) => (
-                  <WarrantyReceiptItem
-                    key={item.warranty_receipt_customer_id}
-                    receipt={item}
-                    onClick={() =>
-                      handleWarrantyReceiptItemClick(item?.warranty_receipt_customer_id)
-                    }
-                  />
-                ))}
+              <div
+                className="max-h-[50vh] overflow-scroll scrollbar-hide"
+                id="warrantyListScrollableTarget"
+              >
+                <InfiniteScroll
+                  scrollableTarget="warrantyListScrollableTarget"
+                  dataLength={warrantyReceipts?.length || 0}
+                  next={() => {
+                    fetchMore({
+                      params: {},
+                    })
+                  }}
+                  hasMore={hasMore}
+                  loader={hasMore ? <ListWarrantyReceiptLoading /> : null}
+                >
+                  {warrantyReceipts?.map((item) => (
+                    <WarrantyReceiptItem
+                      key={item.warranty_receipt_customer_id}
+                      receipt={item}
+                      onClick={() =>
+                        handleWarrantyReceiptItemClick(item?.warranty_receipt_customer_id)
+                      }
+                    />
+                  ))}
+                </InfiniteScroll>
               </div>
             ) : (
               <NotFound notify="Không tìm thấy thông tin!" />

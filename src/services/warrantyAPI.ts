@@ -8,7 +8,7 @@ import {
   UpdateCustomerWarrantyReq,
   WarrantyParams,
   WarrantyProductDetailReq,
-  WarrantyReceiptDeatil
+  WarrantyReceiptDeatil,
 } from '@/types'
 import { AxiosResponse } from 'axios'
 import axiosClient from '.'
@@ -38,7 +38,7 @@ const warrantyAPI = {
   },
 
   //Tìm Phiếu Bảo Hành của khách hàng
-  searchWarrantyReceipt: (params: SearchWarrantyReceiptReq) => {
+  searchWarrantyReceipt: (params?: SearchWarrantyReceiptReq) => {
     return axiosClient.post('/warranty_receipt_customer_controller/search_warranty_receipt', {
       params,
     })
@@ -194,4 +194,3 @@ const warrantyAPI = {
 }
 
 export { warrantyAPI }
-
