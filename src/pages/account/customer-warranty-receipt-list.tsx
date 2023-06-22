@@ -2,6 +2,7 @@ import { companyIconSm } from '@/assets'
 import {
   Breadcrumb,
   Image,
+  ListWarrantyReceiptLoading,
   ModalCustomerWarrantyReceiptDetail,
   NotFound,
   Spinner,
@@ -27,7 +28,7 @@ const CustomerWarrantyReceiptListPage = () => {
     isValidating: gettingCustomerDetail,
     // updateCustomerInfo,
   } = useCustomerDetail({
-    key: `${SWR_KEY.get_customer_info}_${customer_id}`,
+    key: `${SWR_KEY.customer_info}_${customer_id}`,
     params: { customer_id },
   })
 
@@ -46,7 +47,7 @@ const CustomerWarrantyReceiptListPage = () => {
     // confirmWarrantyReceiptForCustomer,
     // deleteWarrantyReceiptDraftForCustomer,
   } = useCustomerWarrantyReceiptList({
-    key: `${SWR_KEY.get_customer_warranty_receipt_list}_${currentTab}`,
+    key: `${SWR_KEY.customer_warranty_receipt_list}_${currentTab}`,
     data_key: 'warranty_receipt_customer',
     params: {
       customer_id,
@@ -79,7 +80,7 @@ const CustomerWarrantyReceiptListPage = () => {
       <AccountContainer className="container mb-32">
         <div className="bg-white p-24 rounded-[10px] shadow-shadow-1">
           <div className="border-b border-gray-200 pb-12 mb-24 flex-between flex-wrap">
-            <p className="text-xl capitalize font-semibold">Thông tin bảo hành của khách hàng</p>
+            <p className="text-xl font-semibold">Thông tin bảo hành của khách hàng</p>
           </div>
 
           <div className="mb-12">
@@ -96,8 +97,8 @@ const CustomerWarrantyReceiptListPage = () => {
                         ? `${API_URL}${customerDetail?.avatar_url?.url}`
                         : companyIconSm
                     }
-                    alt=""
-                    className="rounded-full w-[100px] h-[100px] object-cover"
+                    alt="user avatar"
+                    className="w-[100px]"
                     imageClassName="rounded-full w-[100px] h-[100px] object-cover"
                   />
 
@@ -122,9 +123,7 @@ const CustomerWarrantyReceiptListPage = () => {
 
           <div className="">
             {gettingWarrantyReceiptList ? (
-              <div className="flex-center">
-                <Spinner />
-              </div>
+              <ListWarrantyReceiptLoading />
             ) : isArrayHasValue(customerWarrantyReceiptList) ? (
               <div
                 className="max-h-[80vh] overflow-auto scrollbar-hide"
@@ -135,7 +134,7 @@ const CustomerWarrantyReceiptListPage = () => {
                   dataLength={customerWarrantyReceiptList?.length}
                   next={handleFetchMore}
                   hasMore={hasMore}
-                  loader={hasMore ? <Spinner /> : null}
+                  loader={hasMore ? <ListWarrantyReceiptLoading /> : null}
                 >
                   {customerWarrantyReceiptList?.map((item: any) => (
                     <WarrantyReceiptItem

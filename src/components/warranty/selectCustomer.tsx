@@ -21,7 +21,7 @@ export const SelectCustomer = ({ onClick: onExternalClick }: ISelectCustomer) =>
     hasMore,
     mutate,
   } = useQuery<UserAccount, WarrantyParams>({
-    key: `${SWR_KEY.get_list_customer}`,
+    key: `${SWR_KEY.list_customer}`,
     fetcher: warrantyAPI.getListCustomer,
     initialParams: {
       limit: 12,

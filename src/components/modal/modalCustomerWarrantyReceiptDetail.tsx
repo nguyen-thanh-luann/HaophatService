@@ -38,7 +38,7 @@ export const ModalCustomerWarrantyReceiptDetail = ({
         visible={isOpen}
         animationType={'fade'}
         headerClassName="hidden"
-        modalClassName="relative w-[90%] xl:w-[70%] mx-auto p-18 rounded-md bg-white h-[70vh]"
+        modalClassName="relative w-[90%] md:w-[60%] mx-auto rounded-md bg-white h-[70vh]"
       >
         <div ref={ref}>
           <button
@@ -50,7 +50,7 @@ export const ModalCustomerWarrantyReceiptDetail = ({
             <TimesIcon className="text-gray-400 text-xl hover:text-gray duration-150 ease-in-out" />
           </button>
 
-          <div>
+          <div className='p-12'>
             {onApprove || onDelete ? (
               <WarrantyReceiptDetail
                 warranty_receipt_id={warranty_receipt_customer_id}

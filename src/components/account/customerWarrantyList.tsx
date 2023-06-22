@@ -26,7 +26,7 @@ export const CustomerWarrantyList = ({ className }: CustomerWarrantyListProps) =
     // confirmCreateWarrantyReceipt,
     // deleteWarrantyReceiptDraft,
   } = useCustomerWarranty({
-    key: `${SWR_KEY.get_customer_warranty_receipt_list}_${currentTab}`,
+    key: `${SWR_KEY.customer_warranty_receipt_list}_${currentTab}`,
     data_key: 'warranty_receipt_customer',
     params: {
       limit: 7,

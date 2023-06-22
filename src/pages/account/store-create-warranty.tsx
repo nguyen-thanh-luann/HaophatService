@@ -10,7 +10,7 @@ const StoreCreateWarrantyPage = () => {
   const { createStoreWarrantyReceipt, updateWarrantyReceiptDraft } = useStoreWarranty()
 
   const { data: warrantyUpdateInfo } = useStoreWarrantyDetail({
-    key: `${SWR_KEY?.get_store_warranty_receipt_detail}_${warranty_receipt_id}`,
+    key: `${SWR_KEY?.store_warranty_receipt_detail}_${warranty_receipt_id}`,
     params: {
       warranty_receipt_id,
     },
@@ -29,12 +29,12 @@ const StoreCreateWarrantyPage = () => {
           ...params,
         },
         () => {
-          router.push('/account/warranty')
+          router.push('/account/warranty-list')
         }
       )
     } else {
       createStoreWarrantyReceipt(params, () => {
-        router.push('/account/warranty')
+        router.push('/account/warranty-list')
       })
     }
   }

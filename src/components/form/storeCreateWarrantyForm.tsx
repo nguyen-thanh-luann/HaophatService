@@ -28,6 +28,7 @@ export const StoreCreateWarrantyForm = ({
   warrantyUpdate,
 }: IStoreCreateWarrantyForm) => {
   const [modalSelectPick, setModalSelectPicking] = useState<boolean>(false)
+
   const {
     control,
     handleSubmit,
@@ -61,7 +62,7 @@ export const StoreCreateWarrantyForm = ({
   }
 
   return (
-    <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
+    <form className="mx-auto md:w-[70%]" onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-12">
         <InputField
           label={`Hóa đơn`}
@@ -130,7 +131,7 @@ export const StoreCreateWarrantyForm = ({
             </div>
           </div>
 
-          <div className="max-h-[400px] h-fit overflow-scroll scrollbar-hide p-12">
+          <div className="p-12">
             <SelectPicking
               onClick={(val: any) => {
                 handleSelectPicking(val)

@@ -4,10 +4,11 @@ import {
   Button,
   Customer,
   CustomerForm,
+  CustomerLoading,
+  LoadingList,
   Modal,
   NotFound,
   SearchForm,
-  Spinner,
 } from '@/components'
 import { DEFAULT_LIMIT, SWR_KEY, WEB_DESCRIPTION } from '@/constants'
 import { isArrayHasValue } from '@/helper'
@@ -15,9 +16,9 @@ import { useCustomer, useModal, useQuery } from '@/hooks'
 import { warrantyAPI } from '@/services'
 import { AccountContainer, Main } from '@/templates'
 import { CreateCustomerWarrantyReq, UserAccount, WarrantyParams } from '@/types'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useRouter } from 'next/router'
 
 const CustomerPage = () => {
   const [searching, setSearching] = useState<boolean>(false)
@@ -40,7 +41,7 @@ const CustomerPage = () => {
     mutate,
     hasMore,
   } = useQuery<UserAccount, WarrantyParams>({
-    key: `${SWR_KEY.get_list_customer}`,
+    key: `${SWR_KEY.list_customer}`,
     fetcher: warrantyAPI.getListCustomer,
     initialParams: {
       limit: 24,
@@ -118,18 +119,28 @@ const CustomerPage = () => {
 
           <div className="">
             {isValidating || searching ? (
-              <div className="flex-center">
-                <Spinner />
-              </div>
+              <LoadingList>
+                <CustomerLoading />
+              </LoadingList>
             ) : isArrayHasValue(customerList) ? (
-              <div className="h-[60vh] overflow-scroll scrollbar-hide">
+              <div
+                className="max-h-[80vh] overflow-auto scrollbar-hide"
+                id="customerListScrollableTarget"
+              >
                 <InfiniteScroll
+                  scrollableTarget="customerListScrollableTarget"
                   dataLength={customerList?.length || 0}
                   next={() => {
                     fetchMore({ params: { limit: DEFAULT_LIMIT } })
                   }}
                   hasMore={hasMore}
-                  loader={hasMore ? <Spinner /> : null}
+                  loader={
+                    hasMore ? (
+                      <LoadingList>
+                        <CustomerLoading />
+                      </LoadingList>
+                    ) : null
+                  }
                 >
                   {customerList?.map((item, index) => (
                     <Customer

@@ -81,8 +81,10 @@ export const SWR_KEY = {
   get_customers: 'get_customers',
 
   search_warranty: 'search_Warranty',
-  get_store_warranty_receipt_detail: 'get_store_warranty_receipt_detail',
-  get_list_customer: 'get_list_customer',
-  get_customer_info: 'get_customer_info',
-  get_customer_warranty_receipt_list: 'get_customer_warranty_receipt_list',
+  store_warranty_receipt_detail: 'store_warranty_receipt_detail',
+  list_customer: 'list_customer',
+  customer_info: 'customer_info',
+  customer_warranty_receipt_list: 'customer_warranty_receipt_list',
+  store_warranty_receipt_list: 'store_warranty_receipt_list',
+  store_list_picking: 'store_list_picking',
 } as const

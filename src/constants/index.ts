@@ -145,3 +145,10 @@ export const CustomerWarrantyState = [
     title: 'Hết hiệu lực',
   },
 ]
+
+export const WarrantyStateTabs = CustomerWarrantyState.map((item) => {
+  return {
+    label: item.title,
+    value: item.state,
+  }
+})

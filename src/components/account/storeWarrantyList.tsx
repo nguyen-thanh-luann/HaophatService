@@ -1,4 +1,4 @@
-import { CustomerWarrantyState } from '@/constants'
+import { SWR_KEY, WarrantyStateTabs } from '@/constants'
 import { isArrayHasValue } from '@/helper'
 import { useQuery, useUser } from '@/hooks'
 import { warrantyAPI } from '@/services'
@@ -7,11 +7,10 @@ import classNames from 'classnames'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { SearchForm } from '../form'
-import { NotFound } from '../notFound'
-import { Spinner } from '../spinner'
-import { Tabs } from '../tabs'
-import { StoreWarrantyReceiptItem } from '../warranty'
 import { ModalStoreWarrantyReceiptDetail } from '../modal'
+import { NotFound } from '../notFound'
+import { Tabs } from '../tabs'
+import { ListWarrantyReceiptLoading, StoreWarrantyReceiptItem } from '../warranty'
 
 interface StoreWarrantyListProps {
   className?: string
@@ -30,20 +29,13 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
     hasMore,
     mutate,
   } = useQuery<any, WarrantyParams>({
-    key: `get_store_list_warranty${currentTab}`,
+    key: `${SWR_KEY.store_warranty_receipt_list}_${currentTab}`,
     fetcher: warrantyAPI.getStoreListWarrantyReceipt,
     initialParams: {
       limit: 7,
       warranty_state: currentTab !== 'all' ? [currentTab] : [],
     },
     data_key: 'warranty_receipt',
-  })
-
-  const FilterTab = CustomerWarrantyState.map((item) => {
-    return {
-      label: item.title,
-      value: item.state,
-    }
   })
 
   const handleSearchWarrantyReceipt = async (data: string) => {
@@ -77,7 +69,7 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
 
       <div className="mb-12">
         <Tabs
-          list={[{ label: `Tất cả`, value: 'all' }, ...FilterTab]}
+          list={[{ label: `Tất cả`, value: 'all' }, ...WarrantyStateTabs]}
           tabActive={currentTab}
           onChange={(val: string) => {
             setCurrentTab(val)
@@ -90,16 +82,20 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
 
       <div className="">
         {isValidating || searching ? (
-          <div className="bg-white h-[50vh] flex items-center justify-center">
-            <Spinner />
+          <div className="bg-white">
+            <ListWarrantyReceiptLoading />
           </div>
         ) : isArrayHasValue(warrantyReceiptList) ? (
-          <div>
+          <div
+            className="max-h-[80vh] overflow-auto scrollbar-hide"
+            id="warrantyListScrollableTarget"
+          >
             <InfiniteScroll
+              scrollableTarget="warrantyListScrollableTarget"
               dataLength={warrantyReceiptList?.length || 0}
               next={handleFetchMore}
               hasMore={hasMore}
-              loader={hasMore ? <Spinner /> : null}
+              loader={hasMore ? <ListWarrantyReceiptLoading /> : null}
             >
               {warrantyReceiptList?.map((item: any) => (
                 <StoreWarrantyReceiptItem

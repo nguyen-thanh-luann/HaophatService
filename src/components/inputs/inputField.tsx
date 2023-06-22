@@ -14,7 +14,7 @@ type InputFieldProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInp
   messageClassName?: string
 }
 
-export const InputField = ({ 
+export const InputField = ({
   className = '',
   inputClassName,
   labelClassName,
@@ -47,7 +47,7 @@ export const InputField = ({
         </label>
       )}
 
-      <div className={`relative ${label ? 'mt-8' : ''}`}>
+      <div className={classNames('relative', label ? 'mt-8' : '')}>
         <input
           onChange={onChange}
           onBlur={externalOnBlur}

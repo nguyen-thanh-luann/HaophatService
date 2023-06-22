@@ -1,13 +1,12 @@
-import React from 'react'
-import { Button } from '../button'
-import { Spinner } from '../spinner'
-import { WarrantyStateLabel } from './warrantyStateLabel'
-import { useCustomerWarrantyDetail, useGuest, useUser } from '@/hooks'
-import { WarrantyReceiptDetailLine } from './warrantyReceiptDetailLine'
 import { CheckIcon, PenIconSolid, TrashIconOutline } from '@/assets'
-import { CustomImage } from '../customImage'
 import { CustomerWarrantyState } from '@/constants'
 import { durationToName } from '@/helper'
+import { useCustomerWarrantyDetail, useGuest, useUser } from '@/hooks'
+import { Button } from '../button'
+import { CustomImage } from '../customImage'
+import { WarrantyReceiptDetailLine } from './warrantyReceiptDetailLine'
+import { WarrantyReceiptDetailLoading } from './warrantyReceiptDetailLoading'
+import { WarrantyStateLabel } from './warrantyStateLabel'
 
 interface IWarrantyReceiptDetail {
   warranty_receipt_id: number
@@ -38,11 +37,11 @@ export const WarrantyReceiptDetail = ({
   return (
     <div>
       {isValidating ? (
-        <Spinner />
+        <WarrantyReceiptDetailLoading />
       ) : (
-        <div className="p-12">
+        <div className="">
           <div className="mb-12">
-            <div className="flex justify-end">
+            <div className="flex mb-12">
               <WarrantyStateLabel
                 state={
                   CustomerWarrantyState.filter((warranty) => warranty.state === data?.state)?.[0]

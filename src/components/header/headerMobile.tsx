@@ -1,4 +1,4 @@
-import { MenuIcon, logoLg } from '@/assets'
+import { MenuIcon, companyIconSm } from '@/assets'
 import { useClickOutside, useModal } from '@/hooks'
 import classNames from 'classnames'
 import Link from 'next/link'
@@ -33,7 +33,11 @@ export const HeaderMobile = ({ className }: HeaderMobileProps) => {
 
             <div className="flex-1 flex-center">
               <Link href="/">
-                <Image src={logoLg} className="w-[130px] h-[40px]" />
+                <Image
+                  src={companyIconSm}
+                  className="w-[80px]"
+                  imageClassName="w-[80px] h-[60px]"
+                />
               </Link>
             </div>
 

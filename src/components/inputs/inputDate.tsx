@@ -1,7 +1,7 @@
-import classNames from "classnames";
-import React from "react";
-import { Control, useController } from "react-hook-form";
-import { twMerge } from "tailwind-merge";
+import classNames from 'classnames'
+import React from 'react'
+import { Control, useController } from 'react-hook-form'
+import { twMerge } from 'tailwind-merge'
 
 type InputDateProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, any> & {
   control: Control
@@ -46,26 +46,24 @@ export const InputDate = ({
         </label>
       )}
 
-      <div className="">
-        <div className="relative">
-          <input
-            onChange={onChange}
-            onBlur={onBlur}
-            ref={ref}
-            value={value}
-            className={twMerge(
-              classNames(
-                `border border-gray-200 w-full p-8 text rounded-md outline-none ${
-                  error ? 'border-red bg-red-100' : ''
-                }`,
-                inputClassName
-              )
-            )}
-            id={name}
-            {...attributes}
-            type="date"
-          />
-        </div>
+      <div className={classNames('relative', label ? 'mt-8' : '')}>
+        <input
+          onChange={onChange}
+          onBlur={onBlur}
+          ref={ref}
+          value={value}
+          className={twMerge(
+            classNames(
+              `border border-gray-200 w-full p-8 text rounded-md outline-none ${
+                error ? 'border-red bg-red-100' : ''
+              }`,
+              inputClassName
+            )
+          )}
+          id={name}
+          {...attributes}
+          type="date"
+        />
 
         {error ? <p className="text-md text-red">{error.message}</p> : null}
       </div>

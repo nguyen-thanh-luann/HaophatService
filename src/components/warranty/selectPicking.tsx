@@ -5,7 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { warrantyAPI } from '@/services'
 import { Spinner } from '../spinner'
 import { isArrayHasValue } from '@/helper'
-import { DEFAULT_LIMIT } from '@/constants'
+import { DEFAULT_LIMIT, SWR_KEY } from '@/constants'
 import { PickingItem } from './pickingItem'
 import { NotFound } from '../notFound'
 
@@ -20,7 +20,7 @@ export const SelectPicking = ({ onClick: onExternalClick }: ISelectPicking) => {
     fetchMore,
     hasMore,
   } = useQuery<Picking, WarrantyParams>({
-    key: `get_store_list_picking_order`,
+    key: `${SWR_KEY.store_list_picking}`,
     fetcher: warrantyAPI.getStoreListPickingOrder,
     initialParams: {
       limit: 12,
@@ -34,12 +34,18 @@ export const SelectPicking = ({ onClick: onExternalClick }: ISelectPicking) => {
 
   return (
     <div className="mt-12">
-      <div className="max-h-[300px] overflow-scroll">
+      <div className="max-h-[300px] overflow-scroll scrollbar-hide">
         {isValidating ? (
-          <Spinner />
+          <div className="flex-center">
+            <Spinner />
+          </div>
         ) : isArrayHasValue(pickingList) ? (
-          <div>
+          <div
+            className="max-h-[280px] overflow-auto scrollbar-hide"
+            id="pickingListScrollableTarget"
+          >
             <InfiniteScroll
+              scrollableTarget="pickingListScrollableTarget"
               dataLength={pickingList?.length || DEFAULT_LIMIT}
               next={handleFetchMore}
               hasMore={hasMore}

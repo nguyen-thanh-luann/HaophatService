@@ -1,9 +1,9 @@
 import {
   Breadcrumb,
   CheckWarrantyform,
+  ListWarrantyReceiptLoading,
   ModalCustomerWarrantyReceiptDetail,
   NotFound,
-  Spinner,
   WarrantyReceiptItem,
 } from '@/components'
 import { SWR_KEY, WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
@@ -61,24 +61,20 @@ const LookupWarrantyPage = () => {
 
           <div className="border-t border-gray-200 w-[80%] mx-auto my-20"></div>
 
-          <div>
+          <div className="w-[90%] lg:w-[80%] py-12 m-auto ">
             {isValidating ? (
-              <div className="flex-center">
-                <Spinner />
-              </div>
+              <ListWarrantyReceiptLoading />
             ) : isArrayHasValue(warrantyReceipts) ? (
-              <div className="w-[90%] lg:w-[80%] py-12 m-auto ">
-                <div className="w-full max-h-[400px] lg:max-h-[600px] overflow-scroll scrollbar-hide">
-                  {warrantyReceipts?.map((item) => (
-                    <WarrantyReceiptItem
-                      key={item.warranty_receipt_customer_id}
-                      receipt={item}
-                      onClick={() =>
-                        handleWarrantyReceiptItemClick(item?.warranty_receipt_customer_id)
-                      }
-                    />
-                  ))}
-                </div>
+              <div className="w-full max-h-[400px] md:max-h-[600px] overflow-scroll scrollbar-hide">
+                {warrantyReceipts?.map((item) => (
+                  <WarrantyReceiptItem
+                    key={item.warranty_receipt_customer_id}
+                    receipt={item}
+                    onClick={() =>
+                      handleWarrantyReceiptItemClick(item?.warranty_receipt_customer_id)
+                    }
+                  />
+                ))}
               </div>
             ) : (
               <NotFound notify="Không tìm thấy thông tin!" />

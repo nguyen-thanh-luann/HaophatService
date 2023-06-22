@@ -91,7 +91,7 @@ module.exports = {
         'orange-opacity-100': 'rgba(245, 155, 40, 0.1)',
 
         green: '#14CC62',
-        'green-opacity-100': 'rgba(20, 204, 98, 0.1)',
+        'green-opacity-100': 'rgba(46, 234, 125, 0.3)',
 
         violet: '#9B51E0',
         'violet-opacity-100': 'rgba(155, 81, 224, 0.1)',
@@ -170,7 +170,7 @@ module.exports = {
         header_height: '90px',
         header_nav_height: '46px',
         header_group_height: '136px',
-        header_mobile_height: '110px',
+        header_mobile_height: '120px',
         modal_auth_height: '520px',
         modal_auth_width: '800px',
         category_dropdown_height: '470px',
