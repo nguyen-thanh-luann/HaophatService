@@ -1,11 +1,15 @@
 import {
+  DocumentListIcon,
   DonationIconOutline,
+  HoneyIcon,
   LocationOutlineIcon,
   LockIconOutline,
   LogoutIconOutline,
   PackageBoxIconOutline,
   StarIconOutline,
   UserCircleIcon,
+  UserDoubleCircleIcon,
+  UserPoligonIcon,
 } from '@/assets'
 
 export const accountIconStyle = 'w-[20px] h-[20px]'
@@ -28,31 +32,31 @@ export const accountNavData = [
   },
   {
     path: '/account/warranty-list',
-    icon: <UserCircleIcon className={accountIconStyle} />,
+    icon: <DocumentListIcon className={accountIconStyle} />,
     title: 'Danh sách bảo hành',
     account_type_permissions: PublicAccountTypePermissions,
   },
   {
     path: '/account/store-create-warranty',
-    icon: <UserCircleIcon className={accountIconStyle} />,
+    icon: <HoneyIcon className={accountIconStyle} />,
     title: 'Tạo bảo hành',
     account_type_permissions: StoreAccountTypePermissions,
   },
   {
     path: '/account/customer-create-warranty',
-    icon: <UserCircleIcon className={accountIconStyle} />,
+    icon: <HoneyIcon className={accountIconStyle} />,
     title: 'Tạo bảo hành',
     account_type_permissions: CustomerAccountTypePermissions,
   },
   {
     path: '/account/customer',
-    icon: <UserCircleIcon className={accountIconStyle} />,
+    icon: <UserDoubleCircleIcon className={accountIconStyle} />,
     title: 'Khách hàng',
     account_type_permissions: StoreAccountTypePermissions,
   },
   {
     path: '/account/create-warranty-for-customer',
-    icon: <UserCircleIcon className={accountIconStyle} />,
+    icon: <UserPoligonIcon className={accountIconStyle} />,
     title: 'Tạo bảo hành cho khách',
     account_type_permissions: StoreAccountTypePermissions,
   },

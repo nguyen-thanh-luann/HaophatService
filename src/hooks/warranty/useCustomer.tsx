@@ -1,31 +1,24 @@
-import useSWR from 'swr'
-
-import { CreateCustomerWarrantyReq, UserInfo, WarrantyParams } from '@/types'
-import { useAsync } from '../common'
 import { warrantyAPI } from '@/services'
+import { CreateCustomerWarrantyReq, UserAccount, WarrantyParams } from '@/types'
+import { useAsync, useQuery } from '../common'
 
 interface Props {
   params?: WarrantyParams
   key: string
 }
 
-interface IUseCustomer {
-  createCustomerWarranty: Function
-  customerList: UserInfo[]
-  searchCustomer?: Function
-  mutate?: any
-}
-
-const useCustomer = ({ params, key }: Props): IUseCustomer => {
+const useCustomer = ({ params, key }: Props) => {
   const { asyncHandler } = useAsync()
 
-  const { data: customerList, mutate } = useSWR(
+  const { data, isValidating, fetchMore, mutate, hasMore, filter } = useQuery<
+    UserAccount,
+    WarrantyParams
+  >({
     key,
-    () => warrantyAPI.getListCustomer(params).then((res: any) => res?.result?.data?.customer),
-    {
-      revalidateOnFocus: false,
-    }
-  )
+    fetcher: warrantyAPI.getListCustomer,
+    initialParams: params,
+    data_key: 'customer',
+  })
 
   const createCustomerWarranty = async (
     params: CreateCustomerWarrantyReq,
@@ -34,7 +27,7 @@ const useCustomer = ({ params, key }: Props): IUseCustomer => {
     asyncHandler<CreateCustomerWarrantyReq>({
       fetcher: warrantyAPI.createCustomerWarranty(params),
       onSuccess: (res: any) => {
-        mutate(res?.customer, true)
+        mutate([...(res?.customer || []), ...(data || [])], false)
         handleSuccess?.()
       },
       config: {
@@ -45,8 +38,12 @@ const useCustomer = ({ params, key }: Props): IUseCustomer => {
 
   return {
     createCustomerWarranty,
-    customerList,
+    data,
     mutate,
+    isValidating,
+    fetchMore,
+    hasMore,
+    filter,
   }
 }
 

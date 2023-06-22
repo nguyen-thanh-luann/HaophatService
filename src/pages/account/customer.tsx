@@ -12,10 +12,10 @@ import {
 } from '@/components'
 import { DEFAULT_LIMIT, SWR_KEY, WEB_DESCRIPTION } from '@/constants'
 import { isArrayHasValue } from '@/helper'
-import { useCustomer, useModal, useQuery } from '@/hooks'
+import { useCustomer, useModal } from '@/hooks'
 import { warrantyAPI } from '@/services'
 import { AccountContainer, Main } from '@/templates'
-import { CreateCustomerWarrantyReq, UserAccount, WarrantyParams } from '@/types'
+import { CreateCustomerWarrantyReq, UserAccount } from '@/types'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -24,8 +24,19 @@ const CustomerPage = () => {
   const [searching, setSearching] = useState<boolean>(false)
   const router = useRouter()
 
-  const { createCustomerWarranty } = useCustomer({
-    key: ``,
+  const {
+    data: customerList,
+    isValidating,
+    fetchMore,
+    mutate,
+    hasMore,
+    filter,
+    createCustomerWarranty,
+  } = useCustomer({
+    key: `${SWR_KEY.list_customer}`,
+    params: {
+      limit: DEFAULT_LIMIT,
+    },
   })
 
   const {
@@ -33,21 +44,6 @@ const CustomerPage = () => {
     openModal: showCustomerForm,
     closeModal: closeCustomerForm,
   } = useModal()
-
-  const {
-    data: customerList,
-    isValidating,
-    fetchMore,
-    mutate,
-    hasMore,
-  } = useQuery<UserAccount, WarrantyParams>({
-    key: `${SWR_KEY.list_customer}`,
-    fetcher: warrantyAPI.getListCustomer,
-    initialParams: {
-      limit: 24,
-    },
-    data_key: 'customer',
-  })
 
   const handleShowCustomerWarranty = (data: UserAccount) => {
     router.push({
@@ -59,16 +55,18 @@ const CustomerPage = () => {
   }
 
   const handleSearchCustomer = async (data: string) => {
-    try {
-      setSearching(true)
-      const res: any = await (data
-        ? warrantyAPI.searchCustomer({ customer_phone: data })
-        : warrantyAPI.getListCustomer({ limit: 12 }))
+    if (data) {
+      try {
+        setSearching(true)
+        const res: any = await warrantyAPI.searchCustomer({ customer_phone: data })
 
-      setSearching(false)
-      mutate(res?.result?.data?.customer || res?.data?.customer || [], false)
-    } catch (error) {
-      setSearching(false)
+        setSearching(false)
+        mutate(res?.result?.data?.customer || res?.data?.customer || [], false)
+      } catch (error) {
+        setSearching(false)
+      }
+    } else {
+      filter({ params: {} })
     }
   }
 
@@ -114,6 +112,8 @@ const CustomerPage = () => {
             <SearchForm
               placeholder={`Nhập số điện thoại`}
               onSubmit={(val: any) => handleSearchCustomer(val)}
+              buttonClassName="bg-white hidden md:flex"
+              inputClassName="bg-white !text-text-color !leading-8 !text !font-bold"
             />
           </div>
 
@@ -124,7 +124,7 @@ const CustomerPage = () => {
               </LoadingList>
             ) : isArrayHasValue(customerList) ? (
               <div
-                className="max-h-[80vh] overflow-auto scrollbar-hide"
+                className="max-h-[50vh] overflow-auto scrollbar-hide"
                 id="customerListScrollableTarget"
               >
                 <InfiniteScroll
@@ -171,8 +171,8 @@ const CustomerPage = () => {
                 </div>
               </div>
 
-              <div className="max-h-[400px] h-fit overflow-scroll scrollbar-hide p-12">
-                <CustomerForm className="mt-20" type="create" onSubmit={handleCreateCustomer} />
+              <div className="max-h-[400px] h-fit p-12 overflow-scroll scrollbar-hide">
+                <CustomerForm type="create" onSubmit={handleCreateCustomer} />
               </div>
             </div>
           </Modal>
