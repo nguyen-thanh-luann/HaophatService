@@ -22,7 +22,7 @@ const CustomerPage = () => {
   const [searching, setSearching] = useState<boolean>(false)
 
   const { createCustomerWarranty } = useCustomer({
-    key: `${SWR_KEY.get_list_customer}`,
+    key: ``,
   })
 
   const {
@@ -38,13 +38,16 @@ const CustomerPage = () => {
     mutate,
     hasMore,
   } = useQuery<UserAccount, WarrantyParams>({
-    key: `get_list_customer`,
+    key: `${SWR_KEY.get_list_customer}`,
     fetcher: warrantyAPI.getListCustomer,
     initialParams: {
       limit: 24,
     },
     data_key: 'customer',
   })
+
+  console.log(customerList)
+  
 
   const handleSearchCustomer = async (data: string) => {
     try {

@@ -1,6 +1,6 @@
 import {
-  CreateAttachmentReq,
   CreateCustomerWarrantyReq,
+  CreateWarrantyAttachmentReq,
   CreateWarrantyReceiptReq,
   GetListStoreReq,
   SearchWarrantyReceiptReq,
@@ -8,7 +8,7 @@ import {
   UpdateCustomerWarrantyReq,
   WarrantyParams,
   WarrantyProductDetailReq,
-  WarrantyReceiptDeatil,
+  WarrantyReceiptDeatil
 } from '@/types'
 import { AxiosResponse } from 'axios'
 import axiosClient from '.'
@@ -98,12 +98,9 @@ const warrantyAPI = {
 
   //Đại lí xác nhận phiếu bảo hành cho mình
   storeConfirmCreateWarrantyReceipt: (params?: WarrantyParams) => {
-    return axiosClient.post(
-      '/warranty_receipt_store_controller/waiting_confirm_warranty_receipt',
-      {
-        params,
-      }
-    )
+    return axiosClient.post('/warranty_receipt_store_controller/waiting_confirm_warranty_receipt', {
+      params,
+    })
   },
 
   //Khách hàng xác nhận tạo phiếu bảo hành của mình
@@ -137,7 +134,7 @@ const warrantyAPI = {
   },
 
   //upload hình ảnh hóa đơn
-  createWarrantyAttachment: (params: CreateAttachmentReq) => {
+  createWarrantyAttachment: (params: CreateWarrantyAttachmentReq) => {
     return axiosClient.post('/detail_data_controller/create_attachment_data', { params })
   },
 

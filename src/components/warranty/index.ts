@@ -8,3 +8,7 @@ export * from './storeWarrantyProduct'
 export * from './storeWarrantyReceiptItem'
 export * from './storeWarrantyReceiptItemDetail'
 export * from './customer'
+export * from './selectCustomer'
+export * from './selectProductWarranty'
+export * from './selectLot'
+

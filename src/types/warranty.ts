@@ -280,3 +280,11 @@ export interface CreateCustomerWarrantyReq {
 export interface UpdateCustomerWarrantyReq extends CreateCustomerWarrantyReq {
 	customer_id: number;
 }
+
+export interface CreateWarrantyAttachmentReq {
+  token?: string
+  attachments: {
+    file: string
+    type: 'image'
+  }[]
+}

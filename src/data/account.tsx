@@ -44,7 +44,7 @@ export const accountNavData = [
     account_type_permissions: StoreAccountTypePermissions,
   },
   {
-    path: '/account/warranty',
+    path: '/account/create-warranty-for-customer',
     icon: <UserCircleIcon className={accountIconStyle} />,
     title: 'Tạo bảo hành cho khách',
     account_type_permissions: StoreAccountTypePermissions,
