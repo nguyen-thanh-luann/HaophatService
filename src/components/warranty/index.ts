@@ -11,4 +11,4 @@ export * from './customer'
 export * from './selectCustomer'
 export * from './selectProductWarranty'
 export * from './selectLot'
-
+export * from './selectAgency'
