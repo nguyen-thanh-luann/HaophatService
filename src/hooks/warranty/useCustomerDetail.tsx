@@ -1,15 +1,15 @@
 import useSWR from 'swr'
 
-import { UpdateCustomerWarrantyReq, UserInfo, WarrantyParams } from '@/types'
-import { useAsync } from '../common'
 import { warrantyAPI } from '@/services'
+import { UpdateCustomerWarrantyReq, UserAccount, WarrantyParams } from '@/types'
+import { useAsync } from '../common'
 interface Props {
   params: WarrantyParams
   key?: string
 }
 
 interface IUseCustomer {
-  data: UserInfo
+  data: UserAccount
   updateCustomerInfo: Function
   mutate?: Function
   isValidating?: boolean
@@ -54,3 +54,4 @@ const useCustomerDetail = ({ params, key }: Props): IUseCustomer => {
 }
 
 export { useCustomerDetail }
+

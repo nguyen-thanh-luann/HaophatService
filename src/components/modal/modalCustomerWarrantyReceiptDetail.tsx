@@ -38,7 +38,7 @@ export const ModalCustomerWarrantyReceiptDetail = ({
         visible={isOpen}
         animationType={'fade'}
         headerClassName="hidden"
-        modalClassName="relative w-[90%] xl:w-[70%] mx-auto p-18 rounded-md bg-white h-[70vh] border"
+        modalClassName="relative w-[90%] xl:w-[70%] mx-auto p-18 rounded-md bg-white h-[70vh]"
       >
         <div ref={ref}>
           <button

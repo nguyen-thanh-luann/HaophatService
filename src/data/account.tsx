@@ -17,6 +17,7 @@ export const AdminAccessRule = ['npp'] //only 'npp'
 
 export const PublicAccountTypePermissions = ['store_account', 'customer_account', '']
 export const StoreAccountTypePermissions = ['store_account']
+export const CustomerAccountTypePermissions = ['customer_account']
 
 export const accountNavData = [
   {
@@ -36,6 +37,12 @@ export const accountNavData = [
     icon: <UserCircleIcon className={accountIconStyle} />,
     title: 'Tạo bảo hành',
     account_type_permissions: StoreAccountTypePermissions,
+  },
+  {
+    path: '/account/customer-create-warranty',
+    icon: <UserCircleIcon className={accountIconStyle} />,
+    title: 'Tạo bảo hành',
+    account_type_permissions: CustomerAccountTypePermissions,
   },
   {
     path: '/account/customer',

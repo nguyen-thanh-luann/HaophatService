@@ -138,7 +138,7 @@ const SearchPage = () => {
             )}
 
             {/* product slide here */}
-            <div className="">
+            <div className="mb-12">
               {isValidating || isFilter ? (
                 <ProductsLoadingSlice className="grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-12" />
               ) : null}
@@ -146,22 +146,28 @@ const SearchPage = () => {
               {isValidating ? (
                 <ProductsLoadingSlice className="grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-12" />
               ) : isArrayHasValue(products) ? (
-                <InfiniteScroll
-                  dataLength={products?.length || 0}
-                  next={() => getMore()}
-                  hasMore={hasMore}
-                  loader={
-                    hasMore ? (
-                      <ProductsLoadingSlice className="grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-12" />
-                    ) : null
-                  }
+                <div
+                  className="h-[80vh] overflow-auto scrollbar-hide"
+                  id="productListScrollableTarget"
                 >
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
-                    {products?.map((product) => (
-                      <ProductItem data={product} key={product?.product_id} />
-                    ))}
-                  </div>
-                </InfiniteScroll>
+                  <InfiniteScroll
+                    scrollableTarget="productListScrollableTarget"
+                    dataLength={products?.length || 0}
+                    next={getMore}
+                    hasMore={hasMore}
+                    loader={
+                      hasMore ? (
+                        <ProductsLoadingSlice className="grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-12" />
+                      ) : null
+                    }
+                  >
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+                      {products?.map((product) => (
+                        <ProductItem data={product} key={product?.product_id} />
+                      ))}
+                    </div>
+                  </InfiniteScroll>
+                </div>
               ) : (
                 <div className="">
                   {!isValidating && !isFilter && (

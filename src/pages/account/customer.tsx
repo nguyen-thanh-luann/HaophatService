@@ -17,9 +17,11 @@ import { AccountContainer, Main } from '@/templates'
 import { CreateCustomerWarrantyReq, UserAccount, WarrantyParams } from '@/types'
 import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { useRouter } from 'next/router'
 
 const CustomerPage = () => {
   const [searching, setSearching] = useState<boolean>(false)
+  const router = useRouter()
 
   const { createCustomerWarranty } = useCustomer({
     key: ``,
@@ -46,8 +48,14 @@ const CustomerPage = () => {
     data_key: 'customer',
   })
 
-  console.log(customerList)
-  
+  const handleShowCustomerWarranty = (data: UserAccount) => {
+    router.push({
+      pathname: `/account/customer-warranty-receipt-list`,
+      query: {
+        customer_id: data?.partner_id,
+      },
+    })
+  }
 
   const handleSearchCustomer = async (data: string) => {
     try {
@@ -124,7 +132,13 @@ const CustomerPage = () => {
                   loader={hasMore ? <Spinner /> : null}
                 >
                   {customerList?.map((item, index) => (
-                    <Customer key={index} customer={item as UserAccount} onClick={() => {}} />
+                    <Customer
+                      key={index}
+                      customer={item as UserAccount}
+                      onClick={() => {
+                        handleShowCustomerWarranty(item)
+                      }}
+                    />
                   ))}
                 </InfiniteScroll>
               </div>
