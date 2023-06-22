@@ -1,4 +1,4 @@
-import { TimesIcon, companyIconSm } from '@/assets'
+import { PhotoIcon, TimesIcon, companyIconSm } from '@/assets'
 import { API_URL } from '@/constants'
 import { useAsync, useModal, useWarrantyAttachment } from '@/hooks'
 import { createWarrantyForCustomer } from '@/schema'
@@ -126,7 +126,7 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="p-12">
+      <div>
         {/* customer information */}
         <div className="mb-18">
           <p className="text-md font-bold mb-12">{`Thông tin khách hàng`}</p>
@@ -200,26 +200,30 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
             />
             <label
               htmlFor="warranty_attachment"
-              className={`flex items-center p-8 gap-8 cursor-pointer rounded-md border
-										text-primary border-primary hover:bg-primary-opacity-10 duration-150 ease-linear active:bg-white`}
+              className={`flex items-center p-8 gap-8 cursor-pointer
+										text-primary border-primary duration-150`}
             >
-              <span>Chọn hình ảnh</span>
+              {attachment ? (
+                <div className={`relative mt-8`}>
+                  <Image
+                    src={
+                      attachment?.attachment_url
+                        ? `${API_URL}${attachment.attachment_url}`
+                        : companyIconSm
+                    }
+                    alt="warranty receipt"
+                    className="w-[100px]"
+                    imageClassName="w-[100px] h-[100px] object-cover rounded-md"
+                  />
+                </div>
+              ) : (
+                <div className="">
+                  <PhotoIcon className="w-90 h-90 text-gray" />
+                  <p className="mt-8 text-center text-base">Tải ảnh lên</p>
+                </div>
+              )}
             </label>
           </div>
-          {attachment ? (
-            <div className={`relative mt-8`}>
-              <Image
-                src={
-                  attachment?.attachment_url
-                    ? `${API_URL}${attachment.attachment_url}`
-                    : companyIconSm
-                }
-                alt="warranty receipt"
-                className="w-[100px] h-[100px] object-cover"
-                imageClassName="w-[100px] h-[100px] object-cover"
-              />
-            </div>
-          ) : null}
         </div>
       </div>
 
@@ -249,7 +253,7 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
             </div>
           </div>
 
-          <div className="max-h-[400px] h-fit overflow-scroll scrollbar-hide p-12">
+          <div className="p-12">
             <SelectCustomer
               onClick={(val: any) => {
                 handleSelectCustomer(val)
@@ -277,7 +281,7 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
             </div>
           </div>
 
-          <div className="max-h-[400px] h-fit overflow-scroll scrollbar-hide p-12">
+          <div className="p-12">
             <SelectProductWarranty
               onClick={(val: any) => {
                 handleSelectProductWarranty(val)
@@ -305,7 +309,7 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
             </div>
           </div>
 
-          <div className="max-h-[400px] h-fit overflow-scroll scrollbar-hide p-12">
+          <div className="p-12">
             <SelectLot
               onClick={(val: any) => {
                 hanldeSelectLot(val)

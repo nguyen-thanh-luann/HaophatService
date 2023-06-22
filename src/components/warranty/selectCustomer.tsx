@@ -1,58 +1,58 @@
 import { DEFAULT_LIMIT, SWR_KEY } from '@/constants'
 import { isArrayHasValue } from '@/helper'
-import { useQuery } from '@/hooks'
-import { UserAccount, WarrantyParams } from '@/types'
+import { useCustomer } from '@/hooks'
+import { warrantyAPI } from '@/services'
+import { UserAccount } from '@/types'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { CustomImage } from '../customImage'
 import { SearchField } from '../form'
 import { NotFound } from '../notFound'
 import { Spinner } from '../spinner'
-import { warrantyAPI } from '@/services'
+import { useState } from 'react'
 
 interface ISelectCustomer {
   onClick?: Function
 }
 
 export const SelectCustomer = ({ onClick: onExternalClick }: ISelectCustomer) => {
+  const [searching, setSearching] = useState<boolean>(false)
+
   const {
     data: customerList,
     isValidating,
     fetchMore,
-    hasMore,
     mutate,
-  } = useQuery<UserAccount, WarrantyParams>({
+    hasMore,
+    filter,
+  } = useCustomer({
     key: `${SWR_KEY.list_customer}`,
-    fetcher: warrantyAPI.getListCustomer,
-    initialParams: {
-      limit: 12,
+    params: {
+      limit: DEFAULT_LIMIT,
     },
-    data_key: 'customer',
   })
 
-  console.log({ customerList })
+  const handleSearchCustomer = async (data: string) => {
+    if (data) {
+      try {
+        setSearching(true)
+        const res: any = await warrantyAPI.searchCustomer({ customer_phone: data })
 
-  const handleFetchMore = () => {
-    fetchMore({
-      params: {},
-    })
-  }
-
-  const handleSearchCustomer = async (data: any) => {
-    try {
-      const res: any = await (data
-        ? warrantyAPI.searchCustomer({ customer_phone: data })
-        : warrantyAPI.getListCustomer({ limit: 12 }))
-
-      mutate(res?.result?.data?.customer || [], false)
-    } catch (error) {}
+        setSearching(false)
+        mutate(res?.result?.data?.customer || res?.data?.customer || [], false)
+      } catch (error) {
+        setSearching(false)
+      }
+    } else {
+      filter({ params: {} })
+    }
   }
 
   return (
     <div className="">
-      <div className="my-12">
+      <div className="mb-12">
         <SearchField
           placeholder={`Nhập số điện thoại`}
-          onSubmit={(val) => {
+          onSubmit={(val: any) => {
             handleSearchCustomer(val)
           }}
           onChangeWithDebounceValue={(val) => {
@@ -62,16 +62,22 @@ export const SelectCustomer = ({ onClick: onExternalClick }: ISelectCustomer) =>
         />
       </div>
 
-      <div className="mt-12 max-h-[300px] overflow-scroll">
-        {isValidating ? (
+      <div className="">
+        {isValidating || searching ? (
           <div className="flex-center">
             <Spinner />
           </div>
         ) : isArrayHasValue(customerList) ? (
-          <div>
+          <div
+            className="max-h-[300px] overflow-auto scrollbar-hide"
+            id="customerListScrollableTarget"
+          >
             <InfiniteScroll
+              scrollableTarget="customerListScrollableTarget"
               dataLength={customerList?.length || DEFAULT_LIMIT}
-              next={() => handleFetchMore()}
+              next={() => {
+                fetchMore({ params: { limit: DEFAULT_LIMIT } })
+              }}
               hasMore={hasMore}
               loader={hasMore ? <Spinner /> : null}
             >
@@ -81,19 +87,19 @@ export const SelectCustomer = ({ onClick: onExternalClick }: ISelectCustomer) =>
                   onClick={() => {
                     onExternalClick?.(item)
                   }}
-                  className="rounded-lg p-8 cursor-pointer border-1 
-                  border-gray-200 hover:bg-gray-100 mb-12 last:mb-0 active:bg-opacity-50 flex items-center duration-150 ease-in-out"
+                  className="rounded-lg p-8 cursor-pointer border
+                  border-gray-200 hover:bg-gray-100 mb-12 last:mb-0 flex gap-8 items-center duration-200"
                 >
                   <div className="relative">
                     <CustomImage
                       src={item?.avatar_url?.url || ''}
-                      className="w-[30px]"
-                      imageClassName="rounded-full w-[30px] h-[30px] object-cover"
+                      className="w-[40px]"
+                      imageClassName="rounded-full w-[40px] h-[40px] object-cover"
                     />
                   </div>
-                  <div className="ml-12">
-                    <p className="title-sm">{(item as UserAccount)?.partner_name}</p>
-                    <p className="text-sm"> {(item as UserAccount)?.phone}</p>
+                  <div className="">
+                    <p className="text-base">{(item as UserAccount)?.partner_name}</p>
+                    <p className="text-base"> {(item as UserAccount)?.phone}</p>
                   </div>
                 </div>
               ))}

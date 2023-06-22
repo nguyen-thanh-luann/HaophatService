@@ -45,7 +45,7 @@ const CreateWarrantyForCustomerPage = () => {
             Tạo bảo hành cho khách
           </p>
 
-          <div className="w-[80%] mx-auto">
+          <div className="w-[90%] md:w-[80%] mx-auto">
             <CreateWarrantyForCustomerForm onSubmit={handleSendWarrantyRequest} />
           </div>
         </div>

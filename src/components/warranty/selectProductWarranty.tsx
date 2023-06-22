@@ -6,7 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { Spinner } from '../spinner'
 import { warrantyAPI } from '@/services'
 import { isArrayHasValue } from '@/helper'
-import { API_URL, DEFAULT_LIMIT } from '@/constants'
+import { API_URL, DEFAULT_LIMIT, SWR_KEY } from '@/constants'
 import { companyIconSm } from '@/assets'
 import { Image } from '../image'
 import { NotFound } from '../notFound'
@@ -21,9 +21,9 @@ export const SelectProductWarranty = ({ onClick: onExternalClick }: ISelectProdu
     isValidating,
     fetchMore,
     hasMore,
-    mutate,
+    filter,
   } = useQuery<WarrantyProductItem, WarrantyParams>({
-    key: `product_warranty_list`,
+    key: `${SWR_KEY.product_Warranty_list}`,
     fetcher: warrantyAPI.getListWarrantyProduct,
     initialParams: {
       limit: 12,
@@ -36,16 +36,16 @@ export const SelectProductWarranty = ({ onClick: onExternalClick }: ISelectProdu
   }
 
   const handleSearchProduct = async (data: any) => {
-    try {
-      const res: any = await warrantyAPI.getListWarrantyProduct({ product_name: data })
-
-      mutate(res?.result?.data?.product || res?.data?.product || [], false)
-    } catch (error) {}
+    filter({
+      params: {
+        product_name: data || '',
+      },
+    })
   }
 
   return (
     <div className="">
-      <div className="my-12">
+      <div className="mb-12">
         <SearchField
           placeholder={`Tìm kiếm sản phẩm`}
           onSubmit={(val) => {
@@ -58,14 +58,18 @@ export const SelectProductWarranty = ({ onClick: onExternalClick }: ISelectProdu
         />
       </div>
 
-      <div className="mt-12 max-h-[300px] overflow-scroll scrollbar-hide">
+      <div className="">
         {isValidating ? (
           <div className="flex-center">
             <Spinner />
           </div>
         ) : isArrayHasValue(productWarrantyList) ? (
-          <div>
+          <div
+            className="max-h-[300px] overflow-auto scrollbar-hide"
+            id="productWarrantyListScrollableTarget"
+          >
             <InfiniteScroll
+              scrollableTarget="productWarrantyListScrollableTarget"
               dataLength={productWarrantyList?.length || DEFAULT_LIMIT}
               next={handleFetchMore}
               hasMore={hasMore}
@@ -77,8 +81,8 @@ export const SelectProductWarranty = ({ onClick: onExternalClick }: ISelectProdu
                   onClick={() => {
                     onExternalClick?.(item)
                   }}
-                  className="rounded-lg p-8 cursor-pointer border-1 
-                  border-gray-200 hover:bg-gray-200 mb-12 last:mb-0 active:opacity-50 flex items-center duration-150 ease-in-out"
+                  className="rounded-lg p-8 cursor-pointer border 
+                  border-gray-200 hover:bg-gray-200 mb-12 last:mb-0 flex items-center duration-150"
                 >
                   <div className="relative">
                     <Image
