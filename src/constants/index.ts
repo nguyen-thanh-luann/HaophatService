@@ -126,8 +126,8 @@ export const VNPAY_STATUS_NAME = {
 export const CustomerWarrantyState = [
   {
     state: 'draft',
-    style: 'text-primary bg-error-200',
-    title: 'Đơn nháp',
+    style: 'text-primary bg-red-200',
+    title: 'Phiếu nháp',
   },
   {
     state: 'waiting',

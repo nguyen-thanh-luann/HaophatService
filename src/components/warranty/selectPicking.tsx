@@ -33,7 +33,7 @@ export const SelectPicking = ({ onClick: onExternalClick }: ISelectPicking) => {
   }
 
   return (
-    <div className="mt-12">
+    <div className="">
       <div className="max-h-[300px] overflow-scroll scrollbar-hide">
         {isValidating ? (
           <div className="flex-center">

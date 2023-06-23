@@ -1,4 +1,4 @@
-import { useAuth, useChatAccount, useGuest, useUser } from '@/hooks'
+import { useAuth, useUser } from '@/hooks'
 import { createPasswordSchema } from '@/schema'
 import { setAuthOption, setBackdropVisible } from '@/store'
 import { authentication } from '@/utils'
@@ -29,11 +29,9 @@ interface ResetPasswordScreenProps {
 export const ResetPasswordScreen = ({ onClose }: ResetPasswordScreenProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { guestInfo } = useGuest()
-  const deviceCode = guestInfo?.device_code || ''
   const { resetPassword } = useAuth()
-  const { addGuestCartToShoppingCart, mutateAccountData } = useUser({})
-  const { autoSignupChatServer } = useChatAccount()
+  const { mutateAccountData } = useUser({})
+  // const { autoSignupChatServer } = useChatAccount()
 
   const [phoneNumber, setPhoneNumber] = useState<string>()
   const [verify, setVerify] = useState<boolean>(false)
@@ -109,8 +107,8 @@ export const ResetPasswordScreen = ({ onClose }: ResetPasswordScreenProps) => {
         toast.success('Thay đổi mật khẩu thành công!')
         mutateAccountData()
         // merge cart data of guest to user's cart
-        addGuestCartToShoppingCart(deviceCode)
-        autoSignupChatServer()
+        // addGuestCartToShoppingCart(deviceCode)
+        // autoSignupChatServer()
         router.push('/')
       },
     })

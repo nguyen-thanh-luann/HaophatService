@@ -1,5 +1,5 @@
 import { UserCircleIcon } from '@/assets'
-import { useGuest, useUser } from '@/hooks'
+import { useUser } from '@/hooks'
 import { selectAuthOption, setAuthOption } from '@/store'
 import { AUTH_OPTION } from '@/types'
 import classNames from 'classnames'
@@ -24,19 +24,15 @@ export const AccountDrawer = ({ className }: AccountDrawerProps) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const authOption: AUTH_OPTION = useSelector(selectAuthOption)
-  const { guestInfo } = useGuest()
   const { userInfo } = useUser({})
 
-  //  console.log(encodeJWT({ user_id: userInfo?.account?.partner_id }))
-
-  const deviceCode = guestInfo?.device_code
 
   const handleCLoseModal = () => {
     dispatch(setAuthOption(undefined))
   }
 
   const handleClick = () => {
-    if (!deviceCode) {
+    if (userInfo) {
       router.push('/account/profile')
     } else {
       dispatch(setAuthOption('loginPassword'))
@@ -51,7 +47,7 @@ export const AccountDrawer = ({ className }: AccountDrawerProps) => {
           className="w-header_tab_width h-header_tab_height flex p-8 gap-8 rounded-[8px] items-center shadow-shadow-1 cursor-pointer group bg-background hover:bg-primary-100"
         >
           <div className="w-20 h-20">
-            {deviceCode ? (
+            {!userInfo ? (
               <UserCircleIcon className="text-gray w-20 h-20 group-hover:text-primary" />
             ) : (
               <div>
@@ -65,7 +61,7 @@ export const AccountDrawer = ({ className }: AccountDrawerProps) => {
 
           <div className="hidden md:block">
             <p className="title !text-gray group-hover:!text-primary line-clamp-1 break-all">
-              {!deviceCode
+              {userInfo
                 ? userInfo?.account?.business_operation_name || userInfo?.account?.partner_name
                 : 'Đăng nhập'}
             </p>
@@ -73,11 +69,11 @@ export const AccountDrawer = ({ className }: AccountDrawerProps) => {
         </div>
 
         <AccountDrawerMenu
-          className={`absolute z-40 left-[-25%] hidden ${!deviceCode ? 'group-hover:block' : ''}`}
+          className={`absolute z-40 left-[-25%] hidden ${userInfo ? 'group-hover:block' : ''}`}
         />
       </div>
 
-      {deviceCode ? (
+      {!userInfo ? (
         <ModalAuth visible={authOption !== undefined}>
           <div>
             {authOption === 'loginPassword' ? (

@@ -13,12 +13,12 @@ export const PickingItem = ({data, onClick: onExternalClick}: PickingItemProps) 
       onClick={() => {
         onExternalClick?.(data)
       }}
-      className="rounded-sm p-8 cursor-pointer border-1 shadow-sm
-      border-gray-200 hover:bg-gray-10 mb-12 last:mb-0 active:bg-white flex items-center gap-12"
+      className="rounded-md p-8 cursor-pointer border 
+      border-gray-200 hover:bg-gray-100 mb-12 last:mb-0 flex items-center gap-12"
     >
       <div>
-        <p className="title-md">{data?.name}</p>
-        <p className="text-md">{formatMoneyVND(data?.amount_total || 0)}</p>
+        <p className="text-base">{`Mã hóa đơn: ${data?.name}`}</p>
+        <p className="text-base">{`Tổng: ${formatMoneyVND(data?.amount_total || 0)}`}</p>
       </div>
     </div>
   )

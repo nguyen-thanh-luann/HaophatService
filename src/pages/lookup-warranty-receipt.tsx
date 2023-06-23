@@ -8,7 +8,7 @@ import {
 } from '@/components'
 import { SWR_KEY, WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
 import { isArrayHasValue } from '@/helper'
-import { useCheckWarranty, useGuest } from '@/hooks'
+import { useCheckWarranty, useUser } from '@/hooks'
 import { Main } from '@/templates'
 import { WarrantyParams } from '@/types'
 import { useState } from 'react'
@@ -18,12 +18,11 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 const LookupWarrantyPage = () => {
   const [searchParams, setSearchParams] = useState<WarrantyParams>({})
   const [warrantyReceiptId, setWarrantyReceiptId] = useState<number | undefined>(undefined)
-  const { guestInfo } = useGuest()
-  const deviceCode = guestInfo?.device_code
+  const { userInfo } = useUser({})
 
   const handleFormSubmit = (data: WarrantyParams) => {
     setSearchParams(data)
-    console.log({ data })
+    // console.log({ data })
   }
 
   const {
@@ -39,7 +38,7 @@ const LookupWarrantyPage = () => {
   })
 
   const handleWarrantyReceiptItemClick = (id: number) => {
-    if (deviceCode) {
+    if (!userInfo) {
       return toast.error('Vui lòng đăng nhập để xem chi tiết!')
     }
     setWarrantyReceiptId(id)

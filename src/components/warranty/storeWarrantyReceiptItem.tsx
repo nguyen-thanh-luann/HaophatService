@@ -14,7 +14,7 @@ export const StoreWarrantyReceiptItem = ({
 }: IStoreWarrantyReceiptItem) => {
   return (
     <div
-      className="bg-white mb-20 last:mb-0 p-16 rounded-sm shadow-sm cursor-pointer
+      className="bg-white mb-20 last:mb-0 p-16 border border-gray-200 rounded-md cursor-pointer
 		hover:bg-gray-200 ease-linear duration-150 active:bg-white"
       onClick={() => {
         onExternalClick?.()
@@ -22,18 +22,13 @@ export const StoreWarrantyReceiptItem = ({
     >
       <div className="flex justify-between items-center">
         <div className="">
-          <p className="title-sm">
-            <span>{`Phiếu bảo hành: `}</span>
-            <span className="!font-500">{item?.name}</span>
-          </p>
-          <p className="title-sm">
-            <span>{`Đơn hàng: `}</span>
-            <span className="!font-500">{item?.picking_id?.name}</span>
-          </p>
-          <p className="title-sm">
-            <span>{`Ngày bắt đầu: `}</span>
-            <span className="!font-500">{item?.warranty_starting}</span>
-          </p>
+          <p className="text-md">{`Phiếu bảo hành: ${item?.name}`}</p>
+
+          <p className="text-md">{`Đơn hàng: ${item?.picking_id?.name}`}</p>
+
+          <p className="text-md">{`Số hóa đơn: ${item?.invoice_ref}`}</p>
+
+          <p className="text-md">{`Ngày bắt đầu: ${item?.warranty_starting}`}</p>
         </div>
         <div>
           <WarrantyStateLabel

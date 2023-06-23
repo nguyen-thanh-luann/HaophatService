@@ -1,7 +1,7 @@
 import { CheckIcon, PenIconSolid, TrashIconOutline } from '@/assets'
 import { CustomerWarrantyState } from '@/constants'
 import { durationToName } from '@/helper'
-import { useCustomerWarrantyDetail, useGuest, useUser } from '@/hooks'
+import { useCustomerWarrantyDetail, useUser } from '@/hooks'
 import { Button } from '../button'
 import { CustomImage } from '../customImage'
 import { WarrantyReceiptDetailLine } from './warrantyReceiptDetailLine'
@@ -24,8 +24,6 @@ export const WarrantyReceiptDetail = ({
   onApprove,
 }: IWarrantyReceiptDetail) => {
   const { userInfo } = useUser({})
-  const { guestInfo } = useGuest()
-  const deviceCode = guestInfo?.device_code
 
   const { data, isValidating } = useCustomerWarrantyDetail({
     key: `get_warranty_product_info_${warranty_receipt_id}`,
@@ -165,7 +163,7 @@ export const WarrantyReceiptDetail = ({
             </div>
           </div>
 
-          {!deviceCode ? (
+          {userInfo ? (
             <div className="flex items-center justify-center gap-12 flex-wrap">
               {data?.state === 'draft' && onUpdate ? (
                 <Button

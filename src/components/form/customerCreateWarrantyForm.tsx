@@ -216,10 +216,10 @@ export const CustomerCreateWarrantyForm = ({
             />
 
             <InputField
-              label="Số lô / Serial"
+              label="Số lot"
               control={control}
               name="serial"
-              placeholder="Chọn số lô / serial"
+              placeholder="Là mã seri được ghi trên hóa đơn"
               required={true}
               readOnly
               onClick={() => {
@@ -240,7 +240,8 @@ export const CustomerCreateWarrantyForm = ({
             />
 
             <InputDate
-              label="Chọn ngày bảo hành"
+              label="Chọn ngày kích hoạt"
+              placeholder=''
               control={control}
               name="date"
               required={true}
@@ -359,7 +360,7 @@ export const CustomerCreateWarrantyForm = ({
       >
         <div>
           <div className="flex-between p-12">
-            <p className="text-md">Chọn số seri</p>
+            <p className="text-md">Chọn số lot</p>
             <div
               className="cursor-pointer"
               onClick={() => {

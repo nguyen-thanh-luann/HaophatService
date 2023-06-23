@@ -3,11 +3,9 @@ import { LIMIT_ATTACHMENT, STORE_TYPE } from '@/constants'
 import {
   useAttachment,
   useAuth,
-  useChatAccount,
   useCreateAttachment,
-  useGuest,
   useModal,
-  useUser,
+  useUser
 } from '@/hooks'
 import { storeRegisterSchema } from '@/schema'
 import { userAPI } from '@/services'
@@ -47,11 +45,9 @@ type certificatteTypeImage = 'businessCertificateImage' | 'gppCertificateImage'
 export const StoreRegisterForm = ({ className }: StoreRegisterFormProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { guestInfo } = useGuest()
-  const deviceCode = guestInfo?.device_code || ''
   const { loginPhoneNumber } = useAuth()
-  const { updateUser, addGuestCartToShoppingCart, mutateAccountData } = useUser({})
-  const { autoSignupChatServer } = useChatAccount()
+  const { updateUser, mutateAccountData } = useUser({})
+  // const { autoSignupChatServer } = useChatAccount()
   const [formData, setFormData] = useState<any>()
 
   const { visible: showOtpForm, openModal: setShowOtpForm, closeModal: closeOtpForm } = useModal()
@@ -194,10 +190,10 @@ export const StoreRegisterForm = ({ className }: StoreRegisterFormProps) => {
                 establish_date: data?.establish_date,
               },
               () => {
-                autoSignupChatServer('npp')
+                // autoSignupChatServer('npp')
                 // merge cart data of guest to user's cart
                 mutateAccountData()
-                addGuestCartToShoppingCart(deviceCode)
+                // addGuestCartToShoppingCart(deviceCode)
                 router.push('/')
               }
             )

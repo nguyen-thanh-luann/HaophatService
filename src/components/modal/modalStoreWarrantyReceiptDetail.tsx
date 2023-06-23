@@ -1,10 +1,9 @@
 import { TimesIcon } from '@/assets'
+import { SWR_KEY } from '@/constants'
 import { isObjectHasValue } from '@/helper'
-import { useStoreWarrantyDetail } from '@/hooks'
+import { useModal, useStoreWarrantyDetail } from '@/hooks'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { Spinner } from '../spinner'
-import { StoreWarrantyReceiptItemDetail } from '../warranty'
+import { StoreWarrantyReceiptItemDetail, WarrantyReceiptDetailLoading } from '../warranty'
 import { Modal } from './modal'
 import { ModalConfirm } from './modalConfirm'
 
@@ -24,49 +23,81 @@ export const ModalStoreWarrantyReceiptDetail = ({
   externalDataMutate,
 }: ModalStoreWarrantyReceiptDetailProps) => {
   const router = useRouter()
-  const [confirmWarrantyDraft, setConfirmWarrantyDraft] = useState<boolean>(false)
-  const [confirmDeleteWarrantyDraft, setConfirmDeleteWarrantyDraft] = useState<boolean>(false)
+
+  const {
+    visible: isConfirmWarrantyDraft,
+    openModal: showConfirmWarrantyDraft,
+    closeModal: closeConfirmWarrantyDraft,
+  } = useModal()
+
+  const {
+    visible: isConfirmDeleteWarrantyDraft,
+    openModal: showConfirmDeleteWarrantyDraft,
+    closeModal: closeConfirmDeleteWarrantyDraft,
+  } = useModal()
 
   const { data, isValidating, confirmWarrantyReceiptDraft, deleteWarrantyReceiptDraft } =
     useStoreWarrantyDetail({
-      key: `get_store_warranty_receipt_detail_${warranty_receipt_id}`,
+      key: `${SWR_KEY.store_warranty_receipt_detail}_${warranty_receipt_id}`,
       params: {
         warranty_receipt_id,
       },
     })
 
-  const handleConfirmWarrantyReceiptDraft = () => {
-    setConfirmWarrantyDraft(true)
-  }
-
-  const handleDeleteWarrantyReceiptDraft = () => {
-    setConfirmDeleteWarrantyDraft(true)
-  }
-
   const handleUpdateWarrantyReceiptDraft = () => {
-    router.push(`/account/warranty/store-create-warranty?id=${data?.warranty_receipt_id}`)
+    router.push(`/account/store-create-warranty?id=${data?.warranty_receipt_id}`)
+  }
+
+  const hanldeDeleteWarrantyReceipt = () => {
+    deleteWarrantyReceiptDraft(warranty_receipt_id, () => {
+      externalMutate?.(
+        [...(externalDataMutate || [])].filter(
+          (item) => item.warranty_receipt_id !== warranty_receipt_id
+        ),
+        false
+      )
+      closeConfirmDeleteWarrantyDraft()
+      onClose?.()
+    })
+  }
+
+  const hanldeConfirmWarrantyReceipt = () => {
+    confirmWarrantyReceiptDraft(warranty_receipt_id, () => {
+      externalMutate?.(
+        [...(externalDataMutate || [])].filter(
+          (item) => item.warranty_receipt_id !== warranty_receipt_id
+        ),
+        false
+      )
+      closeConfirmWarrantyDraft()
+      onClose?.()
+    })
   }
 
   return (
     <div>
       <Modal
         visible={isOpen}
-        modalClassName={`mx-auto mt-[5vh] p-8 rounded-md w-[90vw] lg:w-[60vw] max-h-[90vh] bg-white`}
+        animationType={'fade'}
+        headerClassName="hidden"
+        modalClassName="relative w-[90%] md:w-[60%] mx-auto rounded-md bg-white h-[70vh]"
       >
         {isValidating ? (
-          <Spinner />
+          <div className="p-12">
+            <WarrantyReceiptDetailLoading />
+          </div>
         ) : (
           <div>
             {isObjectHasValue(data) ? (
               <div>
-                <div className="flex items-center justify-between p-12">
-                  <p className="title-lg">{`Thông tin phiếu bảo hành`}</p>
+                <div className="flex items-center justify-between p-12 static top-0">
+                  <p className="text-md font-bold">{`Thông tin phiếu bảo hành`}</p>
                   <button
                     onClick={() => {
                       onClose?.()
                     }}
                   >
-                    <TimesIcon className="text-gray-400 text-2xl hover:text-gray duration-150 ease-in-out" />
+                    <TimesIcon className="text-gray-400 text-xl hover:text-gray duration-150 ease-in-out" />
                   </button>
                 </div>
 
@@ -75,10 +106,10 @@ export const ModalStoreWarrantyReceiptDetail = ({
                     warranty={data}
                     isLoading={isValidating}
                     onDelete={() => {
-                      handleDeleteWarrantyReceiptDraft()
+                      showConfirmDeleteWarrantyDraft()
                     }}
                     onConfirm={() => {
-                      handleConfirmWarrantyReceiptDraft()
+                      showConfirmWarrantyDraft()
                     }}
                     onUpdate={() => {
                       handleUpdateWarrantyReceiptDraft()
@@ -87,35 +118,21 @@ export const ModalStoreWarrantyReceiptDetail = ({
                 </div>
 
                 <ModalConfirm
-                  visible={confirmWarrantyDraft}
+                  visible={isConfirmWarrantyDraft}
                   title="Xác nhận phiếu bảo hành"
                   onConfirm={() => {
-                    confirmWarrantyReceiptDraft(warranty_receipt_id, () => {
-                      externalMutate?.(
-                        [...(externalDataMutate || [])].filter(
-                          (item) => item.warranty_receipt_id !== warranty_receipt_id
-                        ),
-                        false
-                      )
-                    })
+                    hanldeConfirmWarrantyReceipt()
                   }}
-                  onDeny={() => {}}
+                  onDeny={closeConfirmWarrantyDraft}
                 />
 
                 <ModalConfirm
-                  visible={confirmDeleteWarrantyDraft}
+                  visible={isConfirmDeleteWarrantyDraft}
                   title="Xóa phiếu bảo hành?"
                   onConfirm={() => {
-                    deleteWarrantyReceiptDraft(warranty_receipt_id, () => {
-                      externalMutate?.(
-                        [...(externalDataMutate || [])].filter(
-                          (item) => item.warranty_receipt_id !== warranty_receipt_id
-                        ),
-                        false
-                      )
-                    })
+                    hanldeDeleteWarrantyReceipt()
                   }}
-                  onDeny={() => {}}
+                  onDeny={closeConfirmDeleteWarrantyDraft}
                 />
               </div>
             ) : null}

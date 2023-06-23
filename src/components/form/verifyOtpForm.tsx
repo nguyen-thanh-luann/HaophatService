@@ -1,4 +1,4 @@
-import { useAuth, useChatAccount, useGuest, useUser } from '@/hooks'
+import { useAuth, useUser } from '@/hooks'
 import { userAPI } from '@/services'
 import { setBackdropVisible } from '@/store'
 import { VERIFY_OTP_TYPE } from '@/types'
@@ -27,11 +27,9 @@ interface VerifyOtpFormProps {
 export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpFormProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { guestInfo } = useGuest()
-  const deviceCode = guestInfo?.device_code || ''
   const { loginPhoneNumber } = useAuth()
-  const { updateUser, addGuestCartToShoppingCart, mutateAccountData, userInfo } = useUser({})
-  const { autoSignupChatServer } = useChatAccount()
+  const { updateUser, mutateAccountData, userInfo } = useUser({})
+  // const { autoSignupChatServer } = useChatAccount()
   const [phoneNumber, setPhoneNumber] = useState<string>('')
   const [otpForm, setOtpForm] = useState<boolean>()
 
@@ -121,8 +119,8 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
       handleSuccess: () => {
         mutateAccountData()
         // merge cart data of guest to user's cart
-        addGuestCartToShoppingCart(deviceCode)
-        autoSignupChatServer()
+        // addGuestCartToShoppingCart(deviceCode)
+        // autoSignupChatServer()
         router.push('/')
       },
     })
@@ -139,8 +137,8 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
           () => {
             mutateAccountData()
             // merge cart data of guest to user's cart
-            addGuestCartToShoppingCart(deviceCode)
-            autoSignupChatServer()
+            // addGuestCartToShoppingCart(deviceCode)
+            // autoSignupChatServer()
             router.push('/')
           }
         )

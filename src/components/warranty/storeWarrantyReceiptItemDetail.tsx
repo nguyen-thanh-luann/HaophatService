@@ -1,10 +1,8 @@
+import { CheckIcon, PenIconSolid, TrashIconSolid } from '@/assets'
 import { isArrayHasValue } from '@/helper'
 import { StoreWarrantyReceiptDetail } from '@/types'
-import React from 'react'
-import { WarrantyReceiptDetailLine } from './warrantyReceiptDetailLine'
 import { Button } from '../button'
 import { Spinner } from '../spinner'
-import { CheckIcon, PenIconSolid, TrashIconSolid } from '@/assets'
 import { StoreWarrantyProduct } from './storeWarrantyProduct'
 
 interface IStoreWarrantyReceiptDetail {
@@ -30,52 +28,21 @@ export const StoreWarrantyReceiptItemDetail = ({
         <div>
           <div className="mb-16">
             <div className="flex items-center justify-between">
-              <p className="text-22 leading-28 font-semibold mb-12">{warranty?.name}</p>
+              <p className="text-md font-bold">{warranty?.name}</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
               <div>
-                <WarrantyReceiptDetailLine
-                  leftContent={`Đơn hàng`}
-                  rightContent={warranty?.picking_id?.name}
-                />
-                <WarrantyReceiptDetailLine
-                  leftContent={`Mã tham chiếu`}
-                  rightContent={warranty?.invoice_ref}
-                />
-                <WarrantyReceiptDetailLine
-                  leftContent={`Ngày bắt đầu`}
-                  rightContent={warranty?.warranty_starting}
-                />
-
-                <WarrantyReceiptDetailLine
-                  leftContent={`Người tạo`}
-                  rightContent={warranty?.user_id?.user_name}
-                />
+                <p className="text-md">{`Đơn hàng: ${warranty?.picking_id?.name}`}</p>
+                <p className="text-md">{`Mã tham chiếu: ${warranty?.invoice_ref}`}</p>
+                <p className="text-md">{`Ngày kích hoạt: ${warranty?.warranty_starting}`}</p>
+                <p className="text-md">{`Người tạo: ${warranty?.user_id?.user_name}`}</p>
               </div>
               <div>
-                <WarrantyReceiptDetailLine
-                  leftContent={`Cửa hàng`}
-                  rightContent={warranty?.store_id?.partner_name}
-                />
-                {warranty?.ward_id?.ward_name ? (
-                  <WarrantyReceiptDetailLine
-                    leftContent={`Phường/Xã`}
-                    rightContent={warranty?.ward_id?.ward_name}
-                  />
-                ) : null}
-                {warranty?.district_id?.district_name ? (
-                  <WarrantyReceiptDetailLine
-                    leftContent={`Quận/Huyện`}
-                    rightContent={warranty?.district_id?.district_name}
-                  />
-                ) : null}{' '}
-                {warranty?.province_id?.province_name ? (
-                  <WarrantyReceiptDetailLine
-                    leftContent={`Tỉnh/Thành phố`}
-                    rightContent={warranty?.province_id?.province_name}
-                  />
-                ) : null}
+                <p className="text-md">{`Cửa hàng: ${warranty?.store_id?.partner_name}`}</p>
+                <p className="text-md">{`Địa chỉ: ${warranty?.ward_id?.ward_name || ''} ${
+                  warranty?.district_id?.district_name || ''
+                } ${warranty?.province_id?.province_name || ''}`}</p>
               </div>
             </div>
           </div>
@@ -92,8 +59,9 @@ export const StoreWarrantyReceiptItemDetail = ({
             {warranty?.state === 'draft' && onUpdate ? (
               <Button
                 title="Cập nhật thông tin"
-                className="default-button-second"
-                icon={<PenIconSolid />}
+                className="bg-yellow px-12"
+                textClassName="text-base text-white"
+                icon={<PenIconSolid className="text-base text-white" />}
                 onClick={() => {
                   onUpdate?.()
                 }}
@@ -106,8 +74,9 @@ export const StoreWarrantyReceiptItemDetail = ({
                   onConfirm?.()
                 }}
                 title="Xác nhận"
-                icon={<CheckIcon />}
-                className="default-button"
+                icon={<CheckIcon className="text-base text-white" />}
+                className="bg-green text-white px-12"
+                textClassName="text-base text-white"
               />
             ) : null}
 
@@ -117,8 +86,9 @@ export const StoreWarrantyReceiptItemDetail = ({
                   onDelete?.()
                 }}
                 title="Xóa"
-                className="py-4 px-8 rounded-md !bg-white !text-error border-1"
-                icon={<TrashIconSolid />}
+                className="px-12 bg-red"
+                textClassName="text-base text-white"
+                icon={<TrashIconSolid className="text-base text-white" />}
               />
             ) : null}
           </div>

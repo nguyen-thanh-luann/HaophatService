@@ -1,7 +1,7 @@
-import { useGuest, usePreviousRoute } from '@/hooks'
-import '../styles/global.scss' // any scss custom styles
-import 'react-indiana-drag-scroll/dist/style.css' //style of ScrollContainer library (react-indiana-drag-scroll) use to scroll div with mouse
+import { usePreviousRoute } from '@/hooks'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import 'react-indiana-drag-scroll/dist/style.css'; //style of ScrollContainer library (react-indiana-drag-scroll) use to scroll div with mouse
+import '../styles/global.scss'; // any scss custom styles
 
 import { persistor, setPreviousRoute, store } from '@/store'
 import type { AppProps } from 'next/app'
@@ -13,12 +13,7 @@ import { SWRConfig } from 'swr'
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const { openGraphData = [] } = pageProps as any
-  const { loginGuest } = useGuest()
   const previousRoute = usePreviousRoute()
-  // login guest account when user visit web
-  useEffect(() => {
-    loginGuest()
-  }, [])
 
   useEffect(() => {
     store.dispatch(setPreviousRoute(previousRoute))

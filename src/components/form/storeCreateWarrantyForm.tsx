@@ -1,14 +1,15 @@
 import { TimesIcon } from '@/assets'
 import { changewarrantyDateToInputDatetype } from '@/helper'
+import { useModal } from '@/hooks'
+import { createWarrantyForStoreChema } from '@/schema'
 import { StoreWarrantyReceiptDetail } from '@/types'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '../button'
 import { InputDate, InputField } from '../inputs'
 import { Modal } from '../modal'
 import { SelectPicking } from '../warranty'
-import { createWarrantyForStoreChema } from '@/schema'
 
 export type StoreCreateWarrantyFormProps = {
   picking_id: string
@@ -27,7 +28,11 @@ export const StoreCreateWarrantyForm = ({
   type = 'create',
   warrantyUpdate,
 }: IStoreCreateWarrantyForm) => {
-  const [modalSelectPick, setModalSelectPicking] = useState<boolean>(false)
+  const {
+    visible: isSelectPicking,
+    openModal: showSelectPiking,
+    closeModal: closeSelectPicking,
+  } = useModal()
 
   const {
     control,
@@ -58,7 +63,7 @@ export const StoreCreateWarrantyForm = ({
       label: val?.name,
       value: val?.picking_id,
     })
-    setModalSelectPicking(false)
+    closeSelectPicking()
   }
 
   return (
@@ -72,7 +77,7 @@ export const StoreCreateWarrantyForm = ({
           required={true}
           readOnly
           onClick={() => {
-            setModalSelectPicking(true)
+            showSelectPiking()
           }}
           value={getValues('picking_id.label')}
         />
@@ -94,7 +99,7 @@ export const StoreCreateWarrantyForm = ({
           defaultValue={
             changewarrantyDateToInputDatetype(warrantyUpdate?.warranty_starting || '') || undefined
           }
-          label={`Chọn ngày`}
+          label={`Chọn ngày kích hoạt`}
           control={control}
           name="date"
           required={true}
@@ -114,19 +119,14 @@ export const StoreCreateWarrantyForm = ({
       </div>
 
       <Modal
-        visible={modalSelectPick}
+        visible={isSelectPicking}
         headerClassName="hidden"
         modalClassName="w-[90%] md:w-[500px] max-w-[90vw] h-fit"
       >
         <div>
           <div className="flex-between p-12">
             <p className="text-md">Chọn hóa đơn</p>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                setModalSelectPicking(false)
-              }}
-            >
+            <div className="cursor-pointer" onClick={closeSelectPicking}>
               <TimesIcon />
             </div>
           </div>

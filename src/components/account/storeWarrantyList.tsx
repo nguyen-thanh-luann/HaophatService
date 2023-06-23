@@ -4,7 +4,7 @@ import { useQuery, useUser } from '@/hooks'
 import { warrantyAPI } from '@/services'
 import { WarrantyParams } from '@/types'
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { SearchForm } from '../form'
 import { ModalStoreWarrantyReceiptDetail } from '../modal'
@@ -28,8 +28,9 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
     fetchMore,
     hasMore,
     mutate,
+    filter,
   } = useQuery<any, WarrantyParams>({
-    key: `${SWR_KEY.store_warranty_receipt_list}_${currentTab}`,
+    key: `${SWR_KEY.store_warranty_receipt_list}`,
     fetcher: warrantyAPI.getStoreListWarrantyReceipt,
     initialParams: {
       limit: DEFAULT_LIMIT,
@@ -39,20 +40,35 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
   })
 
   const handleSearchWarrantyReceipt = async (data: string) => {
-    if (!data) return
-    try {
-      setSearching(true)
-      const res: any = await warrantyAPI.storeSearchWarrantyReceipt({
-        store_phone: userInfo?.account?.phone,
-        invoice_code: data,
-      })
+    if (data) {
+      try {
+        setSearching(true)
+        const res: any = await warrantyAPI.storeSearchWarrantyReceipt({
+          store_phone: userInfo?.account?.phone,
+          invoice_code: data,
+        })
 
-      mutate(res?.result?.data?.warranty_receipt || [], false)
-      setSearching(false)
-    } catch (error) {
-      setSearching(false)
+        mutate(res?.data?.warranty_receipt || [], false)
+        setSearching(false)
+      } catch (error) {
+        setSearching(false)
+      }
+    } else {
+      filter({
+        params: {
+          warranty_state: currentTab !== 'all' ? [currentTab] : [],
+        },
+      })
     }
   }
+
+  useEffect(() => {
+    filter({
+      params: {
+        warranty_state: currentTab !== 'all' ? [currentTab] : [],
+      },
+    })
+  }, [currentTab])
 
   const handleFetchMore = () => {
     fetchMore({ params: { warranty_state: currentTab !== 'all' ? [currentTab] : [] } })
@@ -62,8 +78,10 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
     <div className={classNames('', className)}>
       <div className="mb-12">
         <SearchForm
-          placeholder={`Nhập mã tham chiếu`}
+          placeholder={`Tìm theo số hóa đơn hoặc phiếu bảo hành`}
           onSubmit={(val: any) => handleSearchWarrantyReceipt(val)}
+          buttonClassName="bg-white hidden md:flex"
+          inputClassName="bg-white !text-text-color !leading-8 !text !font-bold"
         />
       </div>
 
@@ -112,7 +130,7 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
           <NotFound notify="Không tìm thấy thông tin" />
         )}
 
-        {currentWarrantyId ? (
+        {currentWarrantyId && (
           <ModalStoreWarrantyReceiptDetail
             isOpen={currentWarrantyId !== undefined}
             warranty_receipt_id={currentWarrantyId}
@@ -122,7 +140,7 @@ export const StoreWarrantyList = ({ className }: StoreWarrantyListProps) => {
               setCurrentWarrantyId(undefined)
             }}
           />
-        ) : null}
+        )}
       </div>
     </div>
   )
