@@ -37,12 +37,12 @@ const CustomerCreateWarrantyPage = () => {
           ...params,
         },
         () => {
-          router.push('/account/warranty')
+          router.push('/account/warranty-list')
         }
       )
     } else {
       createWarrantyReceipt(params, () => {
-        router.push('/account/warranty')
+        router.push('/account/warranty-list')
       })
     }
   }

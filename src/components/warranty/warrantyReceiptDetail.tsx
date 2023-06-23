@@ -4,7 +4,6 @@ import { durationToName } from '@/helper'
 import { useCustomerWarrantyDetail, useUser } from '@/hooks'
 import { Button } from '../button'
 import { CustomImage } from '../customImage'
-import { WarrantyReceiptDetailLine } from './warrantyReceiptDetailLine'
 import { WarrantyReceiptDetailLoading } from './warrantyReceiptDetailLoading'
 import { WarrantyStateLabel } from './warrantyStateLabel'
 
@@ -53,38 +52,27 @@ export const WarrantyReceiptDetail = ({
               <div className="relative flex flex-col lg:flex-row gap-12">
                 <CustomImage
                   src={data?.product_id?.representation_image?.image_url}
-                  className="rounded-full w-[100px] h-[100px] object-cover mx-auto lg:mx-0"
-                  imageClassName="w-[100px] h-[100px] object-cover"
+                  className="min-w-[100px]"
+                  imageClassName="rounded-full object-cover w-[100px] h-[100px] mx-auto"
                 />
                 <div>
-                  <p className="title-sm lg:title-md mb-12 line-clamp-2">
-                    {data?.product_id?.product_name}
-                  </p>
+                  <p className="text-base font-bold mb-8">{data?.product_id?.product_name}</p>
 
-                  <WarrantyReceiptDetailLine
-                    leftContent={`Mã sản phẩm:`}
-                    rightContent={data?.product_id?.product_code}
-                  />
+                  <p className="text-base mb-8">{`Mã sản phẩm: ${data?.product_id?.product_code}`}</p>
 
-                  <WarrantyReceiptDetailLine
-                    leftContent={`Số lô:`}
-                    rightContent={data?.lot_id?.lot_name}
-                  />
+                  <p className="text-base mb-8">{`Số lot: ${data?.lot_id?.lot_name}`}</p>
 
-                  <WarrantyReceiptDetailLine
-                    leftContent="Thời gian bảo hành:"
-                    rightContent={`${data?.warranty_duration_id?.factor || 0} ${durationToName(
-                      data?.warranty_duration_id?.time_unit?.value
-                    )}`}
-                  />
-                  <WarrantyReceiptDetailLine
-                    leftContent="Ngày bắt đầu bảo hành:"
-                    rightContent={`${data?.warranty_starting || ''}`}
-                  />
-                  <WarrantyReceiptDetailLine
-                    leftContent="Ngày kết thúc bảo hành:"
-                    rightContent={`${data?.warranty_ending || ''}`}
-                  />
+                  <p className="text-base mb-8">{`Thời gian bảo hành:${
+                    data?.warranty_duration_id?.factor || 0
+                  } ${durationToName(data?.warranty_duration_id?.time_unit?.value)}`}</p>
+
+                  <p className="text-base mb-8">{`Ngày bắt đầu bảo hành: ${
+                    data?.warranty_starting || ''
+                  }`}</p>
+
+                  <p className="text-base mb-8">{`Ngày kết thúc bảo hành: ${
+                    data?.warranty_ending || ''
+                  }`}</p>
                 </div>
               </div>
             </div>
@@ -93,15 +81,12 @@ export const WarrantyReceiptDetail = ({
           <div className="border-t-1 border-gray-200 py-12">
             <p className="text-md font-bold mb-12">{`Thông tin hóa đơn`}</p>
 
-            <WarrantyReceiptDetailLine
-              leftContent={`Mã hóa đơn:`}
-              rightContent={data?.invoice_ref}
-            />
+            <p className="text-base mb-8">{`Mã hóa đơn: ${data?.invoice_ref || ''}`}</p>
 
             <CustomImage
               src={data?.invoice_image_url?.image_url}
-              className="object-cover w-[300px] h-[250px] rounded-sm"
-              imageClassName="object-cover w-[300px] h-[250px] rounded-sm"
+              className="w-[300px]"
+              imageClassName="object-cover w-[300px] h-[250px] rounded-md"
             />
           </div>
 
@@ -112,18 +97,13 @@ export const WarrantyReceiptDetail = ({
               <div>
                 <CustomImage
                   src={userInfo?.account?.avatar_url?.url || ''}
-                  className="rounded-full object-cover w-[100px] h-[100px] mx-auto lg:mx-0"
+                  className="min-w-[100px]"
+                  imageClassName="rounded-full object-cover w-[100px] h-[100px] mx-auto"
                 />
               </div>
               <div>
-                <WarrantyReceiptDetailLine
-                  leftContent={`Tên khách hàng:`}
-                  rightContent={data?.customer_id?.partner_name}
-                />
-                <WarrantyReceiptDetailLine
-                  leftContent={`Số điện thoại:`}
-                  rightContent={data?.customer_id?.phone}
-                />
+                <p className="text-base mb-8">{`Tên khách hàng: ${data?.customer_id?.partner_name}`}</p>
+                <p className="text-base mb-8">{`Số điện thoại: ${data?.customer_id?.phone}`}</p>
               </div>
             </div>
           </div>
@@ -135,41 +115,29 @@ export const WarrantyReceiptDetail = ({
               <div>
                 <CustomImage
                   src={data?.store_id?.avatar_url?.image_url || ''}
-                  className="rounded-full object-cover w-[100px] h-[100px] mx-auto lg:mx-0"
+                  className="min-w-[100px]"
+                  imageClassName="rounded-full object-cover w-[100px] h-[100px] mx-auto"
                 />
               </div>
 
               <div>
-                <WarrantyReceiptDetailLine
-                  leftContent={`Tên cửa hàng:`}
-                  rightContent={data?.store_id?.partner_name}
-                />
+                <p className="text-base mb-8">{`Tên cửa hàng: ${data?.store_id?.partner_name}`}</p>
 
-                <WarrantyReceiptDetailLine
-                  leftContent={`Số điện thoại:`}
-                  rightContent={data?.store_id?.phone}
-                />
+                <p className="text-base mb-8">{`Số điện thoại: ${data?.store_id?.phone}`}</p>
 
-                <WarrantyReceiptDetailLine
-                  leftContent={`Địa chỉ:`}
-                  rightContent={`${data?.ward_id?.ward_name ? `${data?.ward_id?.ward_name}, ` : ''} 
-
-									${data?.district_id?.district_name ? `${data.district_id.district_name}, ` : ``}
-									
-									${data?.province_id?.province_name ? `${data.province_id.province_name}` : ``}
-									`}
-                />
+                <p className="text-base mb-8">{`Địa chỉ: ${data?.ward_id?.ward_name} ${data?.district_id?.district_name} ${data?.province_id?.province_name}`}</p>
               </div>
             </div>
           </div>
 
           {userInfo ? (
-            <div className="flex items-center justify-center gap-12 flex-wrap">
+            <div className="flex items-center gap-12 justify-center mt-12 flex-wrap">
               {data?.state === 'draft' && onUpdate ? (
                 <Button
                   title="Cập nhật thông tin"
-                  className={`w-full default-button !bg-warning`}
-                  icon={<PenIconSolid />}
+                  className={`bg-yellow px-12`}
+                  textClassName="text-base text-white"
+                  icon={<PenIconSolid className="text-base text-white" />}
                   onClick={() => {
                     onUpdate?.()
                   }}
@@ -179,8 +147,9 @@ export const WarrantyReceiptDetail = ({
               {data?.state === 'draft' && onConfirm ? (
                 <Button
                   title="Xác nhận thông tin"
-                  className={`w-full default-button-second`}
-                  icon={<CheckIcon />}
+                  className={`bg-green px-12`}
+                  textClassName="text-base text-white"
+                  icon={<CheckIcon className="text-base text-white" />}
                   onClick={() => {
                     onConfirm?.()
                   }}
@@ -192,8 +161,9 @@ export const WarrantyReceiptDetail = ({
               onApprove ? (
                 <Button
                   title="Duyệt phiếu bảo hành"
-                  className={`w-full default-button`}
-                  icon={<CheckIcon />}
+                  className={`bg-blue px-12`}
+                  textClassName="text-base text-white"
+                  icon={<CheckIcon className="text-base text-white" />}
                   onClick={() => {
                     onApprove?.()
                   }}
@@ -202,9 +172,10 @@ export const WarrantyReceiptDetail = ({
 
               {data?.state === 'draft' && onDelete ? (
                 <Button
-                  title="Xóa đơn nháp"
-                  className={`py-4 px-8 rounded-md !bg-white !text-error border-1`}
-                  icon={<TrashIconOutline />}
+                  title="Xóa"
+                  className={`bg-red px-12`}
+                  textClassName="text-base text-white"
+                  icon={<TrashIconOutline className="text-base text-white" />}
                   onClick={() => {
                     onDelete?.()
                   }}

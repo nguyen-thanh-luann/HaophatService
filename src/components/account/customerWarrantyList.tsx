@@ -1,14 +1,13 @@
-import classNames from 'classnames'
-import React, { useState } from 'react'
-import { Tabs } from '../tabs'
-import { CustomerWarrantyState, SWR_KEY } from '@/constants'
-import { useCustomerWarranty } from '@/hooks'
-import { Spinner } from '../spinner'
+import { CustomerWarrantyState, DEFAULT_LIMIT, SWR_KEY } from '@/constants'
 import { isArrayHasValue } from '@/helper'
+import { useCustomerWarranty } from '@/hooks'
+import classNames from 'classnames'
+import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { WarrantyReceiptItem } from '../warranty'
-import { NotFound } from '../notFound'
 import { ModalCustomerWarrantyReceiptDetail } from '../modal'
+import { NotFound } from '../notFound'
+import { Tabs } from '../tabs'
+import { ListWarrantyReceiptLoading, WarrantyReceiptItem } from '../warranty'
 
 interface CustomerWarrantyListProps {
   className?: string
@@ -16,23 +15,30 @@ interface CustomerWarrantyListProps {
 
 export const CustomerWarrantyList = ({ className }: CustomerWarrantyListProps) => {
   const [currentTab, setCurrentTab] = useState<string>('all')
-  const [currentWarrantyId, setCurretnWarrantyId] = useState<number>()
+  const [currentWarrantyId, setCurretnWarrantyId] = useState<number | undefined>(undefined)
 
   const {
     data: listWarrantyReceipt,
     isValidating,
     fetchMore,
     hasMore,
-    // confirmCreateWarrantyReceipt,
-    // deleteWarrantyReceiptDraft,
+    filter,
   } = useCustomerWarranty({
-    key: `${SWR_KEY.customer_warranty_receipt_list}_${currentTab}`,
+    key: `${SWR_KEY.customer_warranty_receipt_list}`,
     data_key: 'warranty_receipt_customer',
     params: {
-      limit: 7,
+      limit: DEFAULT_LIMIT,
       warranty_state: currentTab !== 'all' ? [currentTab] : [],
     },
   })
+
+  useEffect(() => {
+    filter({
+      params: {
+        warranty_state: currentTab !== 'all' ? [currentTab] : [],
+      },
+    })
+  }, [currentTab])
 
   const FilterTab = CustomerWarrantyState.map((item) => {
     return {
@@ -62,8 +68,8 @@ export const CustomerWarrantyList = ({ className }: CustomerWarrantyListProps) =
 
       <div>
         {isValidating ? (
-          <div className="flex-center">
-            <Spinner />
+          <div className="bg-white">
+            <ListWarrantyReceiptLoading />
           </div>
         ) : isArrayHasValue(listWarrantyReceipt) ? (
           <div
@@ -75,7 +81,13 @@ export const CustomerWarrantyList = ({ className }: CustomerWarrantyListProps) =
               dataLength={listWarrantyReceipt?.length}
               next={handleFetchMore}
               hasMore={hasMore}
-              loader={hasMore ? <Spinner /> : null}
+              loader={
+                hasMore ? (
+                  <div className="bg-white">
+                    <ListWarrantyReceiptLoading />
+                  </div>
+                ) : null
+              }
             >
               {listWarrantyReceipt?.map((item: any) => (
                 <WarrantyReceiptItem

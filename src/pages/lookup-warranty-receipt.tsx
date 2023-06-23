@@ -22,7 +22,6 @@ const LookupWarrantyPage = () => {
 
   const handleFormSubmit = (data: WarrantyParams) => {
     setSearchParams(data)
-    // console.log({ data })
   }
 
   const {

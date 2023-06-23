@@ -44,7 +44,7 @@ export const SelectProductWarranty = ({ onClick: onExternalClick }: ISelectProdu
   }
 
   return (
-    <div className="">
+    <div>
       <div className="mb-12">
         <SearchField
           placeholder={`Tìm kiếm sản phẩm`}

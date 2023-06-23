@@ -280,7 +280,11 @@ export const postTagFormSchema = Yup.object().shape({
 })
 
 export const checkWarrantySchema = Yup.object().shape({
-  serialNumber: Yup.string().min(6, 'Vui lòng nhập số serial hợp lệ'),
+  serialNumber: Yup.string()
+    .min(6, 'Vui lòng nhập số serial hợp lệ')
+    .nullable()
+    .notRequired()
+    .transform((value) => (value === '' ? null : value)),
   phoneNumber: Yup.string()
     .matches(PHONE_SCHEMA, 'Vui lòng nhập số điện thoại hợp lệ')
     .required('Vui lòng nhập số điện thoại'),

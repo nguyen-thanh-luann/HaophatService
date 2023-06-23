@@ -73,7 +73,7 @@ export const StoreWarrantyReceiptItemDetail = ({
                 onClick={() => {
                   onConfirm?.()
                 }}
-                title="Xác nhận"
+                title="Xác nhận thông tin"
                 icon={<CheckIcon className="text-base text-white" />}
                 className="bg-green text-white px-12"
                 textClassName="text-base text-white"

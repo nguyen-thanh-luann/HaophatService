@@ -16,21 +16,22 @@ interface IUseCustomer {
   isValidating?: boolean
   fetchMore: Function
   hasMore: boolean
-  confirmWarrantyReceiptForCustomer: Function
+  approveWarrantyReceiptForCustomer: Function
   deleteWarrantyReceiptDraftForCustomer: Function
+  filter: Function
 }
 
 const useCustomerWarrantyReceiptList = ({ params, key, data_key }: Props): IUseCustomer => {
   const { asyncHandler } = useAsync()
 
-  const { data, isValidating, fetchMore, hasMore, mutate } = useQuery<any, WarrantyParams>({
+  const { data, isValidating, fetchMore, hasMore, mutate, filter } = useQuery<any, WarrantyParams>({
     key,
     fetcher: warrantyAPI.getCustomerListWarrantyReceipt,
     initialParams: params,
     data_key,
   })
 
-  const confirmWarrantyReceiptForCustomer = async (
+  const approveWarrantyReceiptForCustomer = async (
     params: WarrantyParams,
     handleSuccess?: Function
   ) => {
@@ -60,13 +61,12 @@ const useCustomerWarrantyReceiptList = ({ params, key, data_key }: Props): IUseC
       fetcher: warrantyAPI.deleteCustomerWarrantyReceipt({
         warranty_receipt_customer_id,
       }),
-      onSuccess: (res) => {
-        console.log('delete response: ', res)
+      onSuccess: () => {
         mutate(
           [...(data || [])].filter(
             (item) =>
               (item as WarrantyReceipt)?.warranty_receipt_customer_id !==
-              res?.warranty_receipt_customer_id
+              warranty_receipt_customer_id
           )
         )
         handleSuccess?.()
@@ -83,7 +83,8 @@ const useCustomerWarrantyReceiptList = ({ params, key, data_key }: Props): IUseC
     fetchMore,
     hasMore,
     isValidating,
-    confirmWarrantyReceiptForCustomer,
+    filter,
+    approveWarrantyReceiptForCustomer,
     deleteWarrantyReceiptDraftForCustomer,
   }
 }

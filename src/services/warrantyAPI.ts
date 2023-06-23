@@ -179,7 +179,7 @@ const warrantyAPI = {
   },
 
   //xóa phiếu bảo hành cho khách hàng (ở trạng thái draft)
-  deleteCustomerWarrantyReceipt: (params: WarrantyParams) => {
+  deleteCustomerWarrantyReceipt: (params: WarrantyParams) => {    
     return axiosClient.post('/warranty_receipt_customer_controller/delete_warranty_receipt', {
       params,
     })

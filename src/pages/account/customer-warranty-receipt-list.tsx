@@ -3,18 +3,26 @@ import {
   Breadcrumb,
   Image,
   ListWarrantyReceiptLoading,
+  ModalConfirm,
   ModalCustomerWarrantyReceiptDetail,
   NotFound,
   Spinner,
   Tabs,
   WarrantyReceiptItem,
 } from '@/components'
-import { API_URL, CustomerWarrantyState, SWR_KEY, WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
+import {
+  API_URL,
+  CustomerWarrantyState,
+  DEFAULT_LIMIT,
+  SWR_KEY,
+  WEB_DESCRIPTION,
+  WEB_TITTLE,
+} from '@/constants'
 import { isArrayHasValue } from '@/helper'
-import { useCustomerDetail, useCustomerWarrantyReceiptList } from '@/hooks'
+import { useCustomerDetail, useCustomerWarrantyReceiptList, useModal } from '@/hooks'
 import { AccountContainer, Main } from '@/templates'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 const CustomerWarrantyReceiptListPage = () => {
@@ -22,6 +30,12 @@ const CustomerWarrantyReceiptListPage = () => {
   const customer_id = Number(router?.query?.customer_id) || 0
   const [currentTab, setCurrentTab] = useState<string>('all')
   const [currentWarrantyId, setCurretnWarrantyId] = useState<number>()
+
+  const {
+    visible: isApproveWarranty,
+    openModal: showApproveWarranty,
+    closeModal: closeApproveWarranty,
+  } = useModal()
 
   const {
     data: customerDetail,
@@ -44,17 +58,25 @@ const CustomerWarrantyReceiptListPage = () => {
     isValidating: gettingWarrantyReceiptList,
     hasMore,
     fetchMore,
-    // confirmWarrantyReceiptForCustomer,
-    // deleteWarrantyReceiptDraftForCustomer,
+    filter,
+    approveWarrantyReceiptForCustomer,
   } = useCustomerWarrantyReceiptList({
-    key: `${SWR_KEY.customer_warranty_receipt_list}_${currentTab}`,
+    key: `${SWR_KEY.customer_warranty_receipt_list}`,
     data_key: 'warranty_receipt_customer',
     params: {
       customer_id,
-      limit: 12,
+      limit: DEFAULT_LIMIT,
       warranty_state: currentTab !== 'all' ? [currentTab] : [],
     },
   })
+
+  useEffect(() => {
+    filter({
+      params: {
+        warranty_state: currentTab !== 'all' ? [currentTab] : [],
+      },
+    })
+  }, [currentTab])
 
   const handleFetchMore = () => {
     fetchMore({ params: { warranty_state: currentTab !== 'all' ? [currentTab] : [] } })
@@ -62,6 +84,20 @@ const CustomerWarrantyReceiptListPage = () => {
 
   const handleViewWarantyReceiptDetail = (data: number) => {
     setCurretnWarrantyId(data)
+  }
+
+  const handleApproveWarrantyForCustomer = (warranty_id: number) => {
+    console.log('call appreove', warranty_id)
+
+    approveWarrantyReceiptForCustomer(
+      {
+        warranty_receipt_customer_id: warranty_id,
+      },
+      () => {
+        closeApproveWarranty()
+        setCurretnWarrantyId(undefined)
+      }
+    )
   }
 
   return (
@@ -156,8 +192,22 @@ const CustomerWarrantyReceiptListPage = () => {
             onClose={() => {
               setCurretnWarrantyId(undefined)
             }}
+            onApprove={() => {
+              showApproveWarranty()
+            }}
           />
         </div>
+
+        <ModalConfirm
+          visible={isApproveWarranty}
+          title="Duyệt phiếu bảo hành?"
+          onConfirm={() => {
+            currentWarrantyId && handleApproveWarrantyForCustomer(currentWarrantyId)
+          }}
+          onDeny={() => {
+            closeApproveWarranty()
+          }}
+        />
       </AccountContainer>
     </Main>
   )

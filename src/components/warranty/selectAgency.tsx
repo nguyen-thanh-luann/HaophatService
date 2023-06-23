@@ -39,7 +39,7 @@ export const SelectAgency = ({ onClick: onExternalClick }: ISelectProductWarrant
 	};
 
 	return (
-    <div className="mt-12">
+    <div>
       <div className="max-h-[400px] overflow-scroll scrollbar-hide">
         <div className="mb-12">
           <SelectField

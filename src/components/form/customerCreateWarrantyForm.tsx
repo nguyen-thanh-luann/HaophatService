@@ -1,4 +1,4 @@
-import { TimesIcon } from '@/assets'
+import { PhotoIcon, TimesIcon, companyIconSm } from '@/assets'
 import { API_URL } from '@/constants'
 import { changewarrantyDateToInputDatetype } from '@/helper'
 import { useAsync, useModal, useWarrantyAttachment } from '@/hooks'
@@ -241,7 +241,7 @@ export const CustomerCreateWarrantyForm = ({
 
             <InputDate
               label="Chọn ngày kích hoạt"
-              placeholder=''
+              placeholder=""
               control={control}
               name="date"
               required={true}
@@ -265,22 +265,30 @@ export const CustomerCreateWarrantyForm = ({
             />
             <label
               htmlFor="warranty_attachment"
-              className={`flex items-center p-8 gap-8 cursor-pointer rounded-md border
-										text-primary border-primary hover:bg-primary-opacity-10 duration-150 ease-linear active:bg-white`}
+              className={`flex items-center p-8 gap-8 cursor-pointer
+										text-primary border-primary duration-150`}
             >
-              Thêm hình ảnh
+              {attachment ? (
+                <div className={`relative mt-8`}>
+                  <Image
+                    src={
+                      attachment?.attachment_url
+                        ? `${API_URL}${attachment.attachment_url}`
+                        : companyIconSm
+                    }
+                    alt="warranty receipt"
+                    className="w-[100px]"
+                    imageClassName="w-[100px] h-[100px] object-cover rounded-md"
+                  />
+                </div>
+              ) : (
+                <div className="">
+                  <PhotoIcon className="w-90 h-90 text-gray" />
+                  <p className="mt-8 text-center text-base">Tải ảnh lên</p>
+                </div>
+              )}
             </label>
           </div>
-          {attachment ? (
-            <div className={`relative w-[100px] h-[100px] mt-8`}>
-              <Image
-                src={attachment?.attachment_url ? `${API_URL}${attachment.attachment_url}` : ''}
-                alt="warranty receipt"
-                className="w-[100px] h-[100px] object-cover"
-                imageClassName="w-[100px] h-[100px] object-cover"
-              />
-            </div>
-          ) : null}
         </div>
       </div>
 
@@ -311,11 +319,11 @@ export const CustomerCreateWarrantyForm = ({
                 closeSelectAgency()
               }}
             >
-              <TimesIcon />
+              <TimesIcon className="text-gray" />
             </div>
           </div>
 
-          <div className="max-h-[400px] h-fit overflow-scroll scrollbar-hide p-12">
+          <div className="p-12">
             <SelectAgency
               onClick={(val: any) => {
                 hanldeSelectAgency(val)
@@ -339,11 +347,11 @@ export const CustomerCreateWarrantyForm = ({
                 closeSelectProductWarranty()
               }}
             >
-              <TimesIcon />
+              <TimesIcon className="text-gray" />
             </div>
           </div>
 
-          <div className="max-h-[400px] h-fit overflow-scroll scrollbar-hide p-12">
+          <div className="p-12">
             <SelectProductWarranty
               onClick={(val: any) => {
                 handleSelectProductWarranty(val)
@@ -367,11 +375,11 @@ export const CustomerCreateWarrantyForm = ({
                 closeSelectLot()
               }}
             >
-              <TimesIcon />
+              <TimesIcon className="text-gray" />
             </div>
           </div>
 
-          <div className="max-h-[400px] h-fit overflow-scroll scrollbar-hide p-12">
+          <div className="p-12">
             <SelectLot
               onClick={(val: any) => {
                 hanldeSelectLot(val)
