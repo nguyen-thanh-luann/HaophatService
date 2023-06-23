@@ -84,6 +84,7 @@ export interface UpdateUserParams {
   district_id?: number
   ward_id?: number
   street?: string
+  warranty_account_type?: UserWarrantyAccountType
   medicine_account_type?: UserMedicineAccountType
   business_type?: UserBusinessType
   gpp_certification_image_url?: number

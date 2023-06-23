@@ -29,7 +29,6 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
   const router = useRouter()
   const { loginPhoneNumber } = useAuth()
   const { updateUser, mutateAccountData, userInfo } = useUser({})
-  // const { autoSignupChatServer } = useChatAccount()
   const [phoneNumber, setPhoneNumber] = useState<string>('')
   const [otpForm, setOtpForm] = useState<boolean>()
 
@@ -83,11 +82,11 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
     }
 
     //tài khoản tồn tại:
-    //+ type !== UserMedicineAccountType -> login => update 'usermedicine'
-    //+ type === UserMedicinAccountType -> login
+    //+ type !== UserWarrantyAccountType -> login => update 'customer_account'
+    //+ type === UserWarrantyAccountType -> login
 
     //tài khoản k tồn tại:
-    //login => update 'usermedicine'
+    //login => update 'customer_account'
 
     checkAccountExist(
       phoneNumber,
@@ -95,19 +94,19 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
       () => {
         if (type === 'login') {
           if (
-            userInfo?.account?.medicine_account_type === 'drugstore_account' ||
-            userInfo?.account?.medicine_account_type === 'patient_account'
+            userInfo?.account?.warranty_account_type === 'customer_account' ||
+            userInfo?.account?.warranty_account_type === 'store_account'
           ) {
             directLogin(otpInput)
           } else {
-            loginAndUpdateMedicineType(otpInput)
+            loginAndUpdateWarrantyAccountType(otpInput)
           }
         }
       },
       // account not exist handler (signup and update accounttype as patient_account)
       () => {
         if (type === 'login') {
-          loginAndUpdateMedicineType(otpInput)
+          loginAndUpdateWarrantyAccountType(otpInput)
         }
       }
     )
@@ -126,13 +125,13 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
     })
   }
 
-  const loginAndUpdateMedicineType = (otpInput: string) => {
+  const loginAndUpdateWarrantyAccountType = (otpInput: string) => {
     loginPhoneNumber({
       otpInput,
       handleSuccess: () => {
         updateUser(
           {
-            medicine_account_type: 'patient_account',
+            warranty_account_type: 'customer_account',
           },
           () => {
             mutateAccountData()

@@ -12,9 +12,6 @@ export const LoginOTPScreen = ({ onClose }: LoginOTPScreenProps) => {
   const dispatch = useDispatch()
   const [phoneNumber, setPhoneNumber] = useState<string>()
 
-  // const handlePhoneSubmit = (data: any) => {
-  //   setPhoneNumber(data)
-  // }
 
   return (
     <>
