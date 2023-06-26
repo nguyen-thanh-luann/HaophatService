@@ -13,7 +13,7 @@ const Register = () => {
 
           <p className="text-center text-text-color text-xl capitalize font-bold my-24">{`Đăng ký người dùng`}</p>
 
-          <UserRegister className="w-[50%] mx-auto" />
+          <UserRegister className="w-[90%] lg:w-[50%] mx-auto" />
         </div>
       </div>
     </MainNoFooter>

@@ -257,20 +257,15 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
         ) : null}
 
         {isLoadProductPromotion ? (
-          <PromotionLoading />
+          <div className="mb-16">
+            <PromotionLoading />
+          </div>
         ) : (
           <ListProductPromotion className="mb-16" data={productPromotions || []} />
         )}
 
         <div className="flex items-center gap-12 mb-16">
           <p className="text_md">{`Số lượng`}</p>
-          {/* <InputQuantity
-            minusIconClassName="text-md text-white"
-            plusIconClassName="text-base text-white"
-            inputClassName={`text-base text-text-color text-center outline-none`}
-            quantity={quantity}
-            onChangeQuantity={(q: number) => setQuantity(q)}
-          /> */}
 
           <CustomInputQuantity
             defaultValue={quantity}

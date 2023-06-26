@@ -1,11 +1,7 @@
 import { ProductCartIcon, companyIconSm } from '@/assets'
-import { API_URL } from '@/constants'
-import {
-  formatMoneyVND,
-  generateProductSlug,
-  isObjectHasValue
-} from '@/helper'
-import { useAddToCart, useModal } from '@/hooks'
+import { API_URL, DOMAIN_URL } from '@/constants'
+import { formatMoneyVND, generateProductSlug, isObjectHasValue } from '@/helper'
+import { useAddToCart, useModal, useUser } from '@/hooks'
 import { addViewedProduct, setProduct } from '@/store'
 import { Product } from '@/types'
 import classNames from 'classnames'
@@ -42,6 +38,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
   const router = useRouter()
   const dispatch = useDispatch()
   const { addToCart, isAddingTocart } = useAddToCart()
+  const { userInfo } = useUser({ shouldFetch: false })
 
   const {
     visible: showProductDetailModal,
@@ -51,6 +48,11 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
 
   const handleAddToCart = (product: Product) => {
     if (isAddingTocart) return
+
+    if (!userInfo?.account?.partner_id) {
+      router.push(`${DOMAIN_URL}/login`)
+      return
+    }
 
     if (product.has_variant) {
       hanldeOpenModalDetail()
@@ -101,25 +103,6 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
                 className="aspect-[1/1]"
               />
             </div>
-
-            {/* packing rule */}
-            {/* <div
-              className={classNames(
-                'absolute top-3',
-                discount > 0 ? 'right-25' : 'right-3',
-                'z-10 min-w-[40px] max-w-[86px] max-h-[35px] overflow-scroll scrollbar-hide rounded-[10px] border border-primary px-4 py-2 bg-white bg-opacity-70'
-              )}
-            >
-              <p className="text-xs font-medium line-clamp-2 flex-center h-full">
-                {data?.packaging_specifications || ''}
-              </p>
-            </div> */}
-
-            {/* {discount > 0 ? (
-              <div className="absolute top-0 right-0 z-10">
-                <ProductDiscountBadge data={`${discount}`} />
-              </div>
-            ) : null} */}
           </div>
 
           {/*product info*/}
