@@ -308,7 +308,7 @@ export const CustomerCreateWarrantyForm = ({
       <Modal
         visible={isSelectAgency}
         headerClassName="hidden"
-        modalClassName="w-[90%] md:w-[500px] max-w-[90vw] h-fit"
+        modalClassName="w-[90%] md:w-[600px] max-w-[90vw] h-fit"
       >
         <div>
           <div className="flex-between p-12">
@@ -326,7 +326,9 @@ export const CustomerCreateWarrantyForm = ({
           <div className="p-12">
             <SelectAgency
               onClick={(val: any) => {
-                hanldeSelectAgency(val)
+                if (val) {
+                  hanldeSelectAgency(val)
+                }
               }}
             />
           </div>

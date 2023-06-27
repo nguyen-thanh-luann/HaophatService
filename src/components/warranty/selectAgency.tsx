@@ -40,7 +40,7 @@ export const SelectAgency = ({ onClick: onExternalClick }: ISelectProductWarrant
 
 	return (
     <div>
-      <div className="max-h-[400px] overflow-scroll scrollbar-hide">
+      <div className="">
         <div className="mb-12">
           <SelectField
             label="Tỉnh / Thành Phố"
@@ -77,7 +77,7 @@ export const SelectAgency = ({ onClick: onExternalClick }: ISelectProductWarrant
 
         <div className="mb-12">
           <SelectField
-            label="Phường/xã"
+            label="Phường / xã"
             value={getValues('ward') || null}
             control={control}
             onChange={(val: any) => {
@@ -96,7 +96,7 @@ export const SelectAgency = ({ onClick: onExternalClick }: ISelectProductWarrant
           />
         </div>
 
-        <div className="mb-12">
+        <div className="mb-24">
           <SelectField
             label="Đại lý"
             name="agency"

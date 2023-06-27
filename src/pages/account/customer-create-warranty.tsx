@@ -1,5 +1,5 @@
 import { Breadcrumb, CustomerCreateWarrantyForm } from '@/components'
-import { WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
+import { SWR_KEY, WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
 import { useCustomerWarranty, useCustomerWarrantyDetail } from '@/hooks'
 import { AccountContainer, Main } from '@/templates'
 import { useRouter } from 'next/router'
@@ -9,10 +9,10 @@ const CustomerCreateWarrantyPage = () => {
   const warranty_receipt_customer_id = Number(router?.query?.id) || 0
 
   const { createWarrantyReceipt, updateCustomerWarrantyReceipt } = useCustomerWarranty({
-    key: '', //update later
+    key: `${SWR_KEY.customer_warranty_receipt_list}`,
   })
   const { data: warrantyUpdate } = useCustomerWarrantyDetail({
-    key: `get_warranty_product_info_${warranty_receipt_customer_id}`,
+    key: `${SWR_KEY.warranty_product_detail}_${warranty_receipt_customer_id}`,
     params: {
       warranty_receipt_customer_id,
     },

@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react'
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const res: any = await productAPI.filterProduct({ product_type: 'product_product' })
+    const res: any = await productAPI.filterProduct({ product_type: 'product_product', limit: 12 })
 
     return {
       paths: res?.data?.result.map((item: Product) => ({
