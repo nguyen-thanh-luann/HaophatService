@@ -6,7 +6,7 @@ import {
   facebookIcon,
   zaloIcon,
 } from '@/assets'
-import { CONTACT_PHONE_NUMBER } from '@/constants'
+import { CONTACT_EMAIL_ADDRESS, CONTACT_PHONE_NUMBER, DOMAIN_URL } from '@/constants'
 import { AboutUsData, WebCategoryData } from '@/data'
 import Link from 'next/link'
 import { Image } from '../image'
@@ -26,27 +26,29 @@ export const Footer = () => {
 
           <p className="text-md text-text-color font-normal mb-12"></p>
 
-          <p className="text-md text-text-color font-normal mb-12">Địa chỉ:</p>
-          <p className="text-md text-text-color font-normal mb-12">GPĐKKD:</p>
+          <p className="text-md text-text-color font-normal mb-12">
+            Địa chỉ: SH1-08 Khu Đô Thị Sala, 153 Nguyễn Cơ Thạch, Phường An Lợi Đông, Thành phố thủ
+            đức, Thành Phố Hồ Chí Minh, Việt Nam
+          </p>
+          <p className="text-md text-text-color font-normal mb-12">GPĐKKD: XXXX</p>
 
           <p className="text-md text-text-color font-normal mb-12">
-            Website: <a href="" target="_blank"></a>
+            Website:{' '}
+            <a href={DOMAIN_URL} target="_blank">
+              {DOMAIN_URL}
+            </a>
           </p>
           <p className="text-md text-text-color font-normal mb-12">
             Tổng đài tư vấn: <a href={`tel:${CONTACT_PHONE_NUMBER}`}>{CONTACT_PHONE_NUMBER}</a>
           </p>
 
           <p className="text-md text-text-color font-normal mb-12">
-            Email: <a href=""></a>
-          </p>
-
-          <p className="text-md text-text-color font-normal mb-12">
-            Người đại diện: <a href=""></a>
+            Email: <a href={`mailto:${CONTACT_EMAIL_ADDRESS}`}>{CONTACT_EMAIL_ADDRESS}</a>
           </p>
         </div>
 
         <div className="col-span-1 z-10">
-          <p className="text-primary font-bold text-lg leading-10 mb-24">Danh mục Website</p>
+          <p className="text-primary font-bold text-lg leading-10 mb-24">Shops</p>
 
           {WebCategoryData.map((item, index) => (
             <Link className="forward-link" key={index} href={item?.path || ''}>
