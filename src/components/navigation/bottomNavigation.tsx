@@ -26,8 +26,7 @@ export const BottomNavigation = ({ className }: BottomNavigationProps) => {
           <div
             key={index}
             className={classNames(
-              'flex-1 flex flex-col items-center justify-center cursor-pointer',
-              isActive ? 'text-primary' : ''
+              'flex-1 flex flex-col items-center justify-center cursor-pointer'
             )}
             onClick={() => {
               router.push(item.path)
@@ -36,12 +35,7 @@ export const BottomNavigation = ({ className }: BottomNavigationProps) => {
             <div className={classNames('mb-4', isActive ? 'text-primary' : 'text-text-color')}>
               {item.icon}
             </div>
-            <p
-              className={classNames(
-                'text-sm text-text-color',
-                isActive ? 'text-primary' : 'text-text-color'
-              )}
-            >
+            <p className={classNames('text-sm', isActive ? 'text-primary' : 'text-text-color')}>
               {item.title}
             </p>
           </div>

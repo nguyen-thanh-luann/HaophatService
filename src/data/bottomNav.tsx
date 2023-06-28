@@ -19,8 +19,8 @@ export const bottomNavData = [
     icon: <MenuSquareDotOutlineIcon className={iconStyle} />,
   },
   {
-    path: '/quick_order',
-    title: 'Đặt hàng hộ',
+    path: '/lookup-warranty-receipt',
+    title: 'Tra cứu bảo hành',
     icon: <DonationIconOutline className={iconStyle} />,
   },
   {

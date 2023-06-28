@@ -22,7 +22,7 @@ export const ProductFilterSidebar = ({
       {/* filter by category */}
       <div className="bg-white rounded-[10px] shadow-shadow-1 mb-16">
         <p className="text-text-color font-bold text-lg border-b border-gray-200 p-8">
-          Danh Mục Dược Phẩm
+          Danh Mục Sản Phẩm
         </p>
 
         <div className="p-8">
