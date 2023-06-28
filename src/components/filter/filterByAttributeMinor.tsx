@@ -15,7 +15,9 @@ export const FilterByAttributeMinor = () => {
 
   const { attributeMinors, isValidating: attributeMinorsLoading } = useAttributeMinor({
     key: SWR_KEY.get_attribute_minor_list_filter,
-    params: {},
+    params: {
+      view_state: 'product',
+    },
   })
 
   const handleSelectAttribute = (attribute_id: number, child_id: number) => {

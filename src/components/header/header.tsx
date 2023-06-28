@@ -27,9 +27,9 @@ export const Header = ({className}: HeaderProps) => {
         </div>
 
         <div className="flex items-center justify-between gap-12">
-          <LookupWarrantyReceipt className=''/>
+          <LookupWarrantyReceipt />
 
-          <AccountDrawer className='max-w-[150px]'/>
+          <AccountDrawer />
 
           <div className={`border-l border-gray-300 h-[24px]`}></div>
 
