@@ -1,5 +1,5 @@
-import { ProductCartIcon, companyIconSm } from '@/assets'
-import { API_URL, DOMAIN_URL } from '@/constants'
+import { ProductCartIcon } from '@/assets'
+import { DOMAIN_URL } from '@/constants'
 import { formatMoneyVND, generateProductSlug, isObjectHasValue } from '@/helper'
 import { useAddToCart, useModal, useUser } from '@/hooks'
 import { addViewedProduct, setProduct } from '@/store'
@@ -11,7 +11,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { twMerge } from 'tailwind-merge'
-import { Image } from '../image'
+import { CustomImage } from '../customImage'
 import { ModalProductDetail } from '../modal'
 import { Spinner } from '../spinner'
 import { Star } from '../star'
@@ -93,13 +93,9 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
               onClick={onProductClick}
               className="mb-8 rounded-tl-[6px] rounded-tr-[6px] max-h-[230px] relative overflow-hidden cursor-pointer"
             >
-              <Image
-                src={
-                  data?.representation_image?.image_url
-                    ? `${API_URL}${data?.representation_image?.image_url}`
-                    : companyIconSm
-                }
-                imageClassName="object-cover w-full h-full hover:scale-110 duration-200 ease-in-out aspect-[1/1]"
+              <CustomImage
+                src={data?.representation_image?.image_url}
+                imageClassName="object-contain w-full h-full hover:scale-110 duration-200 ease-in-out aspect-[1/1]"
                 className="aspect-[1/1]"
               />
             </div>

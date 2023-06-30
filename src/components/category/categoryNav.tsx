@@ -1,4 +1,3 @@
-import { DownIcon } from '@/assets'
 import { SWR_KEY } from '@/constants'
 import { isArrayHasValue } from '@/helper'
 import { useCategoryList, useCategoryMinorList } from '@/hooks'
@@ -9,6 +8,7 @@ import ScrollContainer from 'react-indiana-drag-scroll'
 import { twMerge } from 'tailwind-merge'
 import { Spinner } from '../spinner'
 import { CategoryNavDropDownMenu } from './categoryNavDropDownMenu'
+import { DownIcon } from '@/assets'
 
 interface HeaderCategoryNavProps {
   className?: string
@@ -41,56 +41,54 @@ export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
 
   return (
     <div ref={ref} className={twMerge(classNames(`bg-primary`, className))}>
-      <div className="container px-12">
+      <div className="container">
         <div className="relative" onMouseLeave={() => setCurrentCategoryId(undefined)}>
-          <div className="flex-between overflow-scroll scrollbar-hide">
-            <div className="flex-1 h-header_nav_height">
-              {categoryListLoading || categoryMinorListLoading ? (
-                <div className="flex-1 flex-center h-header_nav_height">
-                  <Spinner />
-                </div>
-              ) : isArrayHasValue(categoryList || categoryMinorList) ? (
-                <ScrollContainer className="flex-1 flex h-header_nav_height gap-12">
-                  {categoryList?.map((option, index) => (
-                    <div
-                      onClick={() => handleCategoryClick(option?.category_id, 'category')}
-                      onMouseEnter={() => {
-                        setCurrentCategoryId(option?.category_id)
-                      }}
-                      className="flex items-center gap-6 py-6 px-8 my-auto cursor-pointer min-w-fit"
-                      key={index}
-                    >
-                      <p className="title !text-white uppercase h-[22px] flex-center">
-                        {option?.category_name}
-                      </p>
-                      <div className="w-[22px] h-[22px] flex-center">
-                        <DownIcon className="title !text-white" />
-                      </div>
+          <div className="h-header_nav_height">
+            {categoryListLoading || categoryMinorListLoading ? (
+              <div className="flex-1 flex-center h-header_nav_height">
+                <Spinner />
+              </div>
+            ) : isArrayHasValue(categoryList || categoryMinorList) ? (
+              <ScrollContainer className="flex h-header_nav_height gap-12">
+                {categoryList?.map((option, index) => (
+                  <div
+                    onClick={() => handleCategoryClick(option?.category_id, 'category')}
+                    onMouseEnter={() => {
+                      setCurrentCategoryId(option?.category_id)
+                    }}
+                    className="flex items-center gap-6 py-6 px-8 my-auto cursor-pointer min-w-fit"
+                    key={index}
+                  >
+                    <p className="title !text-white uppercase h-[22px] flex-center">
+                      {option?.category_name}
+                    </p>
+                    <div className="w-[22px] h-[22px] flex-center">
+                      <DownIcon className="title !text-white" />
                     </div>
-                  ))}
+                  </div>
+                ))}
 
-                  {categoryMinorList.map((option, index) => (
-                    <div
-                      onClick={() => handleCategoryClick(option?.category_id, 'minor_category')}
-                      onMouseEnter={() => {
-                        setIsCategoryMinor(true)
-                        setCurrentCategoryId(option?.category_id)
-                      }}
-                      onMouseLeave={() => setIsCategoryMinor(false)}
-                      className="flex items-center gap-6 py-6 px-8 my-auto cursor-pointer min-w-fit"
-                      key={index}
-                    >
-                      <p className="title !text-white uppercase h-[22px] flex-center">
-                        {option?.category_name}
-                      </p>
-                      <div className="w-[22px] h-[22px] flex-center">
-                        <DownIcon className="title !text-white" />
-                      </div>
+                {categoryMinorList.map((option, index) => (
+                  <div
+                    onClick={() => handleCategoryClick(option?.category_id, 'minor_category')}
+                    onMouseEnter={() => {
+                      setIsCategoryMinor(true)
+                      setCurrentCategoryId(option?.category_id)
+                    }}
+                    onMouseLeave={() => setIsCategoryMinor(false)}
+                    className="flex items-center gap-6 py-6 px-8 my-auto cursor-pointer min-w-fit"
+                    key={index}
+                  >
+                    <p className="title !text-white uppercase h-[22px] flex-center">
+                      {option?.category_name}
+                    </p>
+                    <div className="w-[22px] h-[22px] flex-center">
+                      <DownIcon className="title !text-white" />
                     </div>
-                  ))}
-                </ScrollContainer>
-              ) : null}
-            </div>
+                  </div>
+                ))}
+              </ScrollContainer>
+            ) : null}
           </div>
 
           {/* dropdown menu */}
