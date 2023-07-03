@@ -1,5 +1,5 @@
-import { PhotoIcon, TimesIcon, companyIconSm } from '@/assets'
-import { API_URL } from '@/constants'
+import { PhotoIcon, TimesIcon } from '@/assets'
+import { LIMIT_ATTACHMENT } from '@/constants'
 import { useAsync, useModal, useWarrantyAttachment } from '@/hooks'
 import { createWarrantyForCustomer } from '@/schema'
 import { warrantyAPI } from '@/services'
@@ -7,8 +7,9 @@ import { CreateWarrantyAttachmentReq, WarrantyAttachment } from '@/types'
 import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 import { Button } from '../button'
-import { Image } from '../image'
+import { CustomImage } from '../customImage'
 import { InputDate, InputField } from '../inputs'
 import { Modal } from '../modal'
 import { SelectCustomer, SelectLot, SelectProductWarranty } from '../warranty'
@@ -28,7 +29,7 @@ interface ICreateWarrantyForCustomerForm {
 
 export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCustomerForm) => {
   const { asyncHandler } = useAsync()
-  const [attachment, setAttachment] = useState<WarrantyAttachment>()
+  const [attachmentUrls, setAttachmentUrls] = useState<WarrantyAttachment[]>()
 
   const {
     visible: isSelectCustomer,
@@ -44,7 +45,9 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
 
   const { visible: isSelectLot, openModal: showSelectLot, closeModal: closeSelectLot } = useModal()
 
-  const { getBase64Images } = useWarrantyAttachment({ limit: 1 })
+  const { getBase64Images } = useWarrantyAttachment({
+    limit: LIMIT_ATTACHMENT,
+  })
 
   const {
     control,
@@ -62,19 +65,19 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
     if (!e.target.files) return
 
     getBase64Images(e.target.files, async (urls: Array<string>) => {
+      if (!urls?.[0]) return
+
       asyncHandler<CreateWarrantyAttachmentReq>({
         fetcher: warrantyAPI.createWarrantyAttachment({
-          attachments: urls.map((url) => ({
-            file: url.replace(/^data:image\/\w+;base64,/, ''),
-            type: 'image',
-          })),
+          attachments: [
+            {
+              file: urls?.[0].replace(/^data:image\/\w+;base64,/, ''),
+              type: 'image',
+            },
+          ],
         }),
         onSuccess: (res: any) => {
-          setAttachment(res?.[0])
-          setValue('warranty_attachment', {
-            attachment_id: res?.[0]?.attachment_id,
-            attachment_url: res?.[0]?.attachment_url,
-          })
+          setAttachmentUrls([...(attachmentUrls || []), res?.[0]])
         },
         config: {
           showSuccessMsg: false,
@@ -124,8 +127,29 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
     closeSelectLot()
   }
 
+  const hanldeDeleteImage = (props: WarrantyAttachment) => {
+    if (!props || !attachmentUrls?.length) return
+
+    setAttachmentUrls(attachmentUrls?.filter((att) => att?.attachment_id !== props.attachment_id))
+  }
+
+  const hanldeSubmitForm = (data: any) => {
+    if (!attachmentUrls || !data) {
+      toast.error('Vui lòng cung cấp đầy đủ thông tin!')
+    }
+
+    onSubmit?.({
+      product_id: data?.warranty_product?.value,
+      lot_id: data?.serial?.value,
+      customer_id: data?.customer?.value,
+      warranty_starting: data?.date,
+      invoice_ref: data?.invoice_ref,
+      invoice_image_url: attachmentUrls?.map((att) => att?.attachment_id),
+    })
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(hanldeSubmitForm)}>
       <div>
         {/* customer information */}
         <div className="mb-18">
@@ -189,7 +213,7 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-center mb-12">
+        <div className="flex flex-col items-center justify-center mb-12">
           <div>
             <input
               onChange={(e) => handleUploadImages(e)}
@@ -203,27 +227,38 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
               className={`flex items-center p-8 gap-8 cursor-pointer
 										text-primary border-primary duration-150`}
             >
-              {attachment ? (
-                <div className={`relative mt-8`}>
-                  <Image
-                    src={
-                      attachment?.attachment_url
-                        ? `${API_URL}${attachment.attachment_url}`
-                        : companyIconSm
-                    }
-                    alt="warranty receipt"
-                    className="w-[100px]"
-                    imageClassName="w-[100px] h-[100px] object-cover rounded-md"
-                  />
-                </div>
-              ) : (
-                <div className="">
-                  <PhotoIcon className="w-90 h-90 text-gray" />
-                  <p className="mt-8 text-center text-base">Tải ảnh lên</p>
-                </div>
-              )}
+              <div className="">
+                <PhotoIcon className="w-80 h-80 text-gray" />
+                <p className="mt-8 text-center text-base">Tải ảnh lên</p>
+              </div>
             </label>
           </div>
+
+          {attachmentUrls ? (
+            <div className="flex items-center gap-12 mt-12">
+              {attachmentUrls.map((att, index) => (
+                <div key={index} className="relative w-[80px]">
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      hanldeDeleteImage(att)
+                    }}
+                    className="absolute z-40 top-0 right-0 cursor-pointer bg-white rounded-full p-4"
+                  >
+                    <TimesIcon className="text-gray text-xs" />
+                  </span>
+
+                  <div className="">
+                    <CustomImage
+                      src={att?.attachment_url}
+                      alt="attachment"
+                      imageClassName="w-[80px] h-[80px] object-cover rounded-md"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -231,9 +266,9 @@ export const CreateWarrantyForCustomerForm = ({ onSubmit }: ICreateWarrantyForCu
         <Button
           title={`Gửi yêu cầu`}
           type="submit"
-          disabled={!isValid || !attachment}
+          disabled={!isValid || !attachmentUrls}
           className={`w-full p-8 bg-primary ${
-            !isValid || !attachment ? 'cursor-not-allowed opacity-50 hover:opacity-50' : ''
+            !isValid || !attachmentUrls ? 'cursor-not-allowed opacity-50 hover:opacity-50' : ''
           }`}
           textClassName="text-white text-md"
         />

@@ -1,4 +1,4 @@
-import { useAuth, useUser } from '@/hooks'
+import { useAuth, useChatAccount, useUser } from '@/hooks'
 import { createPasswordSchema } from '@/schema'
 import { setAuthOption, setBackdropVisible } from '@/store'
 import { authentication } from '@/utils'
@@ -31,7 +31,7 @@ export const ResetPasswordScreen = ({ onClose }: ResetPasswordScreenProps) => {
   const router = useRouter()
   const { resetPassword } = useAuth()
   const { mutateAccountData } = useUser({})
-  // const { autoSignupChatServer } = useChatAccount()
+  const { autoSignupChatServer } = useChatAccount()
 
   const [phoneNumber, setPhoneNumber] = useState<string>()
   const [verify, setVerify] = useState<boolean>(false)
@@ -108,7 +108,7 @@ export const ResetPasswordScreen = ({ onClose }: ResetPasswordScreenProps) => {
         mutateAccountData()
         // merge cart data of guest to user's cart
         // addGuestCartToShoppingCart(deviceCode)
-        // autoSignupChatServer()
+        autoSignupChatServer('admin')
         router.push('/')
       },
     })

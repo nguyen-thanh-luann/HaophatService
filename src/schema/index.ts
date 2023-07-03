@@ -332,11 +332,7 @@ export const createWarrantyForCustomer = Yup.object().shape({
     .nullable()
     .required('Vui lòng nhập số serial'),
   date: Yup.string().required('Vui lòng chọn ngày bắt đầu'),
-  invoice_ref: Yup.string().required('Vui lòng nhập mã hóa đơn'),
-  warranty_attachment: Yup.object().shape({
-    attachment_id: Yup.number(),
-    attachment_url: Yup.string(),
-  }),
+  invoice_ref: Yup.string().required('Vui lòng nhập mã hóa đơn')
 })
 
 export const customerCreateWarrantySchema = Yup.object().shape({
@@ -361,8 +357,4 @@ export const customerCreateWarrantySchema = Yup.object().shape({
     .required('Vui lòng nhập số serial'),
   date: Yup.string().required('Vui lòng chọn ngày bắt đầu'),
   invoice_ref: Yup.string().required('Vui lòng nhập mã hóa đơn'),
-  warranty_attachment: Yup.object().shape({
-    attachment_id: Yup.number(),
-    attachment_url: Yup.string(),
-  }),
 })

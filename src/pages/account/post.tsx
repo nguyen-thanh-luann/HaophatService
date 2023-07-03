@@ -5,22 +5,28 @@ import {
   Modal,
   ModalConfirm,
   NotFound,
+  Pagination,
   PostAdminItem,
   PostAdminItemLoading,
   PostCategoryOptionForm,
-  PostContentDetail
+  PostContentDetail,
 } from '@/components'
 
-import { DEFAULT_LIMIT, SWR_KEY, WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
+import {
+  DEFAULT_POST_LIMIT,
+  SWR_KEY,
+  WEB_DESCRIPTION,
+  WEB_TITTLE
+} from '@/constants'
 import { isAdmin, isArrayHasValue } from '@/helper'
 import { useChatAccount, usePostList, useUser } from '@/hooks'
 import { setPostForm } from '@/store'
 import { AccountContainer, Main } from '@/templates'
 import { Post } from '@/types'
+import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { useDispatch } from 'react-redux'
 
 const PostPage = () => {
@@ -34,14 +40,17 @@ const PostPage = () => {
   const {
     data: postList,
     isValidating,
-    getMore,
-    hasMore,
+  
     deletePost,
     filter,
+    offset,
+    limit,
+    total,
+    paginate,
   } = usePostList({
     key: `${SWR_KEY.get_post_list}`,
     params: {
-      limit: DEFAULT_LIMIT,
+      limit: DEFAULT_POST_LIMIT,
     },
   })
 
@@ -77,6 +86,10 @@ const PostPage = () => {
       </div>
     )
   }
+
+    const handlePaginate = (page: number) => {
+      paginate({ page })
+    }
 
   return (
     <Main title={WEB_TITTLE} description={WEB_DESCRIPTION}>
@@ -124,7 +137,7 @@ const PostPage = () => {
 
               {isValidating || isArrayHasValue(postList) ? (
                 <div>
-                  <InfiniteScroll
+                  {/* <InfiniteScroll
                     dataLength={postList?.length || 0}
                     next={() => getMore()}
                     hasMore={hasMore}
@@ -151,10 +164,41 @@ const PostPage = () => {
                         </div>
                       )}
                     </div>
-                  </InfiniteScroll>
+                  </InfiniteScroll> */}
+
+                  <div>
+                    {isValidating ? (
+                      <div>{renderPostLoading()}</div>
+                    ) : (
+                      <div>
+                        {postList?.map((post) => (
+                          <PostAdminItem
+                            post={post}
+                            key={post.id}
+                            onClickDelete={() => {
+                              setCurrentPostId(post?.id)
+                            }}
+                            onClickDetail={() => {
+                              setCurrentPostContent(post?.content)
+                            }}
+                            onClickEdit={() => handleEditPostClick(post)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <NotFound notify="Không tìm thấy bài viết nào!" />
+              )}
+
+              {!isValidating && (
+                <Pagination
+                  forcePage={offset / limit}
+                  className={classNames('mt-[24px]')}
+                  pageCount={Math.ceil(total / DEFAULT_POST_LIMIT)}
+                  onPageChange={({ selected }) => handlePaginate(selected + 1)}
+                />
               )}
 
               {/* modal confirm delete post */}

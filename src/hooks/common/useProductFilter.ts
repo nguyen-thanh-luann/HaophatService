@@ -150,6 +150,34 @@ export const useProductFilter = <Data = any, Params extends QueryList = any>({
     }
   }
 
+  const paginate = async (
+    _params: Params,
+    onSuccess?: (data: Data[]) => void,
+    onError?: () => void
+  ) => {
+    if (isLoadingMore || !data?.result?.length || !hasMore || isValidating) return
+
+    const limit = data?.paginate?.limit
+
+    try {
+      setIsFilter(true)
+
+      const newOffset = ((_params?.page || 0) - 1) * limit
+      const newParams = { ...params, limit, offset: newOffset }
+
+      const res: any = await fetcher(newParams)
+      const response = getDataResponse<Data>(res)
+
+      setIsFilter(false)
+
+      mutate(response, false)
+      onSuccess?.(response?.result)
+    } catch (err) {
+      setIsFilter(false)
+      onError?.()
+    }
+  }
+
   return {
     data: data?.result || [],
     offset: data?.paginate?.offset || 0,
@@ -165,6 +193,7 @@ export const useProductFilter = <Data = any, Params extends QueryList = any>({
     params,
     mutate: _mutate,
     filter,
+    paginate,
     getMore,
     refresh,
   }

@@ -79,7 +79,13 @@ export const SelectCustomer = ({ onClick: onExternalClick }: ISelectCustomer) =>
                 fetchMore({ params: { limit: DEFAULT_LIMIT } })
               }}
               hasMore={hasMore}
-              loader={hasMore ? <Spinner /> : null}
+              loader={
+                hasMore ? (
+                  <div className="flex-center">
+                    <Spinner />
+                  </div>
+                ) : null
+              }
             >
               {customerList?.map((item, index) => (
                 <div

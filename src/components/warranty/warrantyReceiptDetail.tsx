@@ -83,11 +83,16 @@ export const WarrantyReceiptDetail = ({
 
             <p className="text-base mb-8">{`Mã hóa đơn: ${data?.invoice_ref || ''}`}</p>
 
-            <CustomImage
-              src={data?.invoice_image_url?.image_url}
-              className="w-[300px]"
-              imageClassName="object-cover w-[300px] h-[250px] rounded-md"
-            />
+            <div className='flex flex-wrap gap-12'>
+              {data?.invoice_image_url?.length > 0 &&
+                data?.invoice_image_url?.map((image: any) => (
+                  <CustomImage
+                    src={image?.image_url}
+                    className="w-[300px]"
+                    imageClassName="object-cover w-[250px] h-[250px] rounded-md"
+                  />
+                ))}
+            </div>
           </div>
 
           <div className="border-t-1 border-gray-200 py-12">

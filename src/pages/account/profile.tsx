@@ -1,4 +1,4 @@
-import { Breadcrumb, StoreProfile, UserProfile } from '@/components'
+import { Breadcrumb, UserProfile } from '@/components'
 import { WEB_DESCRIPTION } from '@/constants'
 import { useUser } from '@/hooks'
 import { AccountContainer, Main } from '@/templates'
@@ -25,11 +25,7 @@ const ProfilePage = () => {
             Hồ sơ cá nhân
           </p>
 
-          {userInfo?.account?.medicine_account_type === 'drugstore_account' ? (
-            <StoreProfile data={userInfo} />
-          ) : (
-            <UserProfile data={userInfo} />
-          )}
+          <UserProfile data={userInfo} />
         </div>
       </AccountContainer>
     </Main>

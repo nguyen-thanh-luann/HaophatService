@@ -1,4 +1,3 @@
-import { NotebookIconOutline } from '@/assets'
 import { SWR_KEY } from '@/constants'
 import { isArrayHasValue } from '@/helper'
 import { usePostList, useUser } from '@/hooks'
@@ -38,11 +37,7 @@ export const HomePosts = ({ className, postCategory }: HomePostsProps) => {
   return (
     <div className={twMerge(classNames(`mb-24`, className))}>
       {isArrayHasValue(postList) ? (
-        <HomeSlide
-          className="md:p-24"
-          title={postCategory?.name || 'Tin tức'}
-          icon={<NotebookIconOutline className="text-primary w-[34px] h-[34px]" />}
-        >
+        <HomeSlide className="md:p-24" title={postCategory?.name || 'Tin tức nổi bật'}>
           <Swiper
             slidesPerView={4}
             spaceBetween={12}

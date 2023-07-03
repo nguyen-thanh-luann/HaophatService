@@ -80,9 +80,9 @@ module.exports = {
         'gray-400': '#B9B9B9',
 
         primary: '#FF3B30',
-        'primary-10': '#eedaf1',
-        'primary-100': 'rgba(143, 72, 156, 0.1)',
-        'primary-200': 'rgba(179, 94, 194, 0.12)',
+        'primary-10': '#ffcfcc',
+        'primary-100': '#ffe7e6',
+        'primary-200': '#ffe7e6',
 
         background: '#FAFAFE',
         'product-item-background': '#FBF9F7',

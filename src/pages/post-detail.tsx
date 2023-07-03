@@ -1,13 +1,19 @@
 import {
   Breadcrumb,
   NotFound,
+  Pagination,
   PostCategoryMenu,
   PostDetail,
   PostDetailLoading,
   PostItemLoading,
   PostListItemHorizontal,
 } from '@/components'
-import { DEFAULT_LIMIT, SWR_KEY, WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
+import {
+  DEFAULT_POST_LIMIT,
+  SWR_KEY,
+  WEB_DESCRIPTION,
+  WEB_TITTLE
+} from '@/constants'
 import {
   fromProductSlugToProductId,
   generateProductSlug,
@@ -17,8 +23,8 @@ import {
 import { usePostDetail, usePostList } from '@/hooks'
 import { Main } from '@/templates'
 import { Post } from '@/types'
+import classNames from 'classnames'
 import { useRouter } from 'next/router'
-import InfiniteScroll from 'react-infinite-scroll-component'
 
 const PostDetailPage = () => {
   const router = useRouter()
@@ -32,12 +38,14 @@ const PostDetailPage = () => {
   const {
     data: postList,
     isValidating: isLoadingPostList,
-    getMore,
-    hasMore,
+    paginate,
+    limit,
+    total,
+    offset,
   } = usePostList({
     key: `${SWR_KEY.get_post_list_related}`,
     params: {
-      limit: DEFAULT_LIMIT,
+      limit: DEFAULT_POST_LIMIT,
     },
   })
 
@@ -59,6 +67,10 @@ const PostDetailPage = () => {
         slug: generateProductSlug(data?.title, data?.id),
       },
     })
+  }
+
+  const handlePaginate = (page: number) => {
+    paginate({ page })
   }
 
   return (
@@ -93,28 +105,30 @@ const PostDetailPage = () => {
                         Xem thêm bài viết
                       </p>
 
-                      <InfiniteScroll
-                        dataLength={postList?.length || 0}
-                        next={() => getMore()}
-                        hasMore={hasMore}
-                        loader={hasMore ? renderderPostLoading() : null}
-                      >
-                        <div>
-                          {isLoadingPostList ? (
-                            <div>{renderderPostLoading()}</div>
-                          ) : (
-                            <div>
-                              {postList?.map((post) =>
-                                post?.id !== post_id ? (
-                                  <PostListItemHorizontal data={post} onClick={hanldePostClick} />
-                                ) : null
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </InfiniteScroll>
+                      <div>
+                        {isValidating ? (
+                          <div>{renderderPostLoading()}</div>
+                        ) : (
+                          <div>
+                            {postList?.map((post) =>
+                              post?.id !== post_id ? (
+                                <PostListItemHorizontal data={post} onClick={hanldePostClick} />
+                              ) : null
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ) : null}
+
+                  {!isValidating && isArrayHasValue(postList) && (
+                    <Pagination
+                      forcePage={offset / limit}
+                      className={classNames('mt-[24px]')}
+                      pageCount={Math.ceil(total / DEFAULT_POST_LIMIT)}
+                      onPageChange={({ selected }) => handlePaginate(selected + 1)}
+                    />
+                  )}
                 </div>
               </div>
             </div>

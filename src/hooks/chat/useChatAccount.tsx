@@ -104,7 +104,7 @@ export const useChatAccount = (): useChatAccountRes => {
             phone: user?.account?.phone || '',
             role: role
               ? role
-              : user?.account?.account_type === 'npp'
+              : user?.account?.account_type === 'manager'
               ? 'admin'
               : user?.account?.account_type,
             user_name: user.account?.partner_name,

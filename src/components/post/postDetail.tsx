@@ -1,11 +1,6 @@
-import { DOMAIN_URL } from '@/constants'
-import { generateProductSlug } from '@/helper'
 import { PostDetail as IPostDetail } from '@/types'
 import classNames from 'classnames'
-import { useRouter } from 'next/router'
 import { twMerge } from 'tailwind-merge'
-import { PostTagItem } from '../postTag'
-import { ShareSocial } from '../shareSocial'
 
 interface PostDetailProps {
   data: IPostDetail
@@ -13,12 +8,11 @@ interface PostDetailProps {
 }
 
 export const PostDetail = ({ data, className }: PostDetailProps) => {
-  const router = useRouter()
   return (
     <div className={twMerge(classNames(`post-content bg-white p-12`, className))}>
       <div dangerouslySetInnerHTML={{ __html: data?.content + '' }}></div>
 
-      <div className="border rounded-lg border-primary bg-white my-32 p-32">
+      {/* <div className="border rounded-lg border-primary bg-white my-32 p-32">
         <div className="flex-center mb-12">
           <p className="text-primary text-md font-semibold mr-12">Chia sẻ cùng bạn bè: </p>
           <ShareSocial
@@ -49,7 +43,7 @@ export const PostDetail = ({ data, className }: PostDetailProps) => {
             />
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -79,7 +79,7 @@ export interface WarrantyReceiptDeatil extends WarrantyReceipt {
 	invoice_image_url: {
 		image_id: number;
 		image_url: string;
-	};
+	}[];
 }
 
 export interface StoreWarrantyReceipt {
@@ -233,14 +233,15 @@ export interface WarrantyProductDetailReq {
 }
 
 export interface CreateWarrantyReceiptReq {
-	token: string;
+	token?: string;
 	product_id: number;
 	lot_id: number;
 	warranty_starting: string;
 	store_id?: number;
 	customer_id?: number;
 	picking_id?: number;
-	invoice_ref?: string;
+  invoice_ref?: string;
+  invoice_image_url?: number[]
 }
 
 export interface GetListStoreReq {

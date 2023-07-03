@@ -38,7 +38,7 @@ export const AccountNav = ({ className }: AccountNavProps) => {
               isActive ? 'bg-primary' : '',
               item?.account_type_permissions?.includes(
                 userInfo?.account?.warranty_account_type || ''
-              )
+              ) && item?.access_rules?.includes(userInfo?.account?.account_type || '')
                 ? ''
                 : 'hidden'
             )}

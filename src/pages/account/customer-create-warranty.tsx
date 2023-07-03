@@ -19,16 +19,7 @@ const CustomerCreateWarrantyPage = () => {
   })
 
   const handleSendWarrantyRequest = (data: any) => {
-    if (!data?.warranty_attachment?.attachment_id) return
-
-    const params = {
-      product_id: data?.warranty_product?.value,
-      lot_id: data?.serial?.value,
-      store_id: data?.agency?.value,
-      warranty_starting: data?.date,
-      invoice_ref: data?.invoice_ref,
-      invoice_image_url: data?.warranty_attachment?.attachment_id,
-    }
+    const params = { ...data }
 
     if (warranty_receipt_customer_id) {
       updateCustomerWarrantyReceipt(

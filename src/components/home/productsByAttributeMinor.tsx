@@ -154,7 +154,7 @@ export const ProductsByAttributeMinor = ({
           pagination={{
             clickable: true,
           }}
-          allowTouchMove={false}
+          // allowTouchMove={false}
           loop={true}
           modules={[Pagination, Navigation]}
           breakpoints={{

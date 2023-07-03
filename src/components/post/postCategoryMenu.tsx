@@ -1,16 +1,11 @@
 import { MenuIcon, RightIcon, TrashIconOutline } from '@/assets'
 import { SWR_KEY } from '@/constants'
-import {
-  fromProductSlugToProductId,
-  generateProductSlug,
-  isArrayHasValue,
-  isDrugStore,
-} from '@/helper'
-import { usePostCategory, useUser } from '@/hooks'
+import { fromProductSlugToProductId, generateProductSlug, isArrayHasValue } from '@/helper'
+import { usePostCategory } from '@/hooks'
 import { PostCategory } from '@/types'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '../button'
 import { Spinner } from '../spinner'
 
@@ -21,27 +16,14 @@ interface PostCategoryMenuProps {
 export const PostCategoryMenu = ({ className }: PostCategoryMenuProps) => {
   const [expandCategories, setExpandCategories] = useState<string[]>([])
   const router = useRouter()
-  const { userInfo } = useUser({})
 
-  const { parent_category, category_id } = router.query
+  const { category_id } = router.query
   const currentPostCategoryId = fromProductSlugToProductId(category_id as string)
 
-  const {
-    data: postCategoryList,
-    isValidating,
-    filter,
-  } = usePostCategory({
-    key: `${SWR_KEY.get_post_category_list}_${parent_category}`,
-    params: {
-      parent_id: parent_category as string,
-    },
+  const { data: postCategoryList, isValidating } = usePostCategory({
+    key: `${SWR_KEY.get_post_category_list}`,
+    params: {},
   })
-
-  useEffect(() => {
-    filter({
-      parent_id: parent_category as string,
-    })
-  }, [parent_category])
 
   const hanldeCategoryClick = (cate: PostCategory) => {
     if (!cate) return
@@ -73,8 +55,6 @@ export const PostCategoryMenu = ({ className }: PostCategoryMenuProps) => {
     setExpandCategories([...(expandCategories || []), data?.id])
   }
 
-  if (!parent_category) return <div></div>
-
   return (
     <div className={classNames('bg-white', className)}>
       <div className="p-10 flex items-center gap-12 border-b border-gray-200">
@@ -89,71 +69,67 @@ export const PostCategoryMenu = ({ className }: PostCategoryMenuProps) => {
         </div>
       ) : (
         <div>
-          {postCategoryList &&
-            (isDrugStore(userInfo?.account)
-              ? postCategoryList
-              : postCategoryList.filter((postCategory) => postCategory.role !== 'npp')
-            )?.map((cate) => {
-              const isExpand = expandCategories?.includes(cate?.id)
+          {postCategoryList?.map((cate) => {
+            const isExpand = expandCategories?.includes(cate?.id)
 
-              return (
-                <div key={cate?.id}>
-                  <div className="flex-between p-12 border-b last:mb-0 border-gray-100">
-                    <p
-                      onClick={() => hanldeCategoryClick(cate)}
+            return (
+              <div key={cate?.id}>
+                <div className="flex-between p-12 border-b last:mb-0 border-gray-100">
+                  <p
+                    onClick={() => hanldeCategoryClick(cate)}
+                    className={classNames(
+                      'text-md hover:text-primary cursor-pointer',
+                      cate?.id === currentPostCategoryId ? 'text-primary' : ''
+                    )}
+                  >
+                    {cate.name}
+                  </p>
+
+                  <div
+                    onClick={() => handleExpandCategory(cate)}
+                    className={classNames(
+                      'flex flex-1 justify-end duration-200 ease-in-out cursor-pointer'
+                    )}
+                  >
+                    <RightIcon
                       className={classNames(
-                        'text-md hover:text-primary cursor-pointer',
-                        cate?.id === currentPostCategoryId ? 'text-primary' : ''
+                        'text-sm text-text-color duration-200 ease-in-out',
+                        isExpand ? 'rotate-90' : '',
+                        cate.children_count > 0 ? 'block' : 'hidden'
                       )}
-                    >
-                      {cate.name}
-                    </p>
-
-                    <div
-                      onClick={() => handleExpandCategory(cate)}
-                      className={classNames(
-                        'flex flex-1 justify-end duration-200 ease-in-out cursor-pointer'
-                      )}
-                    >
-                      <RightIcon
-                        className={classNames(
-                          'text-sm text-text-color duration-200 ease-in-out',
-                          isExpand ? 'rotate-90' : '',
-                          cate.children_count > 0 ? 'block' : 'hidden'
-                        )}
-                      />
-                    </div>
-                  </div>
-
-                  <div className={classNames(isExpand ? 'block' : 'hidden')}>
-                    {isArrayHasValue(cate?.children) ? (
-                      <div className="px-12">
-                        {cate?.children?.map((child) => {
-                          const isActive = child?.id === currentPostCategoryId
-
-                          return (
-                            <div
-                              onClick={() => hanldeCategoryClick(child)}
-                              className="pl-12 py-8 w-full cursor-pointer"
-                              key={child?.id}
-                            >
-                              <p
-                                className={classNames(
-                                  'text-md border-b w-fit hover:text-primary',
-                                  isActive ? 'text-primary border-primary' : 'border-white'
-                                )}
-                              >
-                                {child?.name}
-                              </p>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    ) : null}
+                    />
                   </div>
                 </div>
-              )
-            })}
+
+                <div className={classNames(isExpand ? 'block' : 'hidden')}>
+                  {isArrayHasValue(cate?.children) ? (
+                    <div className="px-12">
+                      {cate?.children?.map((child) => {
+                        const isActive = child?.id === currentPostCategoryId
+
+                        return (
+                          <div
+                            onClick={() => hanldeCategoryClick(child)}
+                            className="pl-12 py-8 w-full cursor-pointer"
+                            key={child?.id}
+                          >
+                            <p
+                              className={classNames(
+                                'text-md border-b w-fit hover:text-primary',
+                                isActive ? 'text-primary border-primary' : 'border-white'
+                              )}
+                            >
+                              {child?.name}
+                            </p>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
 

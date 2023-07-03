@@ -9,19 +9,8 @@ const CreateWarrantyForCustomerPage = () => {
 
   const { createCustomerWarrantyReceipt } = useStoreWarranty()
 
-  const handleSendWarrantyRequest = (data: any) => {
-    if (!data?.warranty_attachment?.attachment_id) return
-
-    const params = {
-      product_id: data?.warranty_product?.value,
-      lot_id: data?.serial?.value,
-      customer_id: data?.customer?.value,
-      warranty_starting: data?.date,
-      invoice_ref: data?.invoice_ref,
-      invoice_image_url: data?.warranty_attachment?.attachment_id,
-    }
-
-    createCustomerWarrantyReceipt(params, () => {
+  const handleSendWarrantyRequest = (props: any) => {
+    createCustomerWarrantyReceipt(props, () => {
       router.push('/account/customer')
     })
   }

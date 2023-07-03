@@ -3,32 +3,45 @@ import {
   Breadcrumb,
   Modal,
   NotFound,
+  Pagination,
   ProductFilterSidebar,
   ProductItem,
   ProductsLoadingSlice,
   Tabs,
 } from '@/components'
-import { PRODUCT_FILTER_TABS, SWR_KEY, WEB_TITTLE } from '@/constants'
+import { DEFAULT_LIMIT_PRODUCT_FILTER, PRODUCT_FILTER_TABS, SWR_KEY, WEB_TITTLE } from '@/constants'
 import { generateFilterProductParamFormRouter, isArrayHasValue, isObjectHasValue } from '@/helper'
-import { useModal, useProductQuery } from '@/hooks'
+import { useModal, useProductQuery, useUser } from '@/hooks'
 import { MainNoFooter } from '@/templates'
 import { ProductfilterSortType } from '@/types'
+import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
 
 const SearchPage = () => {
   const router = useRouter()
+  const { userInfo } = useUser({})
   const [currentTab, setCurrentTab] = useState<string>('default')
   const { visible: showFilters, openModal: openFilters, closeModal: closeFilters } = useModal()
 
-  const { products, filter, isValidating, hasMore, getMore, isFilter, price_max, price_min } =
-    useProductQuery({
-      key: `${SWR_KEY.filter_product}`,
-      params: {
-        product_type: 'product_product',
-      },
-    })
+  const {
+    products,
+    filter,
+    isValidating,
+    isFilter,
+    price_max,
+    price_min,
+    total,
+    limit,
+    offset,
+    paginate,
+  } = useProductQuery({
+    key: `${SWR_KEY.filter_product}_${userInfo?.account?.partner_id || 0}`,
+    params: {
+      product_type: 'product_product',
+      limit: DEFAULT_LIMIT_PRODUCT_FILTER,
+    },
+  })
 
   useEffect(() => {
     const searchParams = generateFilterProductParamFormRouter(router)
@@ -52,6 +65,10 @@ const SearchPage = () => {
     })
   }
 
+  const handlePaginate = (page: number) => {
+    paginate({ page })
+  }
+
   return (
     <MainNoFooter title={WEB_TITTLE} description="">
       <div className="container min-h-[60vh]">
@@ -65,11 +82,11 @@ const SearchPage = () => {
         />
 
         <div className="grid grid-cols-4">
-          <div className="col-span-1 hidden md:block h-[95vh] overflow-scroll scrollbar-hide px-12 pb-12">
+          <div className="col-span-1 hidden md:block px-12 pb-12">
             <ProductFilterSidebar price_max={price_max} price_min={price_min} />
           </div>
 
-          <div className="col-span-4 md:col-span-3 overflow-scroll scrollbar-hide px-12 h-[100vh]">
+          <div className="col-span-4 md:col-span-3 px-12">
             {/* search bar */}
             <div className="p-12 rounded-lg bg-white z-50 mb-12 shadow-shadow-1">
               <Tabs
@@ -138,35 +155,25 @@ const SearchPage = () => {
             )}
 
             {/* product slide here */}
-            <div className="mb-12">
+            <div className="">
               {isValidating || isFilter ? (
                 <ProductsLoadingSlice className="grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-12" />
-              ) : null}
-
-              {isValidating ? (
-                <ProductsLoadingSlice className="grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-12" />
               ) : isArrayHasValue(products) ? (
-                <div
-                  className="h-[80vh] overflow-auto scrollbar-hide"
-                  id="productListScrollableTarget"
-                >
-                  <InfiniteScroll
-                    scrollableTarget="productListScrollableTarget"
-                    dataLength={products?.length || 0}
-                    next={getMore}
-                    hasMore={hasMore}
-                    loader={
-                      hasMore ? (
-                        <ProductsLoadingSlice className="grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-12" />
-                      ) : null
-                    }
-                  >
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
-                      {products?.map((product) => (
-                        <ProductItem data={product} key={product?.product_id} />
-                      ))}
-                    </div>
-                  </InfiniteScroll>
+                <div className="">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+                    {products?.map((product) => (
+                      <ProductItem data={product} key={product?.product_id} />
+                    ))}
+                  </div>
+
+                  {!isValidating && (
+                    <Pagination
+                      forcePage={offset / limit}
+                      className={classNames('my-[24px]')}
+                      pageCount={Math.ceil(total / DEFAULT_LIMIT_PRODUCT_FILTER)}
+                      onPageChange={({ selected }) => handlePaginate(selected + 1)}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="">

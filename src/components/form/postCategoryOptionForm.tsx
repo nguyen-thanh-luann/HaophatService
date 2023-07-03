@@ -1,10 +1,10 @@
 import { DEFAULT_LIMIT, SWR_KEY } from '@/constants'
-import { ValidAccountRoleToUsePostService } from '@/helper'
-import { usePostCategory, useUser } from '@/hooks'
-import { AccountType, PostCategory } from '@/types'
+import { usePostCategory } from '@/hooks'
+import { PostCategory } from '@/types'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { PostCategoryOption, PostCategoryOptionChild, PostCategoryOptionLoading } from '../post'
+import { isArrayHasValue } from '@/helper'
 
 interface PostCategoryOptionFormProps {
   type: 'single' | 'multiple'
@@ -23,17 +23,9 @@ export const PostCategoryOptionForm = ({
   label,
   labelClassName,
 }: PostCategoryOptionFormProps) => {
-  const { userInfo } = useUser({ shouldFetch: false })
-  const userRole: AccountType = ValidAccountRoleToUsePostService(userInfo)
-  const getPostCategoryParams =
-    userInfo?.account?.account_type === 'npp'
-      ? {
-          limit: DEFAULT_LIMIT,
-        }
-      : {
-          limit: DEFAULT_LIMIT,
-          role: userRole,
-        }
+  const getPostCategoryParams = {
+    limit: DEFAULT_LIMIT,
+  }
 
   const { data: postCategoryList, isValidating } = usePostCategory({
     key: `${SWR_KEY.get_post_category_list}`,
@@ -95,6 +87,7 @@ export const PostCategoryOptionForm = ({
     }
   }
 
+  if (!isArrayHasValue(postCategoryList)) return null
   return (
     <div>
       <p className={classNames('mb-8 text-md', labelClassName)}>{label || 'Chọn danh mục'}</p>

@@ -2,9 +2,9 @@ import {
   FirstSectionProductByAttributeMinor,
   HomeBanner,
   HomeBannerMobile,
-  HomePostsList,
+  HomePosts,
   ListProductByAttributeMinor,
-  VisceraAttribute,
+  VisceraAttribute
 } from '@/components'
 
 import { DOMAIN_URL, thumbnailImageUrl, WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
@@ -29,7 +29,7 @@ const HomePage = () => {
         </div>
 
         <div className="container px-12">
-          <HomePostsList />
+          <HomePosts className="mb-12 last:mb-0" />
         </div>
       </div>
     </Main>

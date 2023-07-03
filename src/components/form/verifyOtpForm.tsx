@@ -1,4 +1,4 @@
-import { useAuth, useUser } from '@/hooks'
+import { useAuth, useChatAccount, useUser } from '@/hooks'
 import { userAPI } from '@/services'
 import { setBackdropVisible } from '@/store'
 import { VERIFY_OTP_TYPE } from '@/types'
@@ -31,6 +31,7 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
   const { updateUser, mutateAccountData, userInfo } = useUser({})
   const [phoneNumber, setPhoneNumber] = useState<string>('')
   const [otpForm, setOtpForm] = useState<boolean>()
+  const { autoSignupChatServer } = useChatAccount()
 
   const generateRecaptcha = () => {
     return new RecaptchaVerifier(
@@ -119,7 +120,7 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
         mutateAccountData()
         // merge cart data of guest to user's cart
         // addGuestCartToShoppingCart(deviceCode)
-        // autoSignupChatServer()
+        autoSignupChatServer('admin')
         router.push('/')
       },
     })
@@ -137,7 +138,7 @@ export const VerifyOtpForm = ({ firstOption, secondOption, type }: VerifyOtpForm
             mutateAccountData()
             // merge cart data of guest to user's cart
             // addGuestCartToShoppingCart(deviceCode)
-            // autoSignupChatServer()
+            autoSignupChatServer('admin')
             router.push('/')
           }
         )

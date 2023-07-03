@@ -33,7 +33,6 @@ const PostListPage = () => {
   const {
     data: postList,
     isValidating,
-
     filter,
     offset,
     limit,
@@ -78,7 +77,6 @@ const PostListPage = () => {
   }
 
   const handlePaginate = (page: number) => {
-    console.log({ page })
     paginate({page})
   }
 

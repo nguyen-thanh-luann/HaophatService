@@ -39,7 +39,7 @@ export const AccountNavMobile = ({ className }: AccountNavMobileProps) => {
               isActive ? 'text-primary' : '',
               item?.account_type_permissions?.includes(
                 userInfo?.account?.warranty_account_type || ''
-              )
+              ) && item?.access_rules?.includes(userInfo?.account?.account_type || '')
                 ? ''
                 : 'hidden'
             )}
