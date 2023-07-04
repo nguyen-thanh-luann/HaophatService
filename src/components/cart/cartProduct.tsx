@@ -140,10 +140,6 @@ export const CartProduct = ({
 
   return (
     <div className={classNames('p-12', className)}>
-      {data?.has_promotion ? (
-        <CartProductPromotion {...indexes} companyId={company_id} product={data} />
-      ) : null}
-
       <div className={twMerge(classNames('bg-white flex md:gap-24 items-center'))}>
         {/* product info */}
         <div className="flex-1 flex items-center">
@@ -196,9 +192,17 @@ export const CartProduct = ({
 
             {/* mobile view */}
             <div className="md:hidden flex flex-wrap justify-between items-center">
-              <p className="text-md text-primary font-bold leading-8 line-clamp-1 mt-8">
-                {formatMoneyVND(data?.price_unit)}
-              </p>
+              <div>
+                <p className="text-md text-primary font-bold leading-8 line-clamp-1 mt-8">
+                  {formatMoneyVND(data?.price_unit)}
+                </p>
+
+                {data?.price_unit !== data?.product_id?.origin_price_unit ? (
+                  <p className="text-gray-400 text-xs font-medium leading-7 line-through">
+                    {formatMoneyVND(data?.product_id?.origin_price_unit || 0)}
+                  </p>
+                ) : null}
+              </div>
 
               <div className="flex justify-start mt-8">
                 {data?.rel_uom_ids?.length > 1 ? (
@@ -243,19 +247,16 @@ export const CartProduct = ({
           <p className="text-md text-primary font-bold leading-8 line-clamp-1">
             {formatMoneyVND(data?.price_unit)}
           </p>
+
+          {data?.price_unit !== data?.product_id?.origin_price_unit ? (
+            <p className="text-gray-400 text-xs font-medium leading-7 line-through">
+              {formatMoneyVND(data?.product_id?.origin_price_unit || 0)}
+            </p>
+          ) : null}
         </div>
 
         {/* quantity */}
         <div className="w-[115px] text-start hidden md:block">
-          {/* <InputQuantityV2
-            minusIconClassName="text-md text-white"
-            plusIconClassName="text-base text-white"
-            inputClassName={`text-base text-text-color text-center outline-none`}
-            quantity={data?.quantity}
-            onChangeQuantity={handleChangeQuantity}
-            disabled={isQuantityUpdating}
-          /> */}
-
           <CustomInputQuantity
             defaultValue={data?.quantity}
             disabled={isQuantityUpdating}
@@ -289,6 +290,10 @@ export const CartProduct = ({
           <TrashIconOutline className="text-red w-16 h-16 active:opacity-50 " />
         </div>
       </div>
+
+      {data?.has_promotion ? (
+        <CartProductPromotion {...indexes} companyId={company_id} product={data} />
+      ) : null}
 
       <ModalConfirm
         visible={visible}

@@ -15,7 +15,7 @@ import { useSWRConfig } from 'swr'
 import { twMerge } from 'tailwind-merge'
 import { Button } from '../button'
 import { InputField, TextareaField } from '../inputs'
-import { AddressPicker } from './addressPicker'
+import { AddressPickerV2 } from './addressPickerV2'
 
 interface UserDeliveryAddressFormProps {
   onSubmit?: Function
@@ -130,7 +130,6 @@ export const UserDeliveryAddressForm = ({
       },
     }
 
-
     addAddress({
       address: newAddress,
       addressForm: addressRes,
@@ -185,7 +184,7 @@ export const UserDeliveryAddressForm = ({
           </div>
 
           <div className="mb-12">
-            <AddressPicker
+            <AddressPickerV2
               onSubmit={(data: AddressPickerRes) => handleSelectAddress(data)}
               defaultValue={
                 orderAddress

@@ -15,6 +15,7 @@
 @import './quillEditer.scss';
 @import './input-range.scss';
 @import './tinyMceEditor.scss';
+@import './backdrop.scss';
 
 .container {
   @apply max-w-[1200px] w-full mx-auto xl:px-0;
@@ -28,13 +29,12 @@
   @apply flex justify-between items-center;
 }
 
-.flex-end{
-  @apply flex justify-end items-center
+.flex-end {
+  @apply flex justify-end items-center;
 }
-.flex-start{
-  @apply flex justify-start items-center
+.flex-start {
+  @apply flex justify-start items-center;
 }
-
 
 /* It set 1rem = 10px */
 html,

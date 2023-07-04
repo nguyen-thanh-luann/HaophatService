@@ -222,6 +222,20 @@ export interface Delivery {
   note?: string
 }
 
+export interface ConfirmDeliveryCarrierResponse {
+  id: number
+  name: string
+  amount_total: number
+  delivery_price: number
+}
+
+export interface ConfirmPaymentMethodResponse {
+  id: number
+  name: string
+  amount_total: number
+  fee_acquirer: number
+}
+
 export interface OrderLineDelivery extends Delivery {
   company_id?: number
 }
@@ -426,6 +440,7 @@ export interface CreateOpportunityParams {
   ward_id?: number
   street?: string
   note?: string
+  drugstore_name?: string
   medical_order_image_url?: number[]
   order_line?: ProductLineOpportunityParams[]
 }
