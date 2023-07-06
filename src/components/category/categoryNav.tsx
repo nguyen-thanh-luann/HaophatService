@@ -54,6 +54,7 @@ export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
                   <div
                     onClick={() => handleCategoryClick(option?.category_id, 'category')}
                     onMouseEnter={() => {
+                      setIsCategoryMinor(false)
                       setCurrentCategoryId(option?.category_id)
                     }}
                     className="flex items-center gap-6 py-6 px-8 my-auto cursor-pointer min-w-fit"
@@ -75,7 +76,7 @@ export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
                       setIsCategoryMinor(true)
                       setCurrentCategoryId(option?.category_id)
                     }}
-                    onMouseLeave={() => setIsCategoryMinor(false)}
+                    // onMouseLeave={() => setIsCategoryMinor(false)}
                     className="flex items-center gap-6 py-6 px-8 my-auto cursor-pointer min-w-fit"
                     key={index}
                   >
