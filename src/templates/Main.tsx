@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import {
   Backdrop,
   BottomNavigation,
-  Footer,
+  FooterV2,
   HeaderGroup,
   HeaderMobile
 } from '@/components'
@@ -40,7 +40,9 @@ export const Main = ({ children, ...attributes }: IMainProps) => {
       <div className="mb-bottom_nav_height md:mb-0">
         {children}
 
-        <Footer />
+        {/* <Footer /> */}
+
+        <FooterV2 />
       </div>
       {/* <ContactOptions /> */}
 
