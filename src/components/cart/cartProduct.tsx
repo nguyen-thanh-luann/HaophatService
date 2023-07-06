@@ -71,7 +71,7 @@ export const CartProduct = ({
     updateProductHandler({
       fetcher: cartAPI.deleteCartProduct({
         cart_product_ids: [data.shopping_cart_product_id],
-        category_type: 'category_minor',
+        // category_type: 'category_minor',
       }),
       onSuccess: () => onDelete?.(data),
       config: { method: 'GET', showErrorMsg: true, showBackdrop: true },

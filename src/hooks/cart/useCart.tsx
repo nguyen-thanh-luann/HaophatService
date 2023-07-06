@@ -61,7 +61,7 @@ export const useCarts = () => {
         limit: LIMIT_COMPANY,
         limit_category: LIMIT_CATEGORY,
         limit_product: LIMIT_PRODUCT_IN_CATEGORY,
-        category_type: 'category_minor',
+        // category_type: 'category_minor',
         ...params,
       })
 

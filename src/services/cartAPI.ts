@@ -66,7 +66,7 @@ const cartAPI = {
     params: GetCartCategoriesInCompanyReq
   ): Promise<HTTPResponseV2<CartCategory[]>> => {
     return axiosClient.get(
-      `/shopping_cart_controller/list_category_minor_in_company?${
+      `/shopping_cart_controller/list_category_in_company?${
         params?.shopping_cart_id ? `&shopping_cart_id=${params?.shopping_cart_id}` : ''
       }${params?.limit_product ? `&limit_product=${params.limit_product}` : ''}`
     )
@@ -75,7 +75,7 @@ const cartAPI = {
   getCartProductsInCategory: (
     params: GetCartProductsInCategoryReq
   ): Promise<HTTPResponseV2<CartProduct[]>> => {
-    return axiosClient.get(`/shopping_cart_controller/list_product_in_category_minor`, { params })
+    return axiosClient.get(`/shopping_cart_controller/list_product_in_category`, { params })
   },
 
   updateCartItem: (params: UpdateCartItemReq): Promise<HTTPResponseV2<CartProduct>> => {
