@@ -49,7 +49,7 @@ export const WEB_DESCRIPTION =
   'Hào Phát Group là đơn vị phân phối các sản phẩm gọng kính, mắt kính của các thương hiệu hàng đầu thế giới.'
 
 export const CONTACT_EMAIL_ADDRESS = 'info@gmail.com'
-export const CONTACT_PHONE_NUMBER = '093 3691 xxx'
+export const CONTACT_PHONE_NUMBER = '028 7304 0068'
 export const thumbnailImageUrl = thumbnailImage?.default?.src || ''
 
 export const MESSAGE_OPTION_MENU_SIZE = {
