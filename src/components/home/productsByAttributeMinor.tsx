@@ -126,7 +126,7 @@ export const ProductsByAttributeMinor = ({
               <ScrollContainer className="">
                 <Tabs
                   list={
-                    (atribute?.value_ids?.length || 0) > 3
+                    (atribute?.value_ids?.length || 0) > 4
                       ? [...tabs, { label: 'Xem thêm', value: 'more' }]
                       : [...tabs]
                   }
