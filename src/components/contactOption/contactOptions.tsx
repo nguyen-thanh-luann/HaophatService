@@ -55,7 +55,7 @@ export const ContactOptions = () => {
         {/* <MessengerCustomerChat pageId={FACEBOOK_PAGE_ID} appId={FACEBOOK_APP_ID} /> */}
 
         <div className={classNames('rounded-full bg-blue p-10 cursor-pointer duration-200')}>
-          <Link href={'https://www.facebook.com/duocbinhan'} target="_blank">
+          <Link href={'https://www.facebook.com/haophateyewear'} target="_blank">
             <FacebookIconOutline className="text-white font-bold w-32 h-32" />
           </Link>
         </div>
