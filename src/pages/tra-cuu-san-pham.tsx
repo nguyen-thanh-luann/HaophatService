@@ -1,8 +1,8 @@
 import { glassBrigde, glassFrame, glassLenses } from '@/assets'
 import { Breadcrumb, CustomImage, Image, NotFound, SearchForm, Spinner } from '@/components'
-import { DOMAIN_URL, SWR_KEY, WEB_DESCRIPTION, WEB_TITTLE, thumbnailImageUrl } from '@/constants'
+import { DOMAIN_URL, WEB_DESCRIPTION, WEB_TITTLE, thumbnailImageUrl } from '@/constants'
 import { isObjectHasValue } from '@/helper'
-import { useProductDetail } from '@/hooks'
+import { useCheckProductAuthen } from '@/hooks'
 import { productAPI } from '@/services'
 import { Main } from '@/templates'
 import { ProductDetail } from '@/types'
@@ -16,23 +16,18 @@ const TraCuuSanPhamPage = () => {
   const router = useRouter()
   const { id } = router.query
 
-  const { data, isValidating } = useProductDetail({
-    key: `${SWR_KEY.get_product_detail}_${id}`,
-    params: {
-      product_id: Number(id),
-    },
-  })
+  const { data, isValidating } = useCheckProductAuthen({ params: { uuid_code: id as string } })
 
   useEffect(() => {
-    setCurrentProduct(data?.product_data)
+    setCurrentProduct(data)
   }, [data])
 
   const hanldeSearchProduct = async (val: string) => {
     try {
       setLoading(true)
-      const res: any = await productAPI.getProductDetail({ product_code: val })
+      const res: any = await productAPI.checkProductAuthen({ uuid_code: val })
       if (res?.success) {
-        setCurrentProduct(res?.data?.product_data)
+        setCurrentProduct(res?.data)
       } else {
         setCurrentProduct(undefined)
       }
@@ -108,7 +103,7 @@ const TraCuuSanPhamPage = () => {
                     <p className="uppercase text-md font-bold">Cửa hàng</p>
                   </div>
                   <div className="flex-1 flex-center bg-white rounded-lg p-4">
-                    <p className="text-md uppercase">{`Hào phát`}</p>
+                    <p className="text-md uppercase">{currentProduct?.responsible_store_name}</p>
                   </div>
                 </div>
 
@@ -118,7 +113,9 @@ const TraCuuSanPhamPage = () => {
                   </div>
 
                   <div className="flex-1 flex-center bg-white rounded-lg p-4">
-                    <p className="text-md uppercase">{`153, Nguyễn Cơ Thạch, Quận 2, TP.HCM`}</p>
+                    <p className="text-md uppercase">
+                      {currentProduct?.responsible_store_street || ''}
+                    </p>
                   </div>
                 </div>
 

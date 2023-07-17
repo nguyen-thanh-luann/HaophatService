@@ -1,6 +1,7 @@
 import { DEFAULT_LIMIT, DEFAULT_LIMIT_PRODUCT } from '@/constants'
 import {
   Category,
+  CheckProductAuthenParams,
   FilterProductParams,
   GetCategoryParams,
   GetListAttributeMinorParams,
@@ -26,7 +27,11 @@ const productAPI = {
   },
 
   getProductDetail: (params: GetProductDetailParams) => {
-    return axiosClient.get(`/product_controller/detail_product`, {params})
+    return axiosClient.get(`/product_controller/detail_product`, { params })
+  },
+
+  checkProductAuthen: (params: CheckProductAuthenParams) => {
+    return axiosClient.get(`/product_authenticity_controller/authenticity`, { params })
   },
 
   getProductDescription: (product_id: number) => {

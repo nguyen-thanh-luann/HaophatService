@@ -22,6 +22,10 @@ export interface GetProductDetailParams {
   product_code?: string
 }
 
+export interface CheckProductAuthenParams {
+  uuid_code: string
+}
+
 export type ProductClassification = 'dietary_supplement' | 'medicine'
 
 export type GetProductType = 'product_combo' | 'product_product'
@@ -92,6 +96,8 @@ export interface Product {
   quantity: number
   stock_quantity: ProductUom
   product_type: ProductClassification
+  responsible_store_name: string
+  responsible_store_street: string
 }
 
 export interface ProductUom {
