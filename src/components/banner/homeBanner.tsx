@@ -1,5 +1,5 @@
 import { SWR_KEY } from '@/constants'
-import { isArrayHasValue } from '@/helper'
+import { isArrayHasValue, isRemoteImageUrl } from '@/helper'
 import { useBanner } from '@/hooks'
 import classNames from 'classnames'
 import { Autoplay, Navigation, Pagination } from 'swiper'
@@ -49,10 +49,17 @@ export const HomeBanner = ({ className }: HomeBannerProps) => {
               <SwiperSlide key={index}>
                 <div className="">
                   <CustomImage
-                    // src={`${banners?.[0]?.banner_cloud_storage_id?.url}`}
                     src={`${banner?.banner_cloud_storage_id?.url || ''}`}
                     alt="banner"
-                    imageClassName="object-cover w-full aspect-[2/1] md:aspect-[4/1]"
+                    onClick={() => {
+                      if (isRemoteImageUrl(banner?.description_url)) {
+                        window.open(banner?.description_url, '_blank')
+                      }
+                    }}
+                    imageClassName={classNames(
+                      'object-cover w-full aspect-[2/1] md:aspect-[4/1]',
+                      isRemoteImageUrl(banner?.description_url) ? 'cursor-pointer' : ''
+                    )}
                   />
                 </div>
               </SwiperSlide>
