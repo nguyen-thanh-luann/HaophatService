@@ -49,7 +49,7 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
 
   return (
     <div className={twMerge(classNames(`h-full`, className))}>
-      <div className="flex-between p-12">
+      <div className="flex-between p-12 mb-12">
         <div>
           <Link href="/">
             <Image src={logoLg} className="w-[130px] h-[40px]" />
@@ -147,6 +147,24 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
                 </div>
               </div>
             ))}
+
+            <div
+              onClick={() => {
+                router.push('/lookup-warranty-receipt')
+              }}
+              className="flex-between my-auto cursor-pointer w-full p-12 border-b border-gray-100"
+            >
+              <p className="text-md text-text-color font-bold line-clamp-1">Tra cứu bảo hành</p>
+            </div>
+
+            <div
+              onClick={() => {
+                router.push('/tra-cuu-san-pham')
+              }}
+              className="flex-between my-auto cursor-pointer w-full p-12 border-b border-gray-100"
+            >
+              <p className="text-md text-text-color font-bold line-clamp-1">Tra cứu chính hãng</p>
+            </div>
           </div>
         ) : (
           <div></div>

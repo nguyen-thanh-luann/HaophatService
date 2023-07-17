@@ -1,6 +1,6 @@
 import { AttributeMinor } from './attribute'
 import { Category } from './category'
-import { ImageId } from './common'
+import { ImageId, URLRes } from './common'
 import { Pagination, QueryList } from './http'
 import { StarRatingRange, StarRatingRangeReq, StarString } from './rating'
 
@@ -15,6 +15,11 @@ export interface ProductParams {
   product_id?: number
   partner_id?: number
   attribute_ids?: any[]
+}
+
+export interface GetProductDetailParams {
+  product_id?: number
+  product_code?: string
 }
 
 export type ProductClassification = 'dietary_supplement' | 'medicine'
@@ -65,6 +70,7 @@ export interface Product {
   product_id: number
   category_id: Category
   product_code: string
+  barcode: string
   product_name: string
   representation_image: ImageId
   image_ids: ImageId[]
@@ -125,6 +131,19 @@ export interface ProductDetail extends Product {
   rel_product_ids: Product[]
   liked: boolean
   liked_count: number
+  bridge_size: number
+  lens_size: number
+  temple_size: number
+  frame_color_attribute: ProductDetailAtt
+  frame_material_attribute: ProductDetailAtt
+  lens_color_attribute: ProductDetailAtt
+  lens_material_attribute: ProductDetailAtt
+}
+
+export interface ProductDetailAtt {
+  value_icon: URLRes
+  value_id: number
+  value_name: string
 }
 
 export interface ProductDescriptionTab {

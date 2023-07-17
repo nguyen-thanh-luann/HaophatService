@@ -6,13 +6,15 @@ import {
   NotFound,
   SearchField,
   SelectField,
-  Spinner
+  Spinner,
 } from '@/components'
 import {
   DOMAIN_URL,
   LIMIT_DRUG_STORES,
-  SWR_KEY, thumbnailImageUrl, WEB_DESCRIPTION,
-  WEB_TITTLE
+  SWR_KEY,
+  thumbnailImageUrl,
+  WEB_DESCRIPTION,
+  WEB_TITTLE,
 } from '@/constants'
 import { isArrayHasValue } from '@/helper'
 import { useAddress, useDrugstores } from '@/hooks'
@@ -27,7 +29,7 @@ const DrugstorePage = () => {
     mode: 'all',
   })
 
-  const { districts, getDistricts, getWards, states } = useAddress()
+  const { districts, getDistricts, states } = useAddress()
 
   const { drugstores, filter, hasMore, getMore, isValidating, total } = useDrugstores({
     key: `${SWR_KEY.get_drug_stores}`,
@@ -56,7 +58,6 @@ const DrugstorePage = () => {
       district_id: district.value,
       province_id: getValues('state')?.value,
     })
-    getWards(district.value)
   }
 
   const handleResetFilterValue = () => {

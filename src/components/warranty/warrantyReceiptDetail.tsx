@@ -6,6 +6,7 @@ import { Button } from '../button'
 import { CustomImage } from '../customImage'
 import { WarrantyReceiptDetailLoading } from './warrantyReceiptDetailLoading'
 import { WarrantyStateLabel } from './warrantyStateLabel'
+import { ImageRes } from '@/types'
 
 interface IWarrantyReceiptDetail {
   warranty_receipt_id: number
@@ -31,13 +32,15 @@ export const WarrantyReceiptDetail = ({
     },
   })
 
+  console.log({ data })
+
   return (
     <div>
       {isValidating ? (
         <WarrantyReceiptDetailLoading />
       ) : (
         <div className="">
-          <div className="mb-12">
+          <div className="mb-24">
             <div className="flex mb-12">
               <WarrantyStateLabel
                 state={
@@ -46,93 +49,54 @@ export const WarrantyReceiptDetail = ({
               />
             </div>
 
-            <div>
-              <p className="text-md mb-12 font-bold">{`Thông tin sản phẩm`}</p>
+            <div className="flex flex-col items-center">
+              <p className="text-lg mb-12 font-bold">{`Thông tin sản phẩm`}</p>
 
-              <div className="relative flex flex-col lg:flex-row gap-12">
-                <CustomImage
-                  src={data?.product_id?.representation_image?.image_url}
-                  className="min-w-[100px]"
-                  imageClassName="rounded-full object-cover w-[100px] h-[100px] mx-auto"
-                />
-                <div>
-                  <p className="text-base font-bold mb-8">{data?.product_id?.product_name}</p>
+              <p className="text-base font-bold mb-8">{data?.product_id?.product_name}</p>
 
-                  <p className="text-base mb-8">{`Mã sản phẩm: ${data?.product_id?.product_code}`}</p>
+              <p className="text-base mb-8">{`Mã sản phẩm: ${data?.product_id?.product_code}`}</p>
 
-                  <p className="text-base mb-8">{`Số lot: ${data?.lot_id?.lot_name}`}</p>
+              <p className="text-base mb-8">{`Số lot: ${data?.lot_id?.lot_name}`}</p>
 
-                  <p className="text-base mb-8">{`Thời gian bảo hành:${
-                    data?.warranty_duration_id?.factor || 0
-                  } ${durationToName(data?.warranty_duration_id?.time_unit?.value)}`}</p>
+              <p className="text-base mb-8">{`Thời gian bảo hành:${
+                data?.warranty_duration_id?.factor || 0
+              } ${durationToName(data?.warranty_duration_id?.time_unit?.value)}`}</p>
 
-                  <p className="text-base mb-8">{`Ngày bắt đầu bảo hành: ${
-                    data?.warranty_starting || ''
-                  }`}</p>
+              <p className="text-base mb-8">{`Ngày bắt đầu bảo hành: ${
+                data?.warranty_starting || ''
+              }`}</p>
 
-                  <p className="text-base mb-8">{`Ngày kết thúc bảo hành: ${
-                    data?.warranty_ending || ''
-                  }`}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+              <p className="text-base mb-8">{`Ngày kết thúc bảo hành: ${
+                data?.warranty_ending || ''
+              }`}</p>
 
-          <div className="border-t-1 border-gray-200 py-12">
-            <p className="text-md font-bold mb-12">{`Thông tin hóa đơn`}</p>
-
-            <p className="text-base mb-8">{`Mã hóa đơn: ${data?.invoice_ref || ''}`}</p>
-
-            <div className='flex flex-wrap gap-12'>
-              {data?.invoice_image_url?.length > 0 &&
-                data?.invoice_image_url?.map((image: any) => (
+              <div className="flex items-center flex-wrap gap-12">
+                {data?.image_ids?.map((image: ImageRes) => (
                   <CustomImage
                     src={image?.image_url}
-                    className="w-[300px]"
-                    imageClassName="object-cover w-[250px] h-[250px] rounded-md"
+                    className="min-w-[100px] rounded-full"
+                    imageClassName="rounded-full object-cover w-[100px] h-[100px] mx-auto"
                   />
                 ))}
-            </div>
-          </div>
-
-          <div className="border-t-1 border-gray-200 py-12">
-            <p className="text-md font-bold mb-12">{`Thông tin khách hàng`}</p>
-
-            <div className="flex flex-col lg:flex-row gap-12">
-              <div>
-                <CustomImage
-                  src={userInfo?.account?.avatar_url?.url || ''}
-                  className="min-w-[100px]"
-                  imageClassName="rounded-full object-cover w-[100px] h-[100px] mx-auto"
-                />
-              </div>
-              <div>
-                <p className="text-base mb-8">{`Tên khách hàng: ${data?.customer_id?.partner_name}`}</p>
-                <p className="text-base mb-8">{`Số điện thoại: ${data?.customer_id?.phone}`}</p>
               </div>
             </div>
           </div>
 
-          <div className="border-t-1 border-gray-200 py-12">
-            <p className="text-md font-bold mb-12">{`Thông tin cửa hàng`}</p>
+          <div className="mb-24 flex flex-col items-center">
+            <p className="text-lg font-bold mb-12">{`Thông tin khách hàng`}</p>
 
-            <div className="flex flex-col lg:flex-row gap-12">
-              <div>
-                <CustomImage
-                  src={data?.store_id?.avatar_url?.image_url || ''}
-                  className="min-w-[100px]"
-                  imageClassName="rounded-full object-cover w-[100px] h-[100px] mx-auto"
-                />
-              </div>
+            <p className="text-base mb-8">{`Tên khách hàng: ${data?.customer_id?.partner_name}`}</p>
+            <p className="text-base mb-8">{`Số điện thoại: ${data?.customer_id?.phone}`}</p>
+          </div>
 
-              <div>
-                <p className="text-base mb-8">{`Tên cửa hàng: ${data?.store_id?.partner_name}`}</p>
+          <div className="mb-24 flex flex-col items-center">
+            <p className="text-lg font-bold mb-12">{`Thông tin cửa hàng`}</p>
 
-                <p className="text-base mb-8">{`Số điện thoại: ${data?.store_id?.phone}`}</p>
+            <p className="text-base mb-8">{`Tên cửa hàng: ${data?.store_id?.partner_name}`}</p>
 
-                <p className="text-base mb-8">{`Địa chỉ: ${data?.ward_id?.ward_name} ${data?.district_id?.district_name} ${data?.province_id?.province_name}`}</p>
-              </div>
-            </div>
+            <p className="text-base mb-8">{`Số điện thoại: ${data?.store_id?.phone}`}</p>
+
+            <p className="text-base mb-8">{`Địa chỉ: ${data?.street}`}</p>
           </div>
 
           {userInfo ? (

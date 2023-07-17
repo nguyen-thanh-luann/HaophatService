@@ -336,7 +336,7 @@ export const CustomerCreateWarrantyForm = ({
       <Modal
         visible={isSelectAgency}
         headerClassName="hidden"
-        modalClassName="w-[90%] md:w-[600px] max-w-[90vw] h-fit"
+        modalClassName="w-[90%] md:w-[600px] max-w-[90vw] max-h-[90vh] h-fit"
       >
         <div>
           <div className="flex-between p-12">

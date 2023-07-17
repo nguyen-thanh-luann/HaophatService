@@ -1,46 +1,57 @@
-import useSWR from 'swr'
-import { GetListStoreReq, WarrantyParams } from '@/types'
 import { warrantyAPI } from '@/services'
+import { GetListStoreReq, UserAccount } from '@/types'
+import { useQuery } from '../common'
 
 interface Props {
-  params?: WarrantyParams
-  key?: string
-  data_key?: string
+  params?: GetListStoreReq
+  key: string
+  data_key: string
 }
 
 interface IUseStore {
-  data: any[]
-  error?: any
-  isValidating?: boolean
-  fetchMore?: Function
-  hasMore?: boolean
+  data: UserAccount[]
+  isValidating: boolean
+  fetchMore: Function
+  hasMore: boolean
   mutate?: Function
-  searchStore: Function
+  filter: Function
 }
 
-const useAgency = ({ params, key }: Props): IUseStore => {
-  const { data, isValidating, mutate } = useSWR(
-    key,
-    () =>
-      warrantyAPI
-        .getListStore(params)
-        .then((res: any) => res?.result?.data?.store || res?.data?.store || []),
-    {
-      revalidateOnFocus: false,
-    }
-  )
+const useAgency = ({ params, key, data_key }: Props): IUseStore => {
+  // const { data, isValidating, mutate } = useSWR(
+  //   key,
+  //   () =>
+  //     warrantyAPI
+  //       .getListStore(params)
+  //       .then((res: any) => res?.result?.data?.store || res?.data?.store || []),
+  //   {
+  //     revalidateOnFocus: false,
+  //   }
+  // )
 
-  const searchStore = async (params: GetListStoreReq) => {
-    warrantyAPI.getListStore(params).then((res: any) => {
-      mutate(res?.result?.data?.store || res?.data?.store || [], false)
-    })
-  }
+  // const searchStore = async (params: GetListStoreReq) => {
+  //   warrantyAPI.getListStore(params).then((res: any) => {
+  //     mutate(res?.result?.data?.store || res?.data?.store || [], false)
+  //   })
+  // }
+
+  const { data, isValidating, fetchMore, hasMore, mutate, filter } = useQuery<
+    UserAccount,
+    GetListStoreReq
+  >({
+    key,
+    fetcher: warrantyAPI.getListStore,
+    initialParams: params,
+    data_key,
+  })
 
   return {
-    data,
+    data: data || [],
     isValidating,
     mutate,
-    searchStore,
+    filter,
+    hasMore,
+    fetchMore,
   }
 }
 

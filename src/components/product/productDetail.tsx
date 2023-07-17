@@ -138,7 +138,7 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
         </div>
 
         {/* like & share */}
-        <div className="flex justify-between flex-col md:flex-row">
+        <div className="flex justify-between flex-wrap">
           <div className="mr-8 flex items-center">
             <p className="text-text-color text-md font-semibold mr-12">Chia sẻ: </p>
             <ShareSocial

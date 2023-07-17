@@ -1,11 +1,11 @@
 import { productAPI } from '@/services'
-import { ProductDetailRes } from '@/types'
+import { GetProductDetailParams, ProductDetailRes } from '@/types'
 import useSWR from 'swr'
 
 interface useProductDetailProps {
   key: string
   shouldFetch?: boolean
-  product_id: number
+  params: GetProductDetailParams
 }
 
 interface useProducDetailRes {
@@ -16,13 +16,13 @@ interface useProducDetailRes {
 export const useProductDetail = ({
   shouldFetch = true,
   key,
-  product_id,
+  params,
 }: useProductDetailProps): useProducDetailRes => {
   const { data, isValidating } = useSWR(
     key,
-    !shouldFetch || !product_id
+    !shouldFetch || !params
       ? null
-      : () => productAPI.getProductDetail(product_id).then((res: any) => res?.data),
+      : () => productAPI.getProductDetail(params).then((res: any) => res?.data),
     {
       revalidateOnFocus: false,
       dedupingInterval: 60000,

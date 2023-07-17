@@ -20,7 +20,9 @@ export const ModalProductDetail = ({ onClose, isOpen }: IModalProductDetail) => 
 
   const { data: productDetail, isValidating } = useProductDetail({
     key: `${SWR_KEY.get_product_detail}_${productProps?.product_id}`,
-    product_id: productProps?.product_id,
+    params: {
+      product_id: productProps?.product_id,
+    },
   })
 
   const handleCloseModal = () => {
@@ -53,7 +55,7 @@ export const ModalProductDetail = ({ onClose, isOpen }: IModalProductDetail) => 
           {isValidating ? (
             <ProductDetailLoading />
           ) : productDetail && isObjectHasValue(productDetail) ? (
-            <ProductDetail data={productDetail?.product_data} type='modal'/>
+            <ProductDetail data={productDetail?.product_data} type="modal" />
           ) : null}
         </div>
       </Modal>

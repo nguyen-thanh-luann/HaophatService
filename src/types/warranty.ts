@@ -245,7 +245,8 @@ export interface CreateWarrantyReceiptReq {
 }
 
 export interface GetListStoreReq {
-	token?: string;
+  token?: string;
+  store_name?: string
 	province_id?: number;
 	district_id?: number;
 	ward_id?: number;

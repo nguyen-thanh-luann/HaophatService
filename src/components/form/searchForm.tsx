@@ -10,6 +10,7 @@ type SearchFormProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInp
   onChangeWithDebounceValue?: (_: string) => void
   timer?: number
   device?: 'mobile' | 'desktop'
+  buttonLabel?: string
   buttonClassName?: string
   inputClassName?: string
 }
@@ -19,6 +20,7 @@ export const SearchForm = ({
   timer = 500,
   onChangeWithDebounceValue,
   device = 'desktop',
+  buttonLabel = 'Tìm kiếm',
   ...attributes
 }: SearchFormProps) => {
   const { onChange, value, clearValue } = useInputText()
@@ -85,7 +87,7 @@ export const SearchForm = ({
           )
         )}
       >
-        <span className="title !text-primary">Tìm kiếm</span>
+        <span className="title !text-primary">{buttonLabel}</span>
         <span className="absolute border border-gray-300 rounded-lg left-0 top-0 bottom-0 h-[50%] my-auto"></span>
       </button>
     </form>

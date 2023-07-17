@@ -6,6 +6,7 @@ import {
   GetListAttributeMinorParams,
   GetProductByAttributeMinorParams,
   GetProductByCategoryParams,
+  GetProductDetailParams,
   HTTPListRes,
   HTTPProductFilterResponse,
   HTTPResponseV2,
@@ -24,8 +25,8 @@ const productAPI = {
     })
   },
 
-  getProductDetail: (product_id: number) => {
-    return axiosClient.get(`/product_controller/detail_product?product_id=${product_id}`)
+  getProductDetail: (params: GetProductDetailParams) => {
+    return axiosClient.get(`/product_controller/detail_product`, {params})
   },
 
   getProductDescription: (product_id: number) => {

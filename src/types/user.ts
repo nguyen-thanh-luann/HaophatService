@@ -50,6 +50,8 @@ export interface UserAccount {
   full_address: string
   email: string
   date_of_birth: Date
+  longitude: string
+  latitude: string
 }
 
 export interface UserDetail {

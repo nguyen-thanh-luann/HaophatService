@@ -49,3 +49,8 @@ export const quality = require('./quality.png')
 export const respect = require('./respect.png')
 export const trust = require('./trust.png')
 export const delivery = require('./delivery.png')
+
+//glasses images
+export const glassBrigde = require('./glass-brigde.png')
+export const glassFrame = require('./glass-frame.png')
+export const glassLenses = require('./glass-lenses.png')
