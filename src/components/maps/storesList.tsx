@@ -143,17 +143,19 @@ export const StoresList = ({ className }: StoresListProps) => {
       </div>
 
       <div className="p-24">
-        <SearchField
-          placeholder="Tìm theo tên cửa hàng"
-          className="border mb-12 rounded-full px-12 py-6"
-          onChangeWithDebounceValue={(val) => {
-            filter({
-              params: {
-                store_name: val,
-              },
-            })
-          }}
-        />
+        <div className="flex items-center">
+          <SearchField
+            placeholder="Tìm theo tên cửa hàng"
+            className="border mb-12 rounded-full px-12 py-6"
+            onChangeWithDebounceValue={(val) => {
+              filter({
+                params: {
+                  store_name: val,
+                },
+              })
+            }}
+          />
+        </div>
 
         <div className="mb-12 hidden md:flex items-center justify-center">
           <div className="block min-w-[132px] w-[10%] h-[1px] border border-t border-gray-300"></div>
