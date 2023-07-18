@@ -35,7 +35,7 @@ export const AccountNavMobile = ({ className }: AccountNavMobileProps) => {
             }}
             key={index}
             className={classNames(
-              `flex-between p-10 rounded-[10px] cursor-pointer group hover:text-primary mb-12 last:mb-0 isActive:opacity-50`,
+              `flex items-center justify-between p-10 rounded-[10px] cursor-pointer group hover:text-primary mb-12 last:mb-0 isActive:opacity-50`,
               isActive ? 'text-primary' : '',
               item?.account_type_permissions?.includes(
                 userInfo?.account?.warranty_account_type || ''

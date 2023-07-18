@@ -18,23 +18,6 @@ interface IUseStore {
 }
 
 const useAgency = ({ params, key, data_key }: Props): IUseStore => {
-  // const { data, isValidating, mutate } = useSWR(
-  //   key,
-  //   () =>
-  //     warrantyAPI
-  //       .getListStore(params)
-  //       .then((res: any) => res?.result?.data?.store || res?.data?.store || []),
-  //   {
-  //     revalidateOnFocus: false,
-  //   }
-  // )
-
-  // const searchStore = async (params: GetListStoreReq) => {
-  //   warrantyAPI.getListStore(params).then((res: any) => {
-  //     mutate(res?.result?.data?.store || res?.data?.store || [], false)
-  //   })
-  // }
-
   const { data, isValidating, fetchMore, hasMore, mutate, filter } = useQuery<
     UserAccount,
     GetListStoreReq

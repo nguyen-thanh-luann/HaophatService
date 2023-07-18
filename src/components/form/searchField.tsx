@@ -15,6 +15,8 @@ type SearchFieldProps = React.DetailedHTMLProps<
   showSearchIcon?: boolean
   inputRef?: any
   onInputChange?: Function
+  inputClassName?: string
+  searchIconClassName?: string
 }
 
 export const SearchField = ({
@@ -24,6 +26,8 @@ export const SearchField = ({
   onChangeWithDebounceValue,
   inputRef,
   onInputChange,
+  inputClassName,
+  searchIconClassName,
   ...attributes
 }: SearchFieldProps) => {
   const { clearValue, onChange, value } = useInputText()
@@ -51,7 +55,7 @@ export const SearchField = ({
       <input
         {...attributes}
         ref={inputRef || ref}
-        className="outline-none w-full rounded-lg"
+        className={classNames('outline-none w-full rounded-lg', inputClassName)}
         type="text"
         value={value}
         onChange={(e) => {
@@ -73,7 +77,7 @@ export const SearchField = ({
       </span>
 
       {showSearchIcon && (
-        <button onClick={handleSubmit} className="">
+        <button onClick={handleSubmit} className={classNames('', searchIconClassName)}>
           <SearchIcon className="text-gray text-base" />
         </button>
       )}

@@ -99,4 +99,5 @@ export const SWR_KEY = {
   product_lot_list: 'product_lot_list',
   warranty_product_detail: 'warranty_product_detail',
   store_list: 'store_list',
+  brand_list: 'brand_list',
 } as const

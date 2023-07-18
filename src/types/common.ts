@@ -1,3 +1,5 @@
+import { QueryList } from "./http"
+
 export interface PayloadType<T> {
   payload: T
 }
@@ -81,4 +83,17 @@ export interface uploadImageRes {
   thumbnail_url: string
   url: string
   type: string
+}
+
+export interface Brand {
+  brand_id: number
+  brand_code: string
+  brand_name: string
+  description: string
+  brand_icon: ImageId
+  icon_cloud_storage_id: URLRes
+}
+
+export interface GetListBrandParams extends QueryList {
+  brand_name?: string
 }

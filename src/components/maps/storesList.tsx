@@ -1,12 +1,12 @@
-import { useAddress, useAgency } from '@/hooks'
-import { OptionType, UserAccount } from '@/types'
+import { useAddress, useAgency, useBrand } from '@/hooks'
+import { GetListStoreReq, OptionType, UserAccount } from '@/types'
 import classNames from 'classnames'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { SearchField } from '../form'
 import { SelectField } from '../inputs'
 
-import { DEFAULT_LIMIT, GOOGLE_API_KEY, SWR_KEY } from '@/constants'
+import { DEFAULT_LIMIT, GOOGLE_API_KEY, LIMIT_DRUG_STORES, SWR_KEY } from '@/constants'
 import { isArrayHasValue } from '@/helper'
 import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api'
 import { toast } from 'react-hot-toast'
@@ -33,6 +33,16 @@ export const StoresList = ({ className }: StoresListProps) => {
   })
 
   const { districts, getDistricts, states, getWards } = useAddress()
+  const {
+    data: brands,
+    getMore: getMoreBrand,
+    isLoadingMore: isLoadingMoreBrand,
+  } = useBrand({
+    key: `${SWR_KEY.brand_list}`,
+    params: {
+      limit: LIMIT_DRUG_STORES,
+    },
+  })
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -47,6 +57,7 @@ export const StoresList = ({ className }: StoresListProps) => {
   const [currentPosition, setCurrentPosition] = useState<PositionType>(DEFAULT_POSITION)
 
   const onLoad = useCallback((map: any) => (mapRef.current = map), [])
+  const [filterParams, setFilterParams] = useState<GetListStoreReq>()
 
   const {
     data: stores,
@@ -63,16 +74,21 @@ export const StoresList = ({ className }: StoresListProps) => {
   })
 
   const handleSelectState = (state: OptionType<number>) => {
-    if (!state) return
-
-    filter({
-      params: {
-        province_id: state?.value,
+    if (state === null) {
+      setFilterParams({
+        ...filterParams,
+        province_id: undefined,
         district_id: undefined,
-      },
-    })
+      })
+    } else {
+      setFilterParams({
+        ...filterParams,
+        province_id: state.value,
+        district_id: undefined,
+      })
+    }
 
-    getDistricts(state.value)
+    getDistricts(state?.value)
 
     if (getValues('district')) {
       resetField('district')
@@ -80,16 +96,33 @@ export const StoresList = ({ className }: StoresListProps) => {
   }
 
   const handleSelectDistrict = (district: OptionType<number>) => {
-    if (!district) return
-
-    filter({
-      params: {
-        province_id: getValues('state')?.value,
+    if (district === null) {
+      setFilterParams({
+        ...filterParams,
+        district_id: undefined,
+      })
+    } else {
+      setFilterParams({
+        ...filterParams,
         district_id: district?.value,
-      },
-    })
+      })
+    }
 
-    getWards(district.value)
+    getWards(district?.value)
+  }
+
+  const hanldeSelectBrand = (brand: OptionType<number>) => {
+    if (brand === null) {
+      setFilterParams({
+        ...filterParams,
+        brand_id: undefined,
+      })
+    } else {
+      setFilterParams({
+        ...filterParams,
+        brand_id: brand.value,
+      })
+    }
   }
 
   useEffect(() => {
@@ -104,6 +137,14 @@ export const StoresList = ({ className }: StoresListProps) => {
       }
     }
   }, [stores])
+
+  useEffect(() => {
+    filter({
+      params: {
+        ...filterParams,
+      },
+    })
+  }, [filterParams])
 
   const hanldeStoreClick = (store: UserAccount) => {
     if (Number(store?.latitude) <= 0 || Number(store?.longitude) <= 0) {
@@ -121,6 +162,12 @@ export const StoresList = ({ className }: StoresListProps) => {
     mapRef?.current?.panTo(newPosition)
   }
 
+  const customSelectStyle = {
+    control: (provided: any) => ({
+      ...provided,
+      borderRadius: '20px',
+    }),
+  }
   return (
     <div
       className={classNames(
@@ -143,10 +190,12 @@ export const StoresList = ({ className }: StoresListProps) => {
       </div>
 
       <div className="p-24">
-        <div className="flex items-center">
+        <div className="flex items-center flex-wrap gap-12 mb-12">
           <SearchField
             placeholder="Tìm theo tên cửa hàng"
-            className="border mb-12 rounded-full px-12 py-6"
+            inputClassName="px-12"
+            searchIconClassName="pr-12"
+            className="flex-1 min-w-[200px] border border-gray-300 rounded-full py-8"
             onChangeWithDebounceValue={(val) => {
               filter({
                 params: {
@@ -155,6 +204,23 @@ export const StoresList = ({ className }: StoresListProps) => {
               })
             }}
           />
+
+          <div className="flex-1 min-w-[200px]">
+            <SelectField
+              control={control}
+              onChange={(val: any) => hanldeSelectBrand(val)}
+              placeholder="Chọn thương hiệu"
+              isLoading={isLoadingMoreBrand}
+              onMenuScrollToBottom={getMoreBrand}
+              name="brand"
+              isClearable
+              styles={customSelectStyle}
+              options={brands?.map((item) => ({
+                label: item.brand_name,
+                value: item.brand_id,
+              }))}
+            />
+          </div>
         </div>
 
         <div className="mb-12 hidden md:flex items-center justify-center">
@@ -171,6 +237,8 @@ export const StoresList = ({ className }: StoresListProps) => {
               onChange={(val: any) => handleSelectState(val)}
               placeholder="Tỉnh/thành phố"
               name="state"
+              isClearable
+              styles={customSelectStyle}
               options={states?.map((item) => ({
                 label: item.name,
                 value: item.id,
@@ -186,6 +254,8 @@ export const StoresList = ({ className }: StoresListProps) => {
               }}
               placeholder="Quận/huyện"
               name="district"
+              isClearable
+              styles={customSelectStyle}
               options={districts?.map((item) => ({
                 label: item.name,
                 value: item.id,
