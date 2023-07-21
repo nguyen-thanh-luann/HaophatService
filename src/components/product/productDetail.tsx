@@ -186,21 +186,25 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
           currentProduct?.stock_quantity?.factor || 0
         }`}</p>
 
-        <div className="flex h-fit gap-12 items-center mb-16">
-          <p className="text-red text-2xl font-semibold">
-            {formatMoneyVND(currentProduct?.price_unit || 0)}
-            <span className="text-text-color text-sm ml-4">{`/ ${currentProduct?.uom_id?.uom_name}`}</span>
-          </p>
+        {currentProduct?.is_invisible_price ? (
+          <p className="text-red text-2xl font-semibold mb-16">Liên hệ</p>
+        ) : (
+          <div className="flex h-fit gap-12 items-center mb-16">
+            <p className="text-red text-2xl font-semibold">
+              {formatMoneyVND(currentProduct?.price_unit || 0)}
+              <span className="text-text-color text-sm ml-4">{`/ ${currentProduct?.uom_id?.uom_name}`}</span>
+            </p>
 
-          <p
-            className={classNames(
-              'text-gray-400 text-md font-medium line-through',
-              currentProduct?.price_unit !== currentProduct?.origin_price_unit ? '' : 'hidden'
-            )}
-          >
-            {formatMoneyVND(currentProduct?.origin_price_unit || 0)}
-          </p>
-        </div>
+            <p
+              className={classNames(
+                'text-gray-400 text-md font-medium line-through',
+                currentProduct?.price_unit !== currentProduct?.origin_price_unit ? '' : 'hidden'
+              )}
+            >
+              {formatMoneyVND(currentProduct?.origin_price_unit || 0)}
+            </p>
+          </div>
+        )}
 
         {/* category */}
         {isObjectHasValue(currentProduct?.category_id) ? (
@@ -273,15 +277,17 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
           />
         </div>
 
-        <div className="flex gap-12 items-center">
-          <Button
-            onClick={() => handleAddToCart(currentProduct)}
-            title={isAddingTocart ? '' : 'Chọn mua'}
-            icon={isAddingTocart ? <Spinner className="!text-white !fill-primary" /> : undefined}
-            className="rounded-[8px] p-10 bg-primary border border-primary min-w-[167px] max-w-[30%]"
-            textClassName="text-white text-md"
-          />
-        </div>
+        {!currentProduct?.is_invisible_price && (
+          <div className="flex gap-12 items-center">
+            <Button
+              onClick={() => handleAddToCart(currentProduct)}
+              title={isAddingTocart ? '' : 'Chọn mua'}
+              icon={isAddingTocart ? <Spinner className="!text-white !fill-primary" /> : undefined}
+              className="rounded-[8px] p-10 bg-primary border border-primary min-w-[167px] max-w-[30%]"
+              textClassName="text-white text-md"
+            />
+          </div>
+        )}
       </div>
     </div>
   )

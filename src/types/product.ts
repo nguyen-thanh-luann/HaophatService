@@ -98,6 +98,7 @@ export interface Product {
   product_type: ProductClassification
   responsible_store_name: string
   responsible_store_street: string
+  is_invisible_price: boolean
 }
 
 export interface ProductUom {

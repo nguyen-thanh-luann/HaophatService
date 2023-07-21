@@ -114,28 +114,34 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
             <div className="relative">
               {/* price */}
               <div className="mb-8 flex items-center">
-                <div className="flex items-center flex-1 flex-wrap">
-                  <p className="text-orange text-base md:text-md font-bold leading-9 mr-10">
-                    {formatMoneyVND(data?.price_unit || 0)}
-                  </p>
-
-                  {data?.price_unit !== data?.origin_price_unit ? (
-                    <p className="text-gray-400 text-xs font-medium leading-7 line-through">
-                      {formatMoneyVND(data?.origin_price_unit || 0)}
+                {data?.is_invisible_price ? (
+                  <p className="flex-1 text-primary">Liên hệ</p>
+                ) : (
+                  <div className="flex items-center flex-1 flex-wrap">
+                    <p className="text-orange text-base md:text-md font-bold leading-9 mr-10">
+                      {formatMoneyVND(data?.price_unit || 0)}
                     </p>
-                  ) : null}
-                </div>
 
-                <div
-                  onClick={() => handleAddToCart(data)}
-                  className=" bg-primary h-[30px] w-[30px] min-w-[30px] rounded-full flex-center cursor-pointer"
-                >
-                  {isAddingTocart ? (
-                    <Spinner className="!text-primary !fill-white" />
-                  ) : (
-                    <ProductCartIcon className="text-white w-16 h-16" />
-                  )}
-                </div>
+                    {data?.price_unit !== data?.origin_price_unit ? (
+                      <p className="text-gray-400 text-xs font-medium leading-7 line-through">
+                        {formatMoneyVND(data?.origin_price_unit || 0)}
+                      </p>
+                    ) : null}
+                  </div>
+                )}
+
+                {!data?.is_invisible_price ? (
+                  <div
+                    onClick={() => handleAddToCart(data)}
+                    className=" bg-primary h-[30px] w-[30px] min-w-[30px] rounded-full flex-center cursor-pointer"
+                  >
+                    {isAddingTocart ? (
+                      <Spinner className="!text-primary !fill-white" />
+                    ) : (
+                      <ProductCartIcon className="text-white w-16 h-16" />
+                    )}
+                  </div>
+                ) : null}
               </div>
 
               {/*rate & sale count */}
