@@ -1,14 +1,13 @@
 import { useAddress, useAgency, useBrand } from '@/hooks'
 import { GetListStoreReq, OptionType, UserAccount } from '@/types'
 import classNames from 'classnames'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { SearchField } from '../form'
 import { SelectField } from '../inputs'
 
-import { DEFAULT_LIMIT, GOOGLE_API_KEY, LIMIT_DRUG_STORES, SWR_KEY } from '@/constants'
+import { DEFAULT_LIMIT, LIMIT_DRUG_STORES, SWR_KEY } from '@/constants'
 import { isArrayHasValue } from '@/helper'
-import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api'
 import { toast } from 'react-hot-toast'
 import { NotFound } from '../notFound'
 import { Spinner } from '../spinner'
@@ -20,13 +19,9 @@ interface StoresListProps {
   className?: string
 }
 
-interface PositionType {
-  lat: number
-  lng: number
-}
-
 export const StoresList = ({ className }: StoresListProps) => {
-  const mapRef = useRef<any>(null)
+  const DEFAULT_SRC_MAP =
+    'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3194.0964722432445!2d106.66689534644978!3d10.80605881000873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1svi!2s!4v1689911417589!5m2!1svi!2s'
 
   const { control, getValues, resetField } = useForm({
     mode: 'all',
@@ -36,6 +31,7 @@ export const StoresList = ({ className }: StoresListProps) => {
   const {
     data: brands,
     getMore: getMoreBrand,
+    filter: filterBrand,
     isLoadingMore: isLoadingMoreBrand,
   } = useBrand({
     key: `${SWR_KEY.brand_list}`,
@@ -44,19 +40,8 @@ export const StoresList = ({ className }: StoresListProps) => {
     },
   })
 
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: GOOGLE_API_KEY as string,
-  })
+  const [currentMapSrc, setCurrentMapSrc] = useState<string>(DEFAULT_SRC_MAP)
 
-  const DEFAULT_POSITION = {
-    lng: 106.666804,
-    lat: 10.806001,
-  }
-
-  const [currentPosition, setCurrentPosition] = useState<PositionType>(DEFAULT_POSITION)
-
-  const onLoad = useCallback((map: any) => (mapRef.current = map), [])
   const [filterParams, setFilterParams] = useState<GetListStoreReq>()
 
   const {
@@ -127,13 +112,8 @@ export const StoresList = ({ className }: StoresListProps) => {
 
   useEffect(() => {
     if (isArrayHasValue(stores)) {
-      if (Number(stores[0]?.latitude) <= 0 || Number(stores[0]?.longitude) <= 0) {
-        setCurrentPosition(DEFAULT_POSITION)
-      } else {
-        setCurrentPosition({
-          lat: Number(stores?.[0]?.latitude),
-          lng: Number(stores?.[0]?.longitude),
-        })
+      if (stores?.[0]?.google_map_iframe_id?.source) {
+        setCurrentMapSrc(stores?.[0]?.google_map_iframe_id?.source || '')
       }
     }
   }, [stores])
@@ -147,19 +127,11 @@ export const StoresList = ({ className }: StoresListProps) => {
   }, [filterParams])
 
   const hanldeStoreClick = (store: UserAccount) => {
-    if (Number(store?.latitude) <= 0 || Number(store?.longitude) <= 0) {
-      toast.error('Không tìm thấy tọa độ phù hợp')
-      return
+    if (store && store?.google_map_iframe_id?.source) {
+      setCurrentMapSrc(store?.google_map_iframe_id?.source || '')
+    } else {
+      toast.error('Tọa độ không phù hợp')
     }
-
-    const newPosition = {
-      lat: Number(store?.latitude),
-      lng: Number(store?.longitude),
-    }
-
-    setCurrentPosition(newPosition)
-
-    mapRef?.current?.panTo(newPosition)
   }
 
   const customSelectStyle = {
@@ -168,6 +140,7 @@ export const StoresList = ({ className }: StoresListProps) => {
       borderRadius: '20px',
     }),
   }
+
   return (
     <div
       className={classNames(
@@ -176,17 +149,13 @@ export const StoresList = ({ className }: StoresListProps) => {
       )}
     >
       <div className="relative p-12 rounded-xl h-[300px] md:h-[600px] w-full">
-        {isLoaded && (
-          <GoogleMap
-            ref={mapRef}
-            mapContainerStyle={{ width: '100%', height: '100%' }}
-            center={currentPosition}
-            zoom={10}
-            onLoad={onLoad}
-          >
-            <MarkerF position={currentPosition} visible />
-          </GoogleMap>
-        )}
+        <iframe
+          src={currentMapSrc}
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          loading="lazy"
+        ></iframe>
       </div>
 
       <div className="p-24">
@@ -214,7 +183,17 @@ export const StoresList = ({ className }: StoresListProps) => {
               onMenuScrollToBottom={getMoreBrand}
               name="brand"
               isClearable
+              onBlur={() => {
+                filterBrand({
+                  brand_name: '',
+                })
+              }}
               styles={customSelectStyle}
+              onSearchEmpty={(val) => {
+                filterBrand({
+                  brand_name: val,
+                })
+              }}
               options={brands?.map((item) => ({
                 label: item.brand_name,
                 value: item.brand_id,

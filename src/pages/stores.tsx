@@ -13,6 +13,8 @@ const HomePage = () => {
         </div>
 
         <StoresList />
+
+
       </div>
     </Main>
   )

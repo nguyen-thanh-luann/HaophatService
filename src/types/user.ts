@@ -52,6 +52,7 @@ export interface UserAccount {
   date_of_birth: Date
   longitude: string
   latitude: string
+  google_map_iframe_id: AccountMapLocation
 }
 
 export interface UserDetail {
@@ -73,6 +74,14 @@ export interface UserDetail {
 
 export interface CheckPasswordRes {
   has_password: boolean
+}
+
+export interface AccountMapLocation {
+  iframe_tag: string
+  source: string
+  height: number
+  width: number
+  style: string
 }
 
 export interface UpdateUserParams {
