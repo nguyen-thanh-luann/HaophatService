@@ -1,4 +1,4 @@
-import { useAddress, useAgency, useBrand } from '@/hooks'
+import { useAgency, useBrand, useDistrict, useProvince } from '@/hooks'
 import { GetListStoreReq, OptionType, UserAccount } from '@/types'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
@@ -27,7 +27,6 @@ export const StoresList = ({ className }: StoresListProps) => {
     mode: 'all',
   })
 
-  const { districts, getDistricts, states, getWards } = useAddress()
   const {
     data: brands,
     getMore: getMoreBrand,
@@ -37,6 +36,30 @@ export const StoresList = ({ className }: StoresListProps) => {
     key: `${SWR_KEY.brand_list}`,
     params: {
       limit: LIMIT_DRUG_STORES,
+    },
+  })
+
+  const {
+    data: provinces,
+    filter: filterProvince,
+    getMore: getMoreProvince,
+    isLoadingMore: isLoadingMoreProvince,
+  } = useProvince({
+    key: `${SWR_KEY.list_province}`,
+    params: {
+      value_address_by_store: true,
+    },
+  })
+
+  const {
+    data: districts,
+    filter: filterDistrict,
+    getMore: getMoreDistrict,
+    isLoadingMore: isLoadMoreDistrict,
+  } = useDistrict({
+    key: `${SWR_KEY.list_district}`,
+    params: {
+      value_address_by_store: true,
     },
   })
 
@@ -58,8 +81,8 @@ export const StoresList = ({ className }: StoresListProps) => {
     data_key: 'store',
   })
 
-  const handleSelectState = (state: OptionType<number>) => {
-    if (state === null) {
+  const handleSelectProvince = (province: OptionType<number>) => {
+    if (province === null) {
       setFilterParams({
         ...filterParams,
         province_id: undefined,
@@ -68,12 +91,14 @@ export const StoresList = ({ className }: StoresListProps) => {
     } else {
       setFilterParams({
         ...filterParams,
-        province_id: state.value,
+        province_id: province.value,
         district_id: undefined,
       })
     }
 
-    getDistricts(state?.value)
+    filterDistrict({
+      province_id: province?.value,
+    })
 
     if (getValues('district')) {
       resetField('district')
@@ -92,8 +117,6 @@ export const StoresList = ({ className }: StoresListProps) => {
         district_id: district?.value,
       })
     }
-
-    getWards(district?.value)
   }
 
   const hanldeSelectBrand = (brand: OptionType<number>) => {
@@ -213,15 +236,22 @@ export const StoresList = ({ className }: StoresListProps) => {
             <SelectField
               value={getValues('state') || null}
               control={control}
-              onChange={(val: any) => handleSelectState(val)}
+              onChange={(val: any) => handleSelectProvince(val)}
               placeholder="Tỉnh/thành phố"
+              isLoading={isLoadingMoreProvince}
+              onMenuScrollToBottom={getMoreProvince}
               name="state"
               isClearable
               styles={customSelectStyle}
-              options={states?.map((item) => ({
-                label: item.name,
-                value: item.id,
+              options={provinces?.map((item) => ({
+                label: item.province_name,
+                value: item.province_id,
               }))}
+              onSearchEmpty={(val) => {
+                filterProvince({
+                  keyword: val,
+                })
+              }}
             />
           </div>
           <div className="flex-1 min-w-[200px]">
@@ -231,14 +261,21 @@ export const StoresList = ({ className }: StoresListProps) => {
               onChange={(val: any) => {
                 handleSelectDistrict(val)
               }}
+              isLoading={isLoadMoreDistrict}
+              onMenuScrollToBottom={getMoreDistrict}
               placeholder="Quận/huyện"
               name="district"
               isClearable
               styles={customSelectStyle}
               options={districts?.map((item) => ({
-                label: item.name,
-                value: item.id,
+                label: item.district_name,
+                value: item.district_id,
               }))}
+              onSearchEmpty={(val) => {
+                filterDistrict({
+                  keyword: val,
+                })
+              }}
             />
           </div>
         </div>

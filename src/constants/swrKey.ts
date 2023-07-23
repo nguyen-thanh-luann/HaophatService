@@ -69,6 +69,10 @@ export const SWR_KEY = {
 
   check_product_authen: 'check_product_authen',
 
+  list_province: 'list_province',
+  list_district: 'list_district',
+  list_ward: 'list_ward',
+
   cart_list: 'cart_list',
   cart_count: 'cart_count',
   cart_company_promotion: (id: number) => `cart_company_promotion_${id}`,

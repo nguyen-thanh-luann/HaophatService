@@ -1,4 +1,20 @@
 import { OptionType } from './common'
+import { QueryList } from './http'
+
+export interface GetProvinceParams extends QueryList {
+  value_address_by_store?: boolean
+}
+
+export interface GetDistrictParams extends QueryList {
+  value_address_by_store?: boolean
+  province_id?: number
+}
+
+export interface GetWardParams extends QueryList {
+  value_address_by_store?: boolean
+  district_id: number
+}
+
 
 export interface StateId {
   state_id: number
@@ -11,6 +27,21 @@ export interface DistrictId {
 export interface AddressId {
   id: number
   name: string
+}
+
+export interface Province {
+  province_id: number
+  province_name: string
+}
+
+export interface District {
+  district_id: number
+  district_name: string
+}
+
+export interface Ward {
+  ward_id: number
+  ward_name: string
 }
 
 export interface WardAddress {

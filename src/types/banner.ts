@@ -10,4 +10,6 @@ export interface Banner {
   banner_name: string
   banner_cloud_storage_id: URLRes
   description_url: string
+  banner_video_url: string
+  banner_type: 'banner_video' | 'banner_image'
 }

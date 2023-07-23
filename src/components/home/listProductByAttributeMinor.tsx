@@ -47,10 +47,10 @@ export const ListProductByAttributeMinor = ({ className }: ListProductByAttribut
             />
 
             {isLoadingBanner ? (
-              <div className="animate-pulse bg-gray-200 hidden md:block aspect-[5/1] mt-24"></div>
+              <div className="animate-pulse bg-gray-200 aspect-2/1 md:aspect-[5/1] mt-24"></div>
             ) : (
               bannerList?.[index] && (
-                <ProductSlideBanner data={bannerList?.[index]} className="hidden md:block" />
+                <ProductSlideBanner data={bannerList?.[index]} className="" />
               )
             )}
           </div>
