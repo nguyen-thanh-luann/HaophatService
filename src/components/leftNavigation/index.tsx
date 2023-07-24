@@ -159,7 +159,7 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
 
             <div
               onClick={() => {
-                router.push('/tra-cuu-san-pham')
+                router.push('/tc')
               }}
               className="flex-between my-auto cursor-pointer w-full p-12 border-b border-gray-100"
             >

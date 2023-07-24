@@ -60,7 +60,7 @@ const TraCuuSanPhamPage = () => {
 
         <div>
           <SearchForm
-            placeholder="Nhập mã sản phẩm cần kiểm tra (vd: 6975888251537)"
+            placeholder="Nhập mã sản phẩm cần kiểm tra"
             buttonLabel="Tra cứu"
             onSubmit={(val) => hanldeSearchProduct(val as string)}
           />

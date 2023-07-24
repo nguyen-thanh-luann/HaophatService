@@ -35,7 +35,7 @@ export const HeaderLookup = ({ className }: HeaderLookupProps) => {
         <div
           className="group/child flex items-center mb-12 last:mb-0 rounded-[6px] p-6 hover:bg-primary-100 cursor-pointer"
           onClick={() => {
-            router.push('/tra-cuu-san-pham')
+            router.push('/tc')
           }}
         >
           <p className="title !text-gray group-hover/child:!text-primary">{`Tra cứu chính hãng`}</p>
