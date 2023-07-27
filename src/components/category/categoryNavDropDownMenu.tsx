@@ -31,6 +31,7 @@ export const CategoryNavDropDownMenu = ({
     shouldFetch: parent_category_id !== undefined && !isMinorCategory,
     params: {
       category_parent_id: parent_category_id,
+      root_category: true
     },
   })
 
@@ -39,6 +40,7 @@ export const CategoryNavDropDownMenu = ({
     shouldFetch: parent_category_id !== undefined && isMinorCategory,
     params: {
       category_parent_id: parent_category_id,
+      root_category: true
     },
   })
 

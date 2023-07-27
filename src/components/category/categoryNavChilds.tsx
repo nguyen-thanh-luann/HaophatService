@@ -33,6 +33,7 @@ export const CategoryNavChilds = ({
     shouldFetch: parent_category_id !== undefined && !isMinorCategory,
     params: {
       category_parent_id: parent_category_id,
+      root_category: true
     },
   })
 
@@ -41,6 +42,7 @@ export const CategoryNavChilds = ({
     shouldFetch: parent_category_id !== undefined && isMinorCategory,
     params: {
       category_parent_id: parent_category_id,
+      root_category: true
     },
   })
 
