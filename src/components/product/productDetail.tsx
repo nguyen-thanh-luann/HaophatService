@@ -186,7 +186,7 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
           currentProduct?.stock_quantity?.factor || 0
         }`}</p>
 
-        {currentProduct?.is_invisible_price ? (
+        {currentProduct?.is_invisible_price || currentProduct?.origin_price_unit <= 0 ? (
           <p className="text-red text-2xl font-semibold mb-16">Liên hệ</p>
         ) : (
           <div className="flex h-fit gap-12 items-center mb-16">
@@ -277,7 +277,7 @@ export const ProductDetail = ({ data, className, type = 'detail' }: ProductDetai
           />
         </div>
 
-        {!currentProduct?.is_invisible_price && (
+        {!currentProduct?.is_invisible_price && currentProduct?.origin_price_unit > 0 && (
           <div className="flex gap-12 items-center">
             <Button
               onClick={() => handleAddToCart(currentProduct)}

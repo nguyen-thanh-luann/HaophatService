@@ -114,7 +114,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
             <div className="relative">
               {/* price */}
               <div className="mb-8 flex items-center">
-                {data?.is_invisible_price ? (
+                {data?.is_invisible_price || data?.origin_price_unit <= 0 ? (
                   <p className="flex-1 text-primary">Liên hệ</p>
                 ) : (
                   <div className="flex items-center flex-1 flex-wrap">
