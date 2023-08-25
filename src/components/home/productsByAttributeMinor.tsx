@@ -11,6 +11,7 @@ import { CustomImage } from '../customImage'
 import { ProductItem, ProductItemLoading } from '../product'
 import { Tabs } from '../tabs'
 import { HomeSlide } from './homeSlide'
+import Fade from 'react-reveal/Fade'
 
 import { Navigation, Pagination } from 'swiper'
 import 'swiper/css'
@@ -173,7 +174,9 @@ export const ProductsByAttributeMinor = ({
             {productList &&
               productList?.result?.map((product) => (
                 <SwiperSlide key={product?.product_id}>
-                  <ProductItem key={product?.product_id} data={product} />
+                  <Fade bottom>
+                    <ProductItem key={product?.product_id} data={product} />
+                  </Fade>
                 </SwiperSlide>
               ))}
           </div>

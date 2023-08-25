@@ -11,6 +11,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { twMerge } from 'tailwind-merge'
 import { PostItem, PostItemLoading } from '../post'
 import { HomeSlide } from './homeSlide'
+import Fade from 'react-reveal/Fade'
+
 
 interface HomePostsProps {
   className?: string
@@ -69,7 +71,9 @@ export const HomePosts = ({ className, postCategory }: HomePostsProps) => {
                 ?.filter((post) => post?.role !== 'npp')
                 ?.map((post: Post) => (
                   <SwiperSlide key={post.id}>
-                    <PostItem data={post} parent_category={postCategory?.id} />
+                    <Fade right>
+                      <PostItem data={post} parent_category={postCategory?.id} />
+                    </Fade>
                   </SwiperSlide>
                 ))}
             </div>

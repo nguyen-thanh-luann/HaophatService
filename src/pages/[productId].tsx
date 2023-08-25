@@ -12,9 +12,8 @@ import {
   ProductDescription,
   ProductDetail,
   ProductDetailLoading,
-  ProductTabs,
   RelatedProducts,
-  ViewedProducts,
+  ViewedProducts
 } from '@/components'
 import { SWR_KEY, WEB_TITTLE } from '@/constants'
 import { fromProductSlugToProductId, isArrayHasValue, isObjectHasValue } from '@/helper'
@@ -88,10 +87,6 @@ const ProductDetailPage = () => {
               product_id={data?.product_data?.product_id || 0}
               className="mb-24"
             />
-
-            <div className="mb-24">
-              <ProductTabs product_id={data?.product_data?.product_id || 0} />
-            </div>
 
             <AccessoryProduct className="mb-24" product_id={data?.product_data?.product_id || 0} />
 

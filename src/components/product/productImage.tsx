@@ -52,8 +52,8 @@ export const ProductImg = ({
                     <div>
                       <CustomImage
                         src={img?.image_url}
-                        className="rounded-md w-[440px] h-[440px] mx-auto"
-                        imageClassName="rounded-md object-cover w-[440px] h-[440px] aspect-1 mx-auto"
+                        className="rounded-md w-full mx-auto"
+                        imageClassName="rounded-md object-cover aspect-1 mx-auto"
                       />
                     </div>
                   </SwiperSlide>

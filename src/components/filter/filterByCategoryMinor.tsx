@@ -109,8 +109,9 @@ export const FilterByCategoryMinor = () => {
                       <div
                         className="flex flex-1 justify-end"
                         onClick={() => hanldeShowCategories(category?.category_id)}
-                      ></div>
-                      <RightIcon className={`${isShow ? 'rotate-90' : ''} duration-200`} />
+                      >
+                        <RightIcon className={`${isShow ? 'rotate-90' : ''} duration-200`} />
+                      </div>
                     </div>
 
                     <div className={`pl-12 animate-fade ${isShow ? 'block' : 'hidden'}`}>

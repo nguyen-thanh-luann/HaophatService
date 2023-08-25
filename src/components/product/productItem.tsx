@@ -14,7 +14,6 @@ import { twMerge } from 'tailwind-merge'
 import { CustomImage } from '../customImage'
 import { ModalProductDetail } from '../modal'
 import { Spinner } from '../spinner'
-import { Star } from '../star'
 import { Tooltip } from '../tooltip'
 import { ProductItemLoading } from './productItemLoading'
 
@@ -114,6 +113,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
             <div className="relative">
               {/* price */}
               <div className="mb-8 flex items-center">
+                
                 {data?.is_invisible_price || data?.origin_price_unit <= 0 ? (
                   <p className="flex-1 text-primary">Liên hệ</p>
                 ) : (
@@ -142,17 +142,6 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
                     )}
                   </div>
                 ) : null}
-              </div>
-
-              {/*rate & sale count */}
-              <div className="flex items-end flex-wrap">
-                <p className="text-gray-300 text-xs font-bold">
-                  {`Đã bán: ${data?.sold_quantity || 0}`}
-                </p>
-
-                <div className="mx-6 w-0 h-14 border border-gray-200"></div>
-
-                <Star readonly ratingValue={data?.star_rating * 20} size={14} />
               </div>
             </div>
           </div>

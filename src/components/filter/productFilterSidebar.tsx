@@ -3,7 +3,6 @@ import { twMerge } from 'tailwind-merge'
 import { FilterByAttributeMinor } from './filterByAttributeMinor'
 import { FilterByCategory } from './filterByCategory'
 import { FilterByCategoryMinor } from './filterByCategoryMinor'
-import { FilterByPrice } from './filterByPrice'
 
 interface ProductFilterSidebarProps {
   className?: string
@@ -13,8 +12,6 @@ interface ProductFilterSidebarProps {
 
 export const ProductFilterSidebar = ({
   className,
-  price_max = 100000,
-  price_min = 0,
 }: ProductFilterSidebarProps) => {
 
   return (
@@ -37,9 +34,9 @@ export const ProductFilterSidebar = ({
         <FilterByAttributeMinor />
       </div>
 
-      <div className="mb-16">
+      {/* <div className="mb-16">
         <FilterByPrice price_max={price_max} price_min={price_min} />
-      </div>
+      </div> */}
     </div>
   )
 }

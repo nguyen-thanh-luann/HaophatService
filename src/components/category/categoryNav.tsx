@@ -1,3 +1,4 @@
+import { DownIcon } from '@/assets'
 import { SWR_KEY } from '@/constants'
 import { isArrayHasValue } from '@/helper'
 import { useCategoryList, useCategoryMinorList } from '@/hooks'
@@ -8,7 +9,6 @@ import ScrollContainer from 'react-indiana-drag-scroll'
 import { twMerge } from 'tailwind-merge'
 import { Spinner } from '../spinner'
 import { CategoryNavDropDownMenu } from './categoryNavDropDownMenu'
-import { DownIcon } from '@/assets'
 
 interface HeaderCategoryNavProps {
   className?: string
@@ -99,7 +99,7 @@ export const CategoryNav = ({ className }: HeaderCategoryNavProps) => {
           {/* dropdown menu */}
           <div
             className={classNames(
-              'absolute z-40 left-0 right-0 transition-opacity ease-in-out duration-200',
+              'absolute z-40 left-0 right-0 transition-opacity ease-in-out duration-500',
               currentCategoryId ? 'flex' : 'hidden'
             )}
           >

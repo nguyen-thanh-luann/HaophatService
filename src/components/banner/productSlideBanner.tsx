@@ -15,7 +15,14 @@ export const ProductSlideBanner = ({ data, className }: ProductSlideBanner) => {
     <div className={classNames('', className)}>
       {data?.banner_type === 'banner_video' ? (
         <div className="aspect-2/1 md:aspect-[5/1]">
-          <ReactPlayer className="" url={data?.banner_video_url} width="100%" height="100%" />
+          <ReactPlayer
+            className=""
+            url={data?.banner_video_url}
+            width="100%"
+            height="100%"
+            autoPlay={true}
+            playing={true}
+          />
         </div>
       ) : (
         <CustomImage

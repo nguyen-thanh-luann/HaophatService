@@ -1,51 +1,46 @@
-import { RightIcon, TimesIcon, logoLg } from '@/assets'
+import { TimesIcon, logoLg } from '@/assets'
 import classNames from 'classnames'
 import Link from 'next/link'
-import { useState } from 'react'
 
+import { useRouter } from 'next/router'
 import { twMerge } from 'tailwind-merge'
 import { Image } from '../image'
-import { LeftNavCategoryDropDown } from '../category'
-import { useCategoryList, useCategoryMinorList } from '@/hooks'
-import { SWR_KEY } from '@/constants'
-import { Spinner } from '../spinner'
-import { isArrayHasValue } from '@/helper'
-import { useRouter } from 'next/router'
 interface LeftNavigationProps {
   className?: string
   onClose?: () => void
 }
 
 export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
-  const [currentCategoryId, setCurrentCategoryId] = useState<number>()
-  const [isCategoryMinor, setIsCategoryMinor] = useState<boolean>(false)
   const router = useRouter()
+  // const [currentCategoryId, setCurrentCategoryId] = useState<number>()
 
-  const { categoryList, isValidating: categoryListLoading } = useCategoryList({
-    key: SWR_KEY.get_category_list,
-    params: {},
-  })
+  // const [isCategoryMinor, setIsCategoryMinor] = useState<boolean>(false)
 
-  const { categoryMinorList, isValidating: categoryMinorListLoading } = useCategoryMinorList({
-    key: SWR_KEY.get_category_minor_list,
-    params: {},
-  })
+  // const { categoryList, isValidating: categoryListLoading } = useCategoryList({
+  //   key: SWR_KEY.get_category_list,
+  //   params: {},
+  // })
 
-  const handleCategoryClick = (id: number) => {
-    if (id === currentCategoryId) {
-      setCurrentCategoryId(undefined)
-      return
-    }
-    setCurrentCategoryId(id)
-  }
+  // const { categoryMinorList, isValidating: categoryMinorListLoading } = useCategoryMinorList({
+  //   key: SWR_KEY.get_category_minor_list,
+  //   params: {},
+  // })
 
-  const handleChildCategoryClick = (id: number, type: 'category' | 'minor_category') => {
-    if (type === 'category') {
-      router.push(`/search/?category_${id}=${id}`)
-    } else {
-      router.push(`/search/?minor_category_${id}=${id}`)
-    }
-  }
+  // const handleCategoryClick = (id: number) => {
+  //   if (id === currentCategoryId) {
+  //     setCurrentCategoryId(undefined)
+  //     return
+  //   }
+  //   setCurrentCategoryId(id)
+  // }
+
+  // const handleChildCategoryClick = (id: number, type: 'category' | 'minor_category') => {
+  //   if (type === 'category') {
+  //     router.push(`/search/?category_${id}=${id}`)
+  //   } else {
+  //     router.push(`/search/?minor_category_${id}=${id}`)
+  //   }
+  // }
 
   return (
     <div className={twMerge(classNames(`h-full`, className))}>
@@ -64,7 +59,34 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
         </div>
       </div>
 
-      <div className="">
+      <div
+        onClick={() => {
+          router.push('/stores')
+        }}
+        className="flex-between my-auto cursor-pointer w-full p-12 border-b border-gray-100"
+      >
+        <p className="text-md text-text-color font-bold line-clamp-1">Cửa hàng</p>
+      </div>
+
+      <div
+        onClick={() => {
+          router.push('/lookup-warranty-receipt')
+        }}
+        className="flex-between my-auto cursor-pointer w-full p-12 border-b border-gray-100"
+      >
+        <p className="text-md text-text-color font-bold line-clamp-1">Tra cứu bảo hành</p>
+      </div>
+
+      <div
+        onClick={() => {
+          router.push('/tc')
+        }}
+        className="flex-between my-auto cursor-pointer w-full p-12 border-b border-gray-100"
+      >
+        <p className="text-md text-text-color font-bold line-clamp-1">Tra cứu chính hãng</p>
+      </div>
+
+      {/* <div className="">
         {categoryListLoading || categoryMinorListLoading ? (
           <div className="flex-center my-24">
             <Spinner />
@@ -73,8 +95,8 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
           <div>
             {categoryList?.map((category) => (
               <div key={category?.category_id}>
-                {/* parent category */}
                 <div
+                  // parent category
                   onClick={() => {
                     handleCategoryClick(category?.category_id)
                     setIsCategoryMinor(false)
@@ -93,8 +115,8 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
                   </div>
                 </div>
 
-                {/* childrent category */}
                 <div
+                  //childrent category
                   className={
                     currentCategoryId === category?.category_id ? `flex animate-fade` : `hidden`
                   }
@@ -111,8 +133,8 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
 
             {categoryMinorList?.map((category) => (
               <div key={category?.category_id}>
-                {/* parent category */}
                 <div
+                  // parent category
                   onClick={() => {
                     handleCategoryClick(category?.category_id)
                     setIsCategoryMinor(!isCategoryMinor)
@@ -131,8 +153,8 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
                   </div>
                 </div>
 
-                {/* childrent category */}
                 <div
+                  // childrent category
                   className={`${
                     currentCategoryId === category?.category_id ? `flex animate-fade` : `hidden`
                   }`}
@@ -147,29 +169,11 @@ export const LeftNavigation = ({ className, onClose }: LeftNavigationProps) => {
                 </div>
               </div>
             ))}
-
-            <div
-              onClick={() => {
-                router.push('/lookup-warranty-receipt')
-              }}
-              className="flex-between my-auto cursor-pointer w-full p-12 border-b border-gray-100"
-            >
-              <p className="text-md text-text-color font-bold line-clamp-1">Tra cứu bảo hành</p>
-            </div>
-
-            <div
-              onClick={() => {
-                router.push('/tc')
-              }}
-              className="flex-between my-auto cursor-pointer w-full p-12 border-b border-gray-100"
-            >
-              <p className="text-md text-text-color font-bold line-clamp-1">Tra cứu chính hãng</p>
-            </div>
           </div>
         ) : (
           <div></div>
         )}
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -11,18 +11,23 @@ import {
 } from '@/components'
 import { DEFAULT_LIMIT_PRODUCT_FILTER, PRODUCT_FILTER_TABS, SWR_KEY, WEB_TITTLE } from '@/constants'
 import { generateFilterProductParamFormRouter, isArrayHasValue, isObjectHasValue } from '@/helper'
-import { useModal, useProductQuery, useUser } from '@/hooks'
+import { useClickOutside, useModal, useProductQuery, useUser } from '@/hooks'
 import { MainNoFooter } from '@/templates'
 import { ProductfilterSortType } from '@/types'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Fade from 'react-reveal/Fade'
 
 const SearchPage = () => {
   const router = useRouter()
+  const modalFilterRef = useRef<HTMLDivElement>(null)
   const { userInfo } = useUser({})
   const [currentTab, setCurrentTab] = useState<string>('default')
   const { visible: showFilters, openModal: openFilters, closeModal: closeFilters } = useModal()
+
+
+  useClickOutside([modalFilterRef], closeFilters)
 
   const {
     products,
@@ -112,7 +117,7 @@ const SearchPage = () => {
                 headerClassName="hidden"
                 modalClassName="h-full w-full max-w-[350px] fixed right-0"
               >
-                <div>
+                <div className='' ref={modalFilterRef}>
                   <div className="flex-between bg-primary px-12 py-8">
                     <div onClick={closeFilters} className="cursor-pointer">
                       <TimesIcon className="text-white" />
@@ -162,7 +167,9 @@ const SearchPage = () => {
                 <div className="">
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
                     {products?.map((product) => (
-                      <ProductItem data={product} key={product?.product_id} />
+                      <Fade bottom key={product?.product_id}>
+                        <ProductItem data={product} key={product?.product_id} />
+                      </Fade>
                     ))}
                   </div>
 

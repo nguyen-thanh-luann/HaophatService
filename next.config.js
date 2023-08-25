@@ -20,7 +20,11 @@ module.exports = withBundleAnalyzer({
         hostname: '**',
       },
     ],
-    domains: [process.env.NEXT_PUBLIC_IMAGE_DOMAIN_URL, process.env.NEXT_PUBLIC_API_URL],
+    domains: [
+      process.env.NEXT_PUBLIC_IMAGE_DOMAIN_URL,
+      process.env.NEXT_PUBLIC_API_URL,
+      process.env.NEXT_PUBLIC_IMAGE_DOMAIN_URL_2,
+    ],
   },
   webpack: (config) => {
     config.resolve.fallback = { fs: false }
