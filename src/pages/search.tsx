@@ -1,6 +1,7 @@
 import { FilterOutlineIcon, SearchIcon, TimesIcon, TrashIconOutline } from '@/assets'
 import {
   Breadcrumb,
+  Button,
   Modal,
   NotFound,
   Pagination,
@@ -26,7 +27,6 @@ const SearchPage = () => {
   const [currentTab, setCurrentTab] = useState<string>('default')
   const { visible: showFilters, openModal: openFilters, closeModal: closeFilters } = useModal()
 
-
   useClickOutside([modalFilterRef], closeFilters)
 
   const {
@@ -45,6 +45,7 @@ const SearchPage = () => {
     params: {
       product_type: 'product_product',
       limit: DEFAULT_LIMIT_PRODUCT_FILTER,
+      sort_by: currentTab as ProductfilterSortType
     },
   })
 
@@ -115,18 +116,27 @@ const SearchPage = () => {
                 visible={showFilters}
                 animationType="slideFromLeft"
                 headerClassName="hidden"
-                modalClassName="h-full w-full max-w-[350px] fixed right-0"
+                modalClassName="h-full w-full fixed right-0"
               >
-                <div className='' ref={modalFilterRef}>
-                  <div className="flex-between bg-primary px-12 py-8">
+                <div className="" ref={modalFilterRef}>
+                  <div className="flex-between bg-primary px-12 py-8 sticky top-0">
                     <div onClick={closeFilters} className="cursor-pointer">
                       <TimesIcon className="text-white" />
                     </div>
                     <span className="flex-1 text-center text-white text-md">Lọc sản phẩm</span>
                   </div>
 
-                  <div className="p-16 h-[100vh] overflow-scroll scrollbar-hide">
+                  <div className="p-16 h-[100vh] overflow-scroll scrollbar-hide border border-red">
                     <ProductFilterSidebar price_max={price_max} price_min={price_min} />
+                  </div>
+
+                  <div className="sticky bottom-0">
+                    <Button
+                      onClick={closeFilters}
+                      className="bg-primary w-full p-8"
+                      textClassName="text-white"
+                      title="Áp dụng"
+                    />
                   </div>
                 </div>
               </Modal>

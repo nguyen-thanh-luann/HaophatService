@@ -413,3 +413,4 @@ export const changewarrantyDateToInputDatetype = (date: string) => {
   const draft = date.split('/')
   return `${draft?.[2]}-${draft?.[1]}-${draft?.[0]}`
 }
+

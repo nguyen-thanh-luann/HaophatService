@@ -1,6 +1,7 @@
 import { DEFAULT_LIMIT, DEFAULT_LIMIT_PRODUCT } from '@/constants'
 import {
   Category,
+  CategoryBrand,
   CheckProductAuthenParams,
   FilterProductParams,
   GetCategoryParams,
@@ -13,6 +14,7 @@ import {
   HTTPResponseV2,
   Product,
   ProductParams,
+  QueryList,
 } from '@/types'
 import { AxiosPromise } from 'axios'
 import axiosClient from '.'
@@ -115,6 +117,10 @@ const productAPI = {
     return axiosClient.get(`/product_controller/list_accessory_product`, {
       params,
     })
+  },
+
+  getBrandNews: (params: QueryList): Promise<HTTPResponseV2<CategoryBrand[]>> => {
+    return axiosClient.get(`/brand_news_controller/list_news`, { params })
   },
 }
 

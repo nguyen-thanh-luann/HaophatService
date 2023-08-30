@@ -1,10 +1,11 @@
 import {
+  CategoryBrandNews,
   FirstSectionProductByAttributeMinor,
   HomeBanner,
   HomeBannerMobile,
   HomePosts,
   ListProductByAttributeMinor,
-  VisceraAttribute
+  VisceraAttribute,
 } from '@/components'
 
 import { DOMAIN_URL, thumbnailImageUrl, WEB_DESCRIPTION, WEB_TITTLE } from '@/constants'
@@ -21,6 +22,8 @@ const HomePage = () => {
         <div className="mb-24">{isDesktop ? <HomeBanner /> : <HomeBannerMobile />}</div>
 
         <div className="container px-12">
+          <CategoryBrandNews className='mb-24 md:p-24'/>
+
           <FirstSectionProductByAttributeMinor />
 
           <VisceraAttribute />

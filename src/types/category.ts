@@ -1,4 +1,4 @@
-import { IconType } from './common'
+import { IconType, URLRes } from './common'
 import { QueryList } from './http'
 
 export interface GetCategoryParams extends QueryList {
@@ -27,4 +27,19 @@ export interface CategoryChild extends CategoryIdName {
 
 export interface CategoryMinor extends Category {
   descendants_structor?: CategoryIdName[]
+}
+
+export interface CategoryBrand {
+  brand_news_id: number
+  brand_news_name: string
+  data_view: string
+  image_url: URLRes
+  image_size: {
+    height: number
+    width: number
+  }
+  content_inline: []
+  description_style: string
+  description_html: string
+  description_url: string
 }

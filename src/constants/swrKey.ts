@@ -16,6 +16,8 @@ export const SWR_KEY = {
   get_category_minor_list: 'get_category_minor_list',
   get_category_minor_list_filter: 'get_category_minor_list_filter',
 
+  get_category_brand_news: 'get_category_brand_news',
+
   get_attribute_minor_list: 'get_attribute_minor_list',
   get_attribute_minor_list_filter: 'get_attribute_minor_list_filter',
   get_viscera_attribute: 'get_viscera_attribute',

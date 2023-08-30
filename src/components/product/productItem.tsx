@@ -113,7 +113,6 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
             <div className="relative">
               {/* price */}
               <div className="mb-8 flex items-center">
-                
                 {data?.is_invisible_price || data?.origin_price_unit <= 0 ? (
                   <p className="flex-1 text-primary">Liên hệ</p>
                 ) : (
@@ -130,7 +129,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
                   </div>
                 )}
 
-                {!data?.is_invisible_price ? (
+                {data?.is_invisible_price || data?.origin_price_unit <= 0 ? null : (
                   <div
                     onClick={() => handleAddToCart(data)}
                     className=" bg-primary h-[30px] w-[30px] min-w-[30px] rounded-full flex-center cursor-pointer"
@@ -141,7 +140,7 @@ export const ProductItem = ({ data, className, isLoading }: ProductItemProps) =>
                       <ProductCartIcon className="text-white w-16 h-16" />
                     )}
                   </div>
-                ) : null}
+                )}
               </div>
             </div>
           </div>

@@ -116,7 +116,7 @@ export const FooterV2 = () => {
                             </div>
                           ) : (
                             <CustomImage
-                              onClick={() => hanldeDescriptionLineClick(line)}
+                              onClick={() => hanldeDescriptionLineClick(content)}
                               src={content?.image_url?.image_url || ''}
                               className={classNames(
                                 `w-[${line?.image_size?.width}px] h-[${line?.image_size?.height}px]`,
