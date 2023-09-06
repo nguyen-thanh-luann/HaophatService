@@ -1,42 +1,41 @@
 import { glassBrigde, glassFrame, glassLenses } from '@/assets'
-import { Breadcrumb, CustomImage, Image, NotFound, SearchForm, Spinner } from '@/components'
+import { AntdImageCustom, Breadcrumb, Image, NotFound, SearchForm, Spinner } from '@/components'
 import { DOMAIN_URL, WEB_DESCRIPTION, WEB_TITTLE, thumbnailImageUrl } from '@/constants'
 import { isObjectHasValue } from '@/helper'
 import { useCheckProductAuthen } from '@/hooks'
-import { productAPI } from '@/services'
 import { Main } from '@/templates'
-import { ProductDetail } from '@/types'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import {
+  useEffect,
+  // useEffect,
+  useState,
+} from 'react'
+// import { useSWRConfig } from 'swr'
 
 const TraCuuSanPhamPage = () => {
-  const [currentProduct, setCurrentProduct] = useState<ProductDetail>()
-  const [loading, setLoading] = useState<boolean>(false)
+  // const { cache } = useSWRConfig()
+  const { query, isReady } = useRouter()
 
-  const router = useRouter()
-  const { id } = router.query
+  const [checkParams, setCheckParams] = useState<string>(query?.id as string)
 
-  const { data, isValidating } = useCheckProductAuthen({ params: { uuid_code: id as string } })
-
-  useEffect(() => {
-    setCurrentProduct(data)
-  }, [data])
+  const { data, isValidating } = useCheckProductAuthen({
+    params: { uuid_code: checkParams as string },
+  })
 
   const hanldeSearchProduct = async (val: string) => {
-    try {
-      setLoading(true)
-      const res: any = await productAPI.checkProductAuthen({ uuid_code: val })
-      if (res?.success) {
-        setCurrentProduct(res?.data)
-      } else {
-        setCurrentProduct(undefined)
-      }
-      setLoading(false)
-    } catch (err) {
-      setLoading(false)
-      console.log(err)
-    }
+    if (!val || val?.trim() === '') return
+
+    // const currentData = cache.get(`${SWR_KEY.check_product_authen}_${val}`)?.data
+    // console.log({currentData});
+
+    if (isValidating || !isReady) return
+
+    setCheckParams(val)
   }
+
+  useEffect(() => {
+    hanldeSearchProduct(query?.id as string)
+  }, [query?.id])
 
   return (
     <Main title={WEB_TITTLE} description={WEB_DESCRIPTION}>
@@ -62,15 +61,17 @@ const TraCuuSanPhamPage = () => {
           <SearchForm
             placeholder="Nhập mã sản phẩm cần kiểm tra"
             buttonLabel="Tra cứu"
-            onSubmit={(val) => hanldeSearchProduct(val as string)}
+            onSubmit={(val: any) => {
+              hanldeSearchProduct(val as string)
+            }}
           />
         </div>
 
-        {isValidating || loading ? (
+        {isValidating ? (
           <div className="flex-center my-12">
             <Spinner />
           </div>
-        ) : isObjectHasValue(currentProduct) ? (
+        ) : isObjectHasValue(data) ? (
           <div className="my-32">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-24">
               <div className="bg-primary rounded-lg p-12">
@@ -83,9 +84,7 @@ const TraCuuSanPhamPage = () => {
                     <p className="uppercase text-md font-bold">Thương hiệu</p>
                   </div>
                   <div className="flex-1 bg-white p-4 rounded-lg flex-center">
-                    <p className="text-md uppercase">
-                      {currentProduct?.category_id?.category_name}
-                    </p>
+                    <p className="text-md uppercase">{data?.category_id?.category_name}</p>
                   </div>
                 </div>
 
@@ -94,7 +93,7 @@ const TraCuuSanPhamPage = () => {
                     <p className="uppercase text-md font-bold">Mã sản phẩm</p>
                   </div>
                   <div className="flex-1 flex-center bg-white rounded-lg p-4">
-                    <p className="text-md uppercase">{currentProduct?.product_code}</p>
+                    <p className="text-md uppercase">{data?.product_code}</p>
                   </div>
                 </div>
 
@@ -103,7 +102,7 @@ const TraCuuSanPhamPage = () => {
                     <p className="uppercase text-md font-bold">Cửa hàng</p>
                   </div>
                   <div className="flex-1 flex-center bg-white rounded-lg p-4">
-                    <p className="text-md uppercase">{currentProduct?.responsible_store_name}</p>
+                    <p className="text-md uppercase">{data?.responsible_store_name}</p>
                   </div>
                 </div>
 
@@ -113,9 +112,7 @@ const TraCuuSanPhamPage = () => {
                   </div>
 
                   <div className="flex-1 flex-center bg-white rounded-lg p-4">
-                    <p className="text-md uppercase">
-                      {currentProduct?.responsible_store_street || ''}
-                    </p>
+                    <p className="text-md uppercase">{data?.responsible_store_street || ''}</p>
                   </div>
                 </div>
 
@@ -134,7 +131,7 @@ const TraCuuSanPhamPage = () => {
                           className=""
                         />
                       </div>
-                      <p className="text-base md:text-md">{`${currentProduct?.lens_size}mm`}</p>
+                      <p className="text-base md:text-md">{`${data?.lens_size}mm`}</p>
                     </div>
 
                     <div className="flex-col items-center justify-center flex">
@@ -146,7 +143,7 @@ const TraCuuSanPhamPage = () => {
                           className=""
                         />
                       </div>
-                      <p className="text-base md:text-md">{`${currentProduct?.bridge_size}mm`}</p>
+                      <p className="text-base md:text-md">{`${data?.bridge_size}mm`}</p>
                     </div>
 
                     <div className="flex-col items-center justify-center flex">
@@ -158,7 +155,7 @@ const TraCuuSanPhamPage = () => {
                           className=""
                         />
                       </div>
-                      <p className="text-base md:text-md">{`${currentProduct?.temple_size}mm`}</p>
+                      <p className="text-base md:text-md">{`${data?.temple_size}mm`}</p>
                     </div>
                   </div>
                 </div>
@@ -179,18 +176,18 @@ const TraCuuSanPhamPage = () => {
                   <div className="flex-1 flex-col justify-between items-center bg-white rounded-br-lg p-4">
                     <div className="flex justify-between items-center">
                       <p className="flex-1 text-center text-md">{`${
-                        currentProduct?.frame_color_attribute?.value_name || '...'
+                        data?.frame_color_attribute?.value_name || '...'
                       }`}</p>
                       <p className="flex-1 text-center text-md">{`${
-                        currentProduct?.frame_material_attribute?.value_name || '...'
+                        data?.frame_material_attribute?.value_name || '...'
                       }`}</p>
                     </div>
                     <div className="flex justify-between items-center">
                       <p className="flex-1 text-center text-md">{`${
-                        currentProduct?.lens_color_attribute?.value_name || '...'
+                        data?.lens_color_attribute?.value_name || '...'
                       }`}</p>
                       <p className="flex-1 text-center text-md">{`${
-                        currentProduct?.lens_material_attribute?.value_name || '...'
+                        data?.lens_material_attribute?.value_name || '...'
                       }`}</p>
                     </div>
                   </div>
@@ -205,8 +202,8 @@ const TraCuuSanPhamPage = () => {
                 </div>
 
                 <div className="flex flex-wrap justify-between gap-12">
-                  {currentProduct?.image_ids?.map((image, index) => (
-                    <CustomImage
+                  {data?.image_ids?.map((image, index) => (
+                    <AntdImageCustom
                       key={index}
                       src={image?.image_url}
                       className="flex-1 max-w-[50%]"
