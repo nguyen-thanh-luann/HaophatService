@@ -22,6 +22,7 @@ export const AntdImageCustom = ({ className, imageClassName, src, ...props }: An
               : `${API_URL}${src}`
             : companyIconSm
         }
+        alt=''
         className={classNames(imageClassName)}
         loading="lazy"
         {...props}

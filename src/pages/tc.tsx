@@ -1,19 +1,20 @@
 import { glassBrigde, glassFrame, glassLenses } from '@/assets'
-import { AntdImageCustom, Breadcrumb, Image, NotFound, SearchForm, Spinner } from '@/components'
+import {
+  AntdImageCustom,
+  Breadcrumb,
+  Image,
+  NotFound,
+  SearchForm,
+  Spinner
+} from '@/components'
 import { DOMAIN_URL, WEB_DESCRIPTION, WEB_TITTLE, thumbnailImageUrl } from '@/constants'
-import { isObjectHasValue } from '@/helper'
+import { formatMoneyVND, isObjectHasValue } from '@/helper'
 import { useCheckProductAuthen } from '@/hooks'
 import { Main } from '@/templates'
 import { useRouter } from 'next/router'
-import {
-  useEffect,
-  // useEffect,
-  useState,
-} from 'react'
-// import { useSWRConfig } from 'swr'
+import { useEffect, useState } from 'react'
 
 const TraCuuSanPhamPage = () => {
-  // const { cache } = useSWRConfig()
   const { query, isReady } = useRouter()
 
   const [checkParams, setCheckParams] = useState<string>(query?.id as string)
@@ -24,9 +25,6 @@ const TraCuuSanPhamPage = () => {
 
   const hanldeSearchProduct = async (val: string) => {
     if (!val || val?.trim() === '') return
-
-    // const currentData = cache.get(`${SWR_KEY.check_product_authen}_${val}`)?.data
-    // console.log({currentData});
 
     if (isValidating || !isReady) return
 
@@ -74,7 +72,7 @@ const TraCuuSanPhamPage = () => {
         ) : isObjectHasValue(data) ? (
           <div className="my-32">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-24">
-              <div className="bg-primary rounded-lg p-12">
+              <div className="bg-primary rounded-lg p-12 h-fit">
                 <p className="uppercase font-bold text-lg text-white text-center mb-12">
                   Thông tin sản phẩm
                 </p>
@@ -94,6 +92,17 @@ const TraCuuSanPhamPage = () => {
                   </div>
                   <div className="flex-1 flex-center bg-white rounded-lg p-4">
                     <p className="text-md uppercase">{data?.product_code}</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 mb-12">
+                  <div className="w-[150px] bg-white rounded-lg p-4">
+                    <p className="uppercase text-md font-bold">Giá tiền</p>
+                  </div>
+                  <div className="flex-1 flex-center bg-white rounded-lg p-4">
+                    <p className="text-md uppercase">
+                      {data?.price_unit > 0 ? formatMoneyVND(data?.price_unit) : '-'}
+                    </p>
                   </div>
                 </div>
 
@@ -201,13 +210,13 @@ const TraCuuSanPhamPage = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-wrap justify-between gap-12">
+                <div className="grid grid-cols-2 gap-12">
                   {data?.image_ids?.map((image, index) => (
                     <AntdImageCustom
                       key={index}
                       src={image?.image_url}
-                      className="flex-1 max-w-[50%]"
-                      imageClassName="object-contain w-full"
+                      className="w-full"
+                      imageClassName="!w-[100%] aspect-1 rounded-lg"
                     />
                   ))}
                 </div>
