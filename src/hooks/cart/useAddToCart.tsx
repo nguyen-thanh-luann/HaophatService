@@ -8,7 +8,7 @@ import { useUser } from '../user'
 
 export const useAddToCart = () => {
   const { userInfo } = useUser({})
-  const userCompany = userInfo?.account?.company_id || 1
+  const userCompany = userInfo?.account?.company_id?.company_id || 1
   const { asyncHandler, isLoading } = useAsync()
   const { mutate: swrConfigMutate } = useSWRConfig()
 

@@ -28,7 +28,11 @@ export interface UserInfo {
 export interface UserAccount {
   partner_id: number
   partner_name: string
-  company_id: number
+  // company_id: number
+  company_id: {
+    company_name: string
+    company_id: number
+  }
   phone: string
   gender: UserGenderType
   avatar_url: URLRes

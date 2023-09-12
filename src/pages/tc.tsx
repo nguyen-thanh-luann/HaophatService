@@ -101,7 +101,7 @@ const TraCuuSanPhamPage = () => {
                   </div>
                   <div className="flex-1 flex-center bg-white rounded-lg p-4">
                     <p className="text-md uppercase">
-                      {data?.price_unit > 0 ? formatMoneyVND(data?.price_unit) : '-'}
+                      {data?.price_unit > 0 ? formatMoneyVND(data?.price_unit) : `"-"`}
                     </p>
                   </div>
                 </div>
