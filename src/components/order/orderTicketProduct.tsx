@@ -1,11 +1,8 @@
+import { formatMoneyVND } from '@/helper'
 import { ProductOrderHistory } from '@/types'
 import classNames from 'classnames'
-import React from 'react'
 import { twMerge } from 'tailwind-merge'
-import { Image } from '../image'
-import { API_URL } from '@/constants'
-import { empty } from '@/assets'
-import { formatMoneyVND } from '@/helper'
+import { CustomImage } from '../customImage'
 
 interface OrderTicketProductProps {
   data: ProductOrderHistory
@@ -16,9 +13,10 @@ export const OrderTicketProduct = ({ data, className }: OrderTicketProductProps)
   return (
     <div className={twMerge(classNames(`flex border-b border-gray-200 py-12`, className))}>
       <div className="mr-8">
-        <Image
-          src={data?.image_url?.length > 0 ? `${API_URL}${data?.image_url?.[0]}` : empty}
+        <CustomImage
+          src={data?.image_url?.[0] || ''}
           imageClassName="w-[62px] h-[62px] object-cover"
+          className="w-[62px] h-[62px]"
         />
       </div>
 

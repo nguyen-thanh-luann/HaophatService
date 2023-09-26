@@ -1,5 +1,4 @@
-import { empty, TrashIconOutline } from '@/assets'
-import { API_URL } from '@/constants'
+import { TrashIconOutline } from '@/assets'
 import {
   changeProductUomTypeToReactSelectType,
   changeReactSelectTypeToProductUomType,
@@ -20,7 +19,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import Select from 'react-select'
 import { twMerge } from 'tailwind-merge'
-import { Image } from '../image'
+import { CustomImage } from '../customImage'
 import { CustomInputQuantity, InputCheckbox } from '../inputs'
 import { ModalConfirm } from '../modal'
 import { Spinner } from '../spinner'
@@ -134,9 +133,6 @@ export const CartProduct = ({
     })
   }
 
-  const hasImage =
-    data?.product_id.representation_image.image_url || data?.combo_id?.attachment_cloud_id?.url
-  // console.log({ data })
 
   return (
     <div className={classNames('p-12', className)}>
@@ -152,20 +148,16 @@ export const CartProduct = ({
           </div>
 
           <div className="mr-10">
-            <Image
-              alt=""
-              className="w-60 h-60"
-              imageClassName="w-60 h-60 object-cover"
+            <CustomImage
               src={
-                hasImage
-                  ? `${API_URL}${
-                      isProduct
-                        ? data?.product_id.representation_image.image_url || ''
-                        : data?.combo_id?.attachment_cloud_id?.url || ''
-                    }`
-                  : empty
+                isProduct
+                  ? data?.product_id.representation_image.image_url || ''
+                  : data?.combo_id?.attachment_cloud_id?.url || ''
               }
+              imageClassName="w-60 h-60 object-cover"
+              className="w-60 h-60"
             />
+
           </div>
 
           <div className="w-full flex-1">
